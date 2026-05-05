@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Module 2 - Exam Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .diagram-box {
+            background-color: #f8fafc;
+            border: 2px dashed #94a3b8;
+            color: #475569;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1.25rem 0;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        section { scroll-margin-top: 6rem; }
+        .math-symbol { font-family: 'Times New Roman', serif; font-weight: bold; font-size: 1.2em; color: #1d4ed8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#intro" class="hover:text-blue-400 transition-colors">Relational Intro & Schema</a></li>
+                <li><a href="#keys" class="hover:text-blue-400 transition-colors">Concept of Keys</a></li>
+                <li><a href="#mapping" class="hover:text-blue-400 transition-colors">ER/EER to Relational Mapping</a></li>
+                <li><a href="#algebra" class="hover:text-blue-400 transition-colors">Relational Algebra Operators</a></li>
+                <li><a href="#queries" class="hover:text-blue-400 transition-colors">RA Queries</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            Database Management System: Module 2
+        </h1>
+
+        <!-- 1. INTRODUCTION TO RELATIONAL MODEL -->
+        <section id="intro" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. Introduction to Relational Model & Schema</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>The Relational Model represents data as a collection of two-dimensional tables called <strong>Relations</strong>. It is the most widely used data model due to its simplicity and mathematical foundation.</p>
+                
+                <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">Core Terminologies:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Relation:</strong> A mathematical term for a Table (e.g., Student table).</li>
+                    <li><strong>Tuple:</strong> A single row (or record) in a relation representing a specific real-world entity instance.</li>
+                    <li><strong>Attribute:</strong> A column (or field) in a relation representing a property of the entity.</li>
+                    <li><strong>Domain:</strong> The set of allowable, valid values for a specific attribute (e.g., Domain of 'Age' is numbers between 1 and 120).</li>
+                    <li><strong>Degree:</strong> The total number of attributes (columns) in a relation.</li>
+                    <li><strong>Cardinality:</strong> The total number of tuples (rows) in a relation.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">Relational Schema vs. Relational Instance:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Relational Schema:</strong> The logical design/blueprint of the relation. It defines the table name, its attributes, and their domains. 
+                        <br><em>Format:</em> <code>Relation_Name(Attribute1, Attribute2, ..., AttributeN)</code>
+                        <br><em>Example:</em> <code>Student(RollNo, Name, Email)</code></li>
+                    <li><strong>Relational Instance:</strong> The actual data/set of tuples stored in the relation at a specific moment in time. It changes dynamically as data is inserted or deleted.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. CONCEPT OF KEYS -->
+        <section id="keys" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Concept of Keys</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Why do we need keys?</strong> In a database table, many records look similar. Keys help us uniquely identify each record in a relation, just like identification cards identify people.</p>
+                
+                <ul class="list-disc pl-6 space-y-4">
+                    <li>
+                        <strong>1. Super Key:</strong> Any set of one or more attributes that can uniquely identify a record in a table. A super key may contain extra/unnecessary attributes, but uniqueness is guaranteed.
+                        <br><span class="text-sm text-slate-600"><em>Student Table Example:</em> Attributes are <code>{StudentID, RollNo, Email, Name}</code>. 
+                        <br>Possible Super Keys: <code>{StudentID}</code>, <code>{RollNo}</code>, <code>{Email}</code>, <code>{StudentID, Name}</code>, <code>{RollNo, Email}</code>. Even if we add the unnecessary "Name" attribute to "StudentID", the combination remains unique.</span>
+                        <br><span class="text-sm text-slate-600"><em>Bank Customer Example:</em> <code>{AccountNumber}</code>, <code>{AccountNumber, CustomerName}</code>, <code>{AccountNumber, BranchName}</code> are all Super Keys.</span>
+                    </li>
+                    <li>
+                        <strong>2. Candidate Key:</strong> A <em>minimal</em> super key. "Minimal" means if you remove even a single attribute from this key, uniqueness is lost. It contains absolutely no extra attributes.
+                        <br><span class="text-sm text-slate-600"><em>Example:</em> <code>{StudentID}</code>, <code>{RollNo}</code>, and <code>{Email}</code> are individual Candidate Keys. However, <code>{StudentID, Name}</code> is a Super Key but <strong>not</strong> a Candidate Key because "Name" is extra.</span>
+                    </li>
+                    <li>
+                        <strong>3. Primary Key:</strong> The specific Candidate Key chosen by the database designer to uniquely identify tuples within the relation. There can be only ONE Primary Key per table. It cannot contain NULL values.
+                        <br><span class="text-sm text-slate-600"><em>Example:</em> Out of Candidate Keys <code>{StudentID}</code> and <code>{Email}</code>, the designer chooses <code>{StudentID}</code> as the Primary Key.</span>
+                    </li>
+                    <li>
+                        <strong>4. Foreign Key (Referential Integrity):</strong> An attribute (or set of attributes) in one table that refers to the Primary Key of another table. It is used to link two tables together and enforce referential integrity constraints.
+                    </li>
+                </ul>
+                <div class="diagram-box">Table Example: Student(StudentID, RollNo, Email, Name) | 101, 21, a@gmail.com, Ravi | 102, 22, b@gmail.com, Meena</div>
+            </div>
+        </section>
+
+        <!-- 3. MAPPING ER/EER TO RELATIONAL MODEL -->
+        <section id="mapping" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">3. Mapping ER and EER Model to Relational Model</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>To convert an ER/EER diagram into Relational Tables (Schemas), specific mapping rules are strictly followed:</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">A. Mapping ER Entities & Attributes</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Strong Entity:</strong> Create a new table. Each simple attribute becomes a column. The chosen key attribute becomes the Primary Key.</li>
+                    <li><strong>Weak Entity:</strong> Create a new table. Add all its simple attributes. <strong>Add the Primary Key of the identifying strong entity</strong> as a Foreign Key. The new Primary Key is the combination of the partial key (discriminator) and the foreign key.</li>
+                    <li><strong>Composite Attribute:</strong> Do not create a column for the composite attribute itself. Instead, create separate columns for each of its simple sub-components (e.g., use <em>First_Name</em> and <em>Last_Name</em> columns instead of <em>Name</em>).</li>
+                    <li><strong>Multivalued Attribute:</strong> Create a entirely <strong>new table</strong>. This table contains the multivalued attribute and the Primary Key of the parent entity as a Foreign Key. The Primary Key of this new table is the combination of both.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">B. Mapping ER Relationships (Cardinalities)</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>1:N (One-to-Many):</strong> Do not create a new table. Take the Primary Key of the "1" side and put it as a Foreign Key in the table of the "N" (many) side.</li>
+                    <li><strong>1:1 (One-to-One):</strong> Put the Primary Key of one entity into the other entity's table as a Foreign Key. (Preferably put it in the table that has Total Participation).</li>
+                    <li><strong>M:N (Many-to-Many):</strong> <strong>Must create a new table</strong> for the relationship. This new table's Primary Key is a combination of the Primary Keys of both participating entities (which act as Foreign Keys).</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">C. Mapping EER (Generalization & Specialization)</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Cross-Table Approach:</strong> Create one table for the higher-level (super-class) entity containing all common attributes and a Primary Key. Create separate tables for each lower-level (sub-class) entity. Put the specific attributes in these tables, and add the Primary Key of the super-class as a Foreign Key (which also acts as their Primary Key).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. RELATIONAL ALGEBRA OPERATORS -->
+        <section id="algebra" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Relational Algebra - Operators</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Relational Algebra is a procedural query language. It takes one or two relations as input and produces a new relation as output.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">A. Unary Operators (Work on 1 Table)</h3>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li>
+                        <strong>Selection (<span class="math-symbol">σ</span>):</strong> Selects specific <strong>Rows (tuples)</strong> from a relation that satisfy a given condition. 
+                        <br><em>Syntax:</em> <code>σ<sub>condition</sub>(Relation)</code>
+                        <br><em>Example:</em> <code>σ<sub>salary > 50000</sub>(Employee)</code> (Selects all rows where salary is greater than 50k).
+                    </li>
+                    <li>
+                        <strong>Projection (<span class="math-symbol">π</span>):</strong> Selects specific <strong>Columns (attributes)</strong> from a relation and discards the rest. It automatically eliminates duplicate rows.
+                        <br><em>Syntax:</em> <code>π<sub>attribute_list</sub>(Relation)</code>
+                        <br><em>Example:</em> <code>π<sub>Name, Salary</sub>(Employee)</code> (Shows only the Name and Salary columns).
+                    </li>
+                    <li>
+                        <strong>Rename (<span class="math-symbol">ρ</span>):</strong> Used to rename the output relation or its attributes.
+                        <br><em>Syntax:</em> <code>ρ<sub>New_Name</sub>(Relation)</code>
+                    </li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">B. Set-Theoretic Binary Operators (Work on 2 Tables)</h3>
+                <p class="text-sm text-slate-600 italic">Note: For Union, Intersection, and Difference, the two tables must be "Union Compatible" (same number of columns and matching data types).</p>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li>
+                        <strong>Union (<span class="math-symbol">∪</span>):</strong> Combines all tuples from two relations into a single relation. Duplicate tuples are eliminated.
+                        <br><em>Syntax:</em> <code>A ∪ B</code> (Returns tuples in A, or in B, or in both).
+                    </li>
+                    <li>
+                        <strong>Intersection (<span class="math-symbol">∩</span>):</strong> Returns a relation containing only the tuples that are present in <strong>both</strong> relations.
+                        <br><em>Syntax:</em> <code>A ∩ B</code>
+                    </li>
+                    <li>
+                        <strong>Set Difference (<span class="math-symbol">−</span>):</strong> Returns tuples that are present in the first relation but <strong>not</strong> in the second relation.
+                        <br><em>Syntax:</em> <code>A − B</code> (Tuples in A but not in B).
+                    </li>
+                    <li>
+                        <strong>Cartesian Product (<span class="math-symbol">×</span>):</strong> Combines information from any two relations. It pairs every single row of the first table with every single row of the second table. (If A has 5 rows and B has 4 rows, A × B will have 20 rows).
+                        <br><em>Syntax:</em> <code>A × B</code>
+                    </li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">C. Derived Operators (Joins)</h3>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li>
+                        <strong>Join (<span class="math-symbol">⨝</span>):</strong> A Cartesian Product followed by a Selection process. It combines related tuples from two tables into a single tuple based on a common attribute.
+                    </li>
+                    <li>
+                        <strong>Types of Joins:</strong>
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-700">
+                            <li><strong>Theta Join (⨝<sub>θ</sub>):</strong> Joins based on a specific condition ($\theta$) like <, >, =, etc.</li>
+                            <li><strong>Equi Join:</strong> A Theta Join where the condition only uses the equality operator (=).</li>
+                            <li><strong>Natural Join (⨝):</strong> An Equi Join where one of the two identical columns is automatically dropped from the result.</li>
+                            <li><strong>Outer Join:</strong> Keeps all tuples from one or both tables, even if there is no matching value in the other table. (Left Outer, Right Outer, Full Outer Join). Missing values are filled with NULL.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. RELATIONAL ALGEBRA QUERIES -->
+        <section id="queries" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">5. Relational Algebra Queries</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Relational algebra operators are nested to form complex queries. The innermost operations are evaluated first.</p>
+                
+                <p class="font-semibold text-slate-900 mt-2">Example Database:</p>
+                <p class="text-sm font-mono bg-slate-100 p-2 rounded">Student(RollNo, Name, Age, DeptID)<br>Department(DeptID, DeptName)</p>
+
+                <ul class="list-disc pl-6 space-y-4 mt-4">
+                    <li>
+                        <strong>Query 1:</strong> Find the names of all students who are older than 20.
+                        <br><span class="font-mono text-blue-800 text-base">π<sub>Name</sub>(σ<sub>Age > 20</sub>(Student))</span>
+                        <br><span class="text-sm text-slate-500"><em>Logic:</em> First, filter the rows where Age > 20 using Selection (σ). Then, extract only the Name column using Projection (π).</span>
+                    </li>
+                    <li>
+                        <strong>Query 2:</strong> Find the names of students belonging to the 'Computer' department.
+                        <br><span class="font-mono text-blue-800 text-base">π<sub>Name</sub>(σ<sub>DeptName = 'Computer'</sub>(Student ⨝ Department))</span>
+                        <br><span class="text-sm text-slate-500"><em>Logic:</em> First, Natural Join (⨝) Student and Department using common attribute DeptID. Then filter rows where DeptName is 'Computer' (σ). Finally, project the Name column (π).</span>
+                    </li>
+                    <li>
+                        <strong>Query 3:</strong> Find the names of all students who are either in 'IT' department OR are older than 22.
+                        <br><span class="font-mono text-blue-800 text-base">π<sub>Name</sub>(σ<sub>DeptName = 'IT' ∨ Age > 22</sub>(Student ⨝ Department))</span>
+                    </li>
+                </ul>
+                <div class="diagram-box">Figure: Relational Algebra query tree evaluating operations bottom-up.</div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

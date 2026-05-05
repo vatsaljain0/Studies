@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Module 1 - Exam Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .diagram-box {
+            background-color: #f8fafc;
+            border: 2px dashed #94a3b8;
+            color: #475569;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1.25rem 0;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        section { scroll-margin-top: 6rem; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#intro" class="hover:text-blue-400 transition-colors">Intro & Apps</a></li>
+                <li><a href="#drawbacks" class="hover:text-blue-400 transition-colors">File Sys Drawbacks</a></li>
+                <li><a href="#abstraction" class="hover:text-blue-400 transition-colors">Data Abstraction</a></li>
+                <li><a href="#acid" class="hover:text-blue-400 transition-colors">ACID Properties</a></li>
+                <li><a href="#architecture" class="hover:text-blue-400 transition-colors">DBMS Architecture</a></li>
+                <li><a href="#er-model" class="hover:text-blue-400 transition-colors">ER Model</a></li>
+                <li><a href="#eer-model" class="hover:text-blue-400 transition-colors">EER Model</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            Database Management System: Module 1
+        </h1>
+        
+        <p class="text-lg text-slate-600 mb-8 font-medium italic">
+            "A database is a set of related data. A Database Management System (DBMS) is a software system that allows users to access the data contained in the database, acting as an interface for insert, delete, update, and retrieval operations."
+        </p>
+
+        <!-- 1. INTRODUCTION & APPLICATIONS -->
+        <section id="intro" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. Introduction & Application Areas</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Commercially available DBMS:</strong> Oracle, Sybase, Ingress, Microsoft Access, FoxPro, Dbase.</p>
+                <p class="font-semibold text-slate-900">Key Application Areas:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Banking:</strong> Customer information, accounts, loans, and all banking transactions.</li>
+                    <li><strong>Airlines:</strong> Reservations, schedules, and flight information.</li>
+                    <li><strong>Universities:</strong> Student information, registrations, and grades.</li>
+                    <li><strong>Enterprise Information:</strong> Sales (customers, products, purchases), Accounting (payments, receipts, balances), Human Resources (employee records, salaries, payroll taxes).</li>
+                    <li><strong>Manufacturing:</strong> Supply chain management, production tracking, inventories, and orders.</li>
+                    <li><strong>Telecommunication:</strong> Call records, monthly bills, and prepaid balance maintenance.</li>
+                    <li><strong>Online Retailers:</strong> Online order tracking, recommendation lists, and product evaluations.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. DRAWBACKS OF FILE PROCESSING -->
+        <section id="drawbacks" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Drawbacks of File Processing System (Why use DBMS?)</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Before DBMS, data was stored in traditional file systems, which had several major limitations:</p>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li>
+                        <strong>1. Data Redundancy and Inconsistency:</strong> Same information duplicated in multiple files (e.g., a student's address stored separately in Music and Math department files). Leads to higher storage costs and data inconsistency (updating one copy but not the other).
+                    </li>
+                    <li>
+                        <strong>2. Difficulty in Accessing Data:</strong> Requires writing a new application program for every specific data retrieval request. Cannot anticipate all future requests easily.
+                    </li>
+                    <li>
+                        <strong>3. Data Isolation:</strong> Data is scattered in various files and formats, making it difficult to write new applications to retrieve appropriate related data.
+                    </li>
+                    <li>
+                        <strong>4. Integrity Problems:</strong> Data must satisfy consistency constraints (e.g., account balance > 0). It is difficult to add or change constraints in application code, especially across different files.
+                    </li>
+                    <li>
+                        <strong>5. Atomicity Problems:</strong> A process must happen in its entirety or not at all. If a system fails during a $500 fund transfer, the money might be debited from Account A but not credited to Account B. File systems cannot guarantee atomicity.
+                    </li>
+                    <li>
+                        <strong>6. Concurrent-Access Anomalies:</strong> Multiple users updating data simultaneously can result in inconsistent data (e.g., two clerks debiting the same account balance simultaneously, overwriting each other's changes).
+                    </li>
+                    <li>
+                        <strong>7. Security Problems:</strong> Hard to enforce security constraints where users only see specific parts of data (e.g., payroll staff seeing financial data, but not academic records).
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. DATA ABSTRACTION & DATA MODELS -->
+        <section id="abstraction" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">3. Data Models & Data Abstraction</h2>
+            
+            <h3 class="text-xl font-semibold text-slate-800 mb-3 border-b pb-2">A. Data Models</h3>
+            <div class="space-y-3 text-slate-700 text-lg leading-relaxed">
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Relational Model:</strong> Uses a collection of tables (relations) to represent data and relationships. Each table contains fixed-format records (rows) and attributes (columns).</li>
+                    <li><strong>Entity-Relationship (E-R) Model:</strong> Uses a collection of basic objects (entities) and the relationships among them. Very widely used in database design.</li>
+                    <li><strong>Object-Based Data Model:</strong> Integrates object-oriented programming concepts (like Java/C++) into databases. Procedures can be stored and executed by the database system.</li>
+                </ul>
+                <div class="diagram-box">Figure: ER Model Example (Professor Teaches Course, Student Takes Course)</div>
+            </div>
+
+            <h3 class="text-xl font-semibold text-slate-800 mt-8 mb-3 border-b pb-2">B. Levels of Data Abstraction</h3>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Developers hide complexity from users through several levels of abstraction:</p>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li>
+                        <strong>1. Physical Level (Lowest Level):</strong> Describes <em>how</em> data is actually stored in disk drives. Managed by the Database Administrator (DBA) who decides physical data fragmentation, centralization, and file structures.
+                    </li>
+                    <li>
+                        <strong>2. Logical / Conceptual Level:</strong> Describes <em>what</em> data is stored and its structures (blueprint). It defines the tables, columns (e.g., student_name, roll_no), data types, and relationships between tables.
+                    </li>
+                    <li>
+                        <strong>3. View Level (Highest Level):</strong> Describes how data is <em>shown</em> to the end user. Multiple views exist for security and simplicity (e.g., a student views only their marks, while faculty views all students' marks and salaries).
+                    </li>
+                </ul>
+                <div class="diagram-box">Figure: Levels of Data Abstraction (View Level -> Logical Level -> Physical Level -> Database)</div>
+            </div>
+        </section>
+
+        <!-- 4. ACID PROPERTIES -->
+        <section id="acid" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. ACID Properties</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Transactions are fundamental operations that modify/retrieve data. To maintain integrity, correctness, and reliability even during failures, transactions must follow ACID properties:</p>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li>
+                        <strong>A = Atomicity ("All or nothing"):</strong> A transaction is all-or-nothing; either all its operations succeed (Commit), or none are applied (Abort/Rollback). If any part fails, the entire transaction is rolled back to keep the database consistent.
+                    </li>
+                    <li>
+                        <strong>C = Consistency ("Valid State"):</strong> The database must remain in a valid state before and after a transaction. It must follow all defined rules, constraints, and relationships. If a rule is violated, the transaction rolls back. <em>(e.g., Total bank balance before transfer = Total balance after transfer).</em>
+                    </li>
+                    <li>
+                        <strong>I = Isolation:</strong> Transactions run independently without affecting each other. Changes made by one transaction are not visible to others until committed. Ensures concurrent transactions yield the same result as sequential ones.
+                    </li>
+                    <li>
+                        <strong>D = Durability:</strong> Once a transaction is committed, its changes are permanently saved in non-volatile memory. Even if the system crashes immediately after a commit, the data will survive.
+                    </li>
+                </ul>
+                <div class="diagram-box">Example Table: Transaction T (T1: Read X, X=X-100, Write X | T2: Read Y, Y=Y+100, Write Y)</div>
+            </div>
+        </section>
+
+        <!-- 5. DBMS ARCHITECTURE -->
+        <section id="architecture" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">5. DBMS Architecture</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>The DBMS Architecture is divided into interfaces for specific users (Naive users, Application programmers, Sophisticated users, DBAs) and two main internal components:</p>
+                
+                <h3 class="text-xl font-semibold text-slate-800 mt-4">1. Query Processor</h3>
+                <p>Simplifies and facilitates access to data. It parses and optimizes queries to produce an efficient execution blueprint.</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>DDL Interpreter:</strong> Translates Data Definition Language (DDL) statements and updates data dictionaries.</li>
+                    <li><strong>DML Compiler:</strong> Translates Data Manipulation Language (DML) queries into an evaluation plan of low-level instructions.</li>
+                    <li><strong>Query Evaluation Engine:</strong> Executes the low-level instructions generated by the DML compiler against the database.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6">2. Storage Manager</h3>
+                <p>Provides the interface between low-level data stored in the database and the queries submitted. Responsible for storing, retrieving, and updating data.</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>Authorization and Integrity Manager:</strong> Tests for integrity constraints and checks user authority/access rights.</li>
+                    <li><strong>Transaction Manager:</strong> Ensures DB remains in a consistent state despite failures and handles concurrent transactions without conflict.</li>
+                    <li><strong>File Manager:</strong> Manages space allocation on disk storage and data structures representing information.</li>
+                    <li><strong>Buffer Manager:</strong> Crucial component that fetches data from disk to main memory (cache). Enables DBMS to handle databases much larger than main memory.</li>
+                </ul>
+
+                <p class="font-semibold text-slate-900 mt-4">Storage Manager Data Structures:</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>Data files:</strong> Store the database itself.</li>
+                    <li><strong>Data dictionary:</strong> Stores metadata (schema of the database).</li>
+                    <li><strong>Indices:</strong> Provide fast access pointers to data items holding particular values.</li>
+                </ul>
+                <div class="diagram-box">Figure: Architecture of Database (Showing Users -> Query Processor -> Storage Manager -> Disk Storage)</div>
+            </div>
+        </section>
+
+        <!-- 6. THE ENTITY-RELATIONSHIP (ER) MODEL -->
+        <section id="er-model" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">6. The Entity-Relationship (ER) Model</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                
+                <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">Entity Types & Sets</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Entity:</strong> A real-world object that is distinguishable (e.g., a specific Student or Car).</li>
+                    <li><strong>Entity Set:</strong> A collection of similar entities (e.g., All Students).</li>
+                    <li><strong>Strong Entity Set:</strong> Has its own primary key and can exist independently. Represented by a standard rectangle.</li>
+                    <li><strong>Weak Entity Set:</strong> Does not have a primary key of its own. Its existence depends on a strong entity (identifying entity). Represented by a double rectangle.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">Types of Attributes</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Simple Attribute:</strong> Cannot be further divided (e.g., Age).</li>
+                    <li><strong>Composite Attribute:</strong> Can be divided into smaller sub-parts (e.g., Name can be divided into First, Middle, Last).</li>
+                    <li><strong>Single-valued Attribute:</strong> Holds a single value for an entity (e.g., Date of Birth).</li>
+                    <li><strong>Multi-valued Attribute:</strong> Can hold multiple values (e.g., Phone Numbers). Represented by a double oval.</li>
+                    <li><strong>Derived Attribute:</strong> Value is derived from other attributes (e.g., Age derived from Date of Birth). Represented by a dashed oval.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">Keys</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Super Key:</strong> A set of one or more attributes that can uniquely identify a record.</li>
+                    <li><strong>Candidate Key:</strong> A minimal super key (no unnecessary attributes).</li>
+                    <li><strong>Primary Key:</strong> The specific candidate key chosen by the database designer to uniquely identify entities. Underlined in ER diagrams.</li>
+                    <li><strong>Foreign Key:</strong> An attribute that creates a relationship between two tables, referring to the primary key of another table.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">Relationship Constraints</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Mapping Cardinality:</strong> Defines the maximum number of relationship instances an entity can participate in.
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600">
+                            <li>One-to-One (1:1)</li>
+                            <li>One-to-Many (1:N)</li>
+                            <li>Many-to-One (N:1)</li>
+                            <li>Many-to-Many (M:N)</li>
+                        </ul>
+                    </li>
+                    <li><strong>Participation Constraint:</strong> 
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600">
+                            <li><strong>Total Participation:</strong> Every entity in the set must participate in the relationship (Double line).</li>
+                            <li><strong>Partial Participation:</strong> Only some entities participate in the relationship (Single line).</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 7. EXTENDED ER (EER) MODEL -->
+        <section id="eer-model" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">7. Extended Entity-Relationship (EER) Model</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>The EER model incorporates all ER model concepts but adds complex advanced features for better abstraction:</p>
+                
+                <ul class="list-disc pl-6 space-y-4">
+                    <li>
+                        <strong>1. Generalization:</strong> A <em>bottom-up</em> process. Multiple lower-level entities with common attributes are combined to form a higher-level generalized entity. 
+                        <br><span class="text-sm text-slate-500"><em>Example:</em> "Car" and "Truck" entities can be generalized into a "Vehicle" entity.</span>
+                    </li>
+                    <li>
+                        <strong>2. Specialization:</strong> A <em>top-down</em> process. A higher-level entity is broken down into lower-level sub-entities based on distinguishing features. It is the exact opposite of generalization.
+                        <br><span class="text-sm text-slate-500"><em>Example:</em> An "Employee" entity can be specialized into "Developer", "Tester", or "Manager".</span>
+                    </li>
+                    <li>
+                        <strong>3. Aggregation:</strong> A relationship itself is treated as a higher-level entity so that it can participate in relationships with other entities. It overcomes the limitation of the ER model where relationships cannot have relationships with other entities.
+                        <br><span class="text-sm text-slate-500"><em>Example:</em> If an employee works on a project (relationship "Works-On"), and requires machinery for that specific work, the "Works-On" relationship is aggregated into an entity to connect it to "Machinery".</span>
+                    </li>
+                </ul>
+                <div class="diagram-box">Figures: Generalization Hierarchy / Specialization Hierarchy / Aggregation Example.</div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

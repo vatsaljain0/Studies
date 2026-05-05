@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Module 3 - Exam Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        section { scroll-margin-top: 6rem; }
+        
+        /* Custom Styling for the Example Rule */
+        .example-block {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        .example-header {
+            background-color: #f8fafc;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .example-content {
+            padding: 1rem;
+        }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+        .sql-code {
+            background-color: #0f172a;
+            color: #38bdf8;
+            padding: 1rem;
+            border-radius: 0.375rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            white-space: pre-wrap;
+            margin-bottom: 1rem;
+        }
+        .sql-keyword { color: #f472b6; font-weight: bold; }
+        .output-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #16a34a;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#overview" class="hover:text-blue-400 transition-colors">Overview</a></li>
+                <li><a href="#ddl" class="hover:text-blue-400 transition-colors">DDL</a></li>
+                <li><a href="#dml" class="hover:text-blue-400 transition-colors">DML & Multi-Relation</a></li>
+                <li><a href="#operations" class="hover:text-blue-400 transition-colors">Strings & Sets</a></li>
+                <li><a href="#aggregate" class="hover:text-blue-400 transition-colors">Aggregates (Group By)</a></li>
+                <li><a href="#nested" class="hover:text-blue-400 transition-colors">Nested Queries</a></li>
+                <li><a href="#joins" class="hover:text-blue-400 transition-colors">Joins</a></li>
+                <li><a href="#views" class="hover:text-blue-400 transition-colors">Views & Triggers</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            DBMS Module 3: Structured Query Language (SQL)
+        </h1>
+
+        <!-- 1. OVERVIEW -->
+        <section id="overview" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. Overview of SQL</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>What is SQL:</strong> Structured Query Language is used to manage relational databases. It allows users to create, modify, and retrieve data. It strongly follows the ACID (Atomicity, Consistency, Isolation, Durability) properties for transactions.</li>
+                    <li><strong>History:</strong> Developed by IBM (originally called Sequel) in the early 1970s as part of the System R project. It was standardized by ANSI in 1986.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Parts of the SQL Language:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Data-Definition Language (DDL):</strong> Defines the database structure using commands like CREATE, ALTER, and DROP.</li>
+                    <li><strong>Data-Manipulation Language (DML):</strong> Modifies database data using commands like SELECT, INSERT, UPDATE, and DELETE.</li>
+                    <li><strong>Integrity Constraints:</strong> DDL commands specify constraints that the data must satisfy (e.g., Primary Keys, Foreign Keys). Updates violating these are disallowed.</li>
+                    <li><strong>View Definition:</strong> DDL commands to define virtual tables (views).</li>
+                    <li><strong>Transaction Control Commands (TCL):</strong> Manages transactions using COMMIT and ROLLBACK.</li>
+                    <li><strong>Data Control Language (DCL):</strong> Manages permissions and security using GRANT and REVOKE.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. DATA DEFINITION COMMANDS (DDL) -->
+        <section id="ddl" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Data Definition Commands (DDL) & Types</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                
+                <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Built-in Data Types</h3>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>char(n):</strong> Fixed-length character string.</li>
+                    <li><strong>varchar(n):</strong> Variable-length character string with max length n.</li>
+                    <li><strong>int / smallint:</strong> Integer and small integer types.</li>
+                    <li><strong>numeric(p, d):</strong> Fixed-point number with <em>p</em> total digits and <em>d</em> digits to the right of the decimal (e.g., <code>numeric(3,1)</code> handles exactly 44.5).</li>
+                    <li><strong>real / double precision / float(n):</strong> Floating-point numbers.</li>
+                    <li><strong>BLOB:</strong> Binary Large Object used for storing large binary values like images.</li>
+                    <li><strong>DATE / TIME / TIMESTAMP:</strong> DATE handles YYYY-MM-DD; TIME handles HH:MM:SS; TIMESTAMP includes both plus fractions of seconds.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">B. Schema & Constraints Definition</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>The <code>CREATE TABLE</code> command specifies a new relation by giving it a name, its attributes, and initial constraints.</li>
+                    <li><strong>Integrity Constraints:</strong> Key constraints (Primary Key), entity constraints (NOT NULL), and referential integrity (Foreign Key references) can be declared within the CREATE statement or added later via <code>ALTER TABLE</code>.</li>
+                </ul>
+                
+                <div class="example-block">
+                    <div class="example-header">DDL Example: Creating Tables & Constraints</div>
+                    <div class="example-content">
+                        <p class="text-sm text-slate-600 mb-2"><strong>Syntax Rule:</strong> Define attributes, data types, and integrity constraints (Primary Key, Foreign Key).</p>
+                        
+                        <div class="sql-code"><span class="sql-keyword">create table</span> department (
+    dept_name <span class="sql-keyword">varchar</span>(20),
+    building <span class="sql-keyword">varchar</span>(15),
+    budget <span class="sql-keyword">numeric</span>(12,2),
+    <span class="sql-keyword">primary key</span> (dept_name)
+);
+
+<span class="sql-keyword">create table</span> instructor (
+    ID <span class="sql-keyword">varchar</span>(5),
+    name <span class="sql-keyword">varchar</span>(20) <span class="sql-keyword">not null</span>,
+    dept_name <span class="sql-keyword">varchar</span>(20),
+    salary <span class="sql-keyword">numeric</span>(8,2),
+    <span class="sql-keyword">primary key</span> (ID),
+    <span class="sql-keyword">foreign key</span> (dept_name) <span class="sql-keyword">references</span> department
+);</div>
+                        <div class="output-label">Output Result</div>
+                        <p class="text-slate-700 italic">Empty schema tables for <code>department</code> and <code>instructor</code> are created in the database, enforcing that an instructor's dept_name MUST exist in the department table (Referential Integrity).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. DATA MANIPULATION COMMANDS (DML) -->
+        <section id="dml" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">3. Data Manipulation Commands (DML)</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                
+                <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Single Relation Operations</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>INSERT:</strong> Adds new tuples (rows) to a relation.</li>
+                    <li><strong>DELETE:</strong> Removes tuples from a relation.</li>
+                    <li><strong>ALTER / DROP:</strong> Modifies the schema of a relation or removes the table entirely.</li>
+                    <li><strong>SELECT:</strong> Used to list desired attributes. The <code>distinct</code> keyword removes duplicates from the result set.</li>
+                </ul>
+
+                <div class="example-block">
+                    <div class="example-header">DML: Single Relation Operations (INSERT, SELECT)</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Table Before Query: `instructor`</p>
+                        <table class="data-table">
+                            <tr><th>ID</th><th>name</th><th>dept_name</th><th>salary</th></tr>
+                            <tr><td>10101</td><td>Srinivasan</td><td>Comp. Sci.</td><td>65000</td></tr>
+                            <tr><td>22222</td><td>Einstein</td><td>Physics</td><td>95000</td></tr>
+                        </table>
+
+                        <div class="sql-code"><span class="sql-keyword">insert into</span> instructor <span class="sql-keyword">values</span> (10211, 'Smith', 'Biology', 66000);
+
+<span class="sql-keyword">select</span> name, salary * 1.1 <span class="sql-keyword">as</span> projected_salary
+<span class="sql-keyword">from</span> instructor 
+<span class="sql-keyword">where</span> dept_name = 'Comp. Sci.';</div>
+                        
+                        <div class="output-label">Output Table (For the SELECT Query)</div>
+                        <table class="data-table">
+                            <tr><th>name</th><th>projected_salary</th></tr>
+                            <tr><td>Srinivasan</td><td>71500</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">DML: UPDATE Queries on Custom Databases</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Tables:</p>
+                        <p class="text-sm mb-1 font-mono">Employee(empname, street, city, date_of_joining)</p>
+                        <p class="text-sm mb-2 font-mono">Works(empname, company_name, salary)</p>
+                        
+                        <div class="sql-code">-- Modify the database so that 'John' now lives in 'Mumbai'
+<span class="sql-keyword">UPDATE</span> Employee 
+<span class="sql-keyword">SET</span> city = 'Mumbai' 
+<span class="sql-keyword">WHERE</span> empname = 'John';
+
+-- Give all employees of 'ABC Corporation' a 10% raise
+<span class="sql-keyword">UPDATE</span> Works 
+<span class="sql-keyword">SET</span> salary = salary * 1.10 
+<span class="sql-keyword">WHERE</span> company_name = 'ABC Corporation';</div>
+                        <div class="output-label">Output Result</div>
+                        <p class="text-slate-700 italic">Records corresponding to John are updated with city 'Mumbai'. Salaries inside the Works table associated with 'ABC Corporation' are increased by 10%.</p>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">B. Multiple Relations & Cartesian Product</h3>
+                <p>An SQL query primarily contains three main clauses: <code>select</code>, <code>from</code>, and <code>where</code>. Execution logic operates in this specific order:</p>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>The <strong>from clause</strong> by itself generates a Cartesian product of all the relations listed.</li>
+                    <li>The <strong>where clause</strong> predicate is then applied to restrict the combinations created by the Cartesian product to meaningful, related tuples.</li>
+                    <li>The <strong>select clause</strong> outputs the required attributes from the restricted tuples.</li>
+                </ol>
+
+                <div class="example-block">
+                    <div class="example-header">Querying Multiple Relations</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Tables:</p>
+                        <table class="data-table">
+                            <tr><th>instructor.ID</th><th>instructor.name</th><th>dept_name</th></tr>
+                            <tr><td>10101</td><td>Srinivasan</td><td>Comp. Sci.</td></tr>
+                            <tr><td>22222</td><td>Einstein</td><td>Physics</td></tr>
+                        </table>
+                        <table class="data-table">
+                            <tr><th>teaches.ID</th><th>course_id</th></tr>
+                            <tr><td>10101</td><td>CS-101</td></tr>
+                            <tr><td>22222</td><td>PHY-101</td></tr>
+                        </table>
+
+                        <div class="sql-code">-- Find instructor names and the courses they teach
+<span class="sql-keyword">select</span> name, course_id
+<span class="sql-keyword">from</span> instructor, teaches
+<span class="sql-keyword">where</span> instructor.ID = teaches.ID;</div>
+                        
+                        <div class="output-label">Output Table</div>
+                        <table class="data-table">
+                            <tr><th>name</th><th>course_id</th></tr>
+                            <tr><td>Srinivasan</td><td>CS-101</td></tr>
+                            <tr><td>Einstein</td><td>PHY-101</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. RENAME & STRING OPERATIONS -->
+        <section id="operations" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Rename, String Operations & Ordering</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                
+                <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. The Rename Operation</h3>
+                <p>SQL uses the <code>as</code> clause (old-name <code>as</code> new-name) in both select and from clauses to rename relations or attributes. It is useful for creating convenient shorthands (e.g., <code>from instructor as T</code>).</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">B. String Operations</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Strings are enclosed in single quotes and are case-sensitive (e.g., 'Comp. Sci.').</li>
+                    <li>Pattern matching uses the <code>like</code> or <code>not like</code> operators.</li>
+                    <li><strong>Percent (%):</strong> Matches any substring.</li>
+                    <li><strong>Underscore (_):</strong> Matches exactly one single character.</li>
+                    <li><strong>ESCAPE:</strong> Defines a character used immediately before a special pattern character to treat it as a normal character (e.g., <code>like 'ab\%cd%' escape '\'</code>).</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">C. Ordering Tuples</h3>
+                <p>The <code>order by</code> clause causes the result tuples to appear in sorted order. Use <code>desc</code> for descending and <code>asc</code> for ascending order.</p>
+
+                <div class="example-block">
+                    <div class="example-header">Rename (AS), Pattern Matching (LIKE), and Ordering (ORDER BY)</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Table: `department`</p>
+                        <table class="data-table">
+                            <tr><th>dept_name</th><th>building</th></tr>
+                            <tr><td>Biology</td><td>Watson</td></tr>
+                            <tr><td>Physics</td><td>Watson</td></tr>
+                            <tr><td>Comp. Sci.</td><td>Taylor</td></tr>
+                        </table>
+
+                        <div class="sql-code">-- Rename instructor table to T, find departments with 'Watson' in building, sort descending.
+<span class="sql-keyword">select</span> dept_name <span class="sql-keyword">as</span> Department_Title
+<span class="sql-keyword">from</span> department
+<span class="sql-keyword">where</span> building <span class="sql-keyword">like</span> '%Watson%'
+<span class="sql-keyword">order by</span> dept_name <span class="sql-keyword">desc</span>;</div>
+                        
+                        <div class="output-label">Output Table</div>
+                        <table class="data-table">
+                            <tr><th>Department_Title</th></tr>
+                            <tr><td>Physics</td></tr>
+                            <tr><td>Biology</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 5. SET OPERATIONS & NULLS -->
+        <section id="sets" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">5. Set Operations & Null Values</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                
+                <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Set Operations</h3>
+                <p>SQL operations correspond directly to mathematical set theory:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>UNION:</strong> Combines results. By default, it automatically eliminates duplicates. Use <code>union all</code> to retain duplicates.</li>
+                    <li><strong>INTERSECT:</strong> Returns tuples present in both queries. Eliminates duplicates unless <code>intersect all</code> is used.</li>
+                    <li><strong>EXCEPT:</strong> Returns tuples from the first query that are absent in the second. Eliminates duplicates unless <code>except all</code> is used.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">B. Null Values</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Arithmetic operations (+, -, *, /) involving a null value always result in a null.</li>
+                    <li>Comparisons involving nulls (e.g., "1 < null") are treated as <strong>unknown</strong>.</li>
+                    <li>Boolean operations are extended to handle unknowns (e.g., <em>true or unknown</em> is true; <em>true and unknown</em> is unknown).</li>
+                    <li>To test for nulls, SQL uses the explicit keyword <code>is null</code> in a predicate.</li>
+                </ul>
+
+                <div class="example-block">
+                    <div class="example-header">Set Operations (UNION, INTERSECT, EXCEPT)</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Data from `section` table:</p>
+                        <ul class="text-sm text-slate-700 mb-2 list-disc pl-5">
+                            <li><strong>Fall 2009 Courses:</strong> CS-101, CS-347, PHY-101</li>
+                            <li><strong>Spring 2010 Courses:</strong> CS-101, CS-315, FIN-201</li>
+                        </ul>
+
+                        <div class="sql-code">-- Find courses taught in Fall 2009 BUT NOT in Spring 2010
+(<span class="sql-keyword">select</span> course_id <span class="sql-keyword">from</span> section <span class="sql-keyword">where</span> semester = 'Fall' <span class="sql-keyword">and</span> year = 2009)
+<span class="sql-keyword">except</span>
+(<span class="sql-keyword">select</span> course_id <span class="sql-keyword">from</span> section <span class="sql-keyword">where</span> semester = 'Spring' <span class="sql-keyword">and</span> year = 2010);</div>
+                        
+                        <div class="output-label">Output Table (EXCEPT)</div>
+                        <table class="data-table">
+                            <tr><th>course_id</th></tr>
+                            <tr><td>CS-347</td></tr>
+                            <tr><td>PHY-101</td></tr>
+                        </table>
+                        <p class="text-sm text-slate-600 mt-2"><em>If we used <code>intersect</code>, the output would be only <strong>CS-101</strong> (present in both).</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. AGGREGATES, GROUP BY, HAVING -->
+        <section id="aggregate" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">6. Aggregate Functions, Group By & Having</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Aggregate functions take a collection of values and return a single value. The five built-in functions are: <strong>avg, min, max, sum, and count</strong>.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">GROUP BY & HAVING</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>The <code>group by</code> clause places tuples satisfying the where predicate into groups.</li>
+                    <li>The <code>having</code> clause states conditions that apply to groups rather than individual tuples. Predicates in the having clause are applied <strong>after</strong> groups have been formed.</li>
+                    <li><strong>Crucial Rule:</strong> Any attribute present in the having clause without being aggregated <em>must</em> appear in the group by clause.</li>
+                </ul>
+
+                <div class="example-block">
+                    <div class="example-header">Aggregates with GROUP BY and HAVING</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Table: `instructor`</p>
+                        <table class="data-table">
+                            <tr><th>name</th><th>dept_name</th><th>salary</th></tr>
+                            <tr><td>Srinivasan</td><td>Comp. Sci.</td><td>65000</td></tr>
+                            <tr><td>Brandt</td><td>Comp. Sci.</td><td>92000</td></tr>
+                            <tr><td>Mozart</td><td>Music</td><td>40000</td></tr>
+                            <tr><td>Einstein</td><td>Physics</td><td>95000</td></tr>
+                        </table>
+
+                        <div class="sql-code">-- Find the average salary of instructors in departments where average salary > 42000
+<span class="sql-keyword">select</span> dept_name, <span class="sql-keyword">avg</span>(salary) <span class="sql-keyword">as</span> avg_salary
+<span class="sql-keyword">from</span> instructor
+<span class="sql-keyword">group by</span> dept_name
+<span class="sql-keyword">having avg</span>(salary) > 42000;</div>
+                        
+                        <div class="output-label">Output Table</div>
+                        <table class="data-table">
+                            <tr><th>dept_name</th><th>avg_salary</th></tr>
+                            <tr><td>Comp. Sci.</td><td>78500</td></tr>
+                            <tr><td>Physics</td><td>95000</td></tr>
+                        </table>
+                        <p class="text-sm text-slate-600 mt-2"><em>Notice 'Music' is excluded from the output because its average salary (40000) failed the HAVING clause condition.</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 7. NESTED SUBQUERIES -->
+        <section id="nested" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">7. Nested Subqueries</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>A subquery is a select-from-where expression nested within another query. It is used to perform tests for set membership, comparisons, or cardinality.</p>
+
+                <ul class="list-disc pl-6 space-y-4">
+                    <li><strong>Set Membership (IN / NOT IN):</strong> The <code>in</code> connective tests if a value exists within the collection produced by a subquery.</li>
+                    <li><strong>Set Comparison (SOME / ALL):</strong> The phrase "greater than at least one" is represented by <code>&gt; some</code>. The construct <code>&gt; all</code> translates to "greater than all" values in the subquery.</li>
+                    <li><strong>Test for Empty Relations (EXISTS):</strong> The <code>exists</code> construct returns true if the subquery contains any tuples (is nonempty). If it utilizes a correlation name from the outer query, it's called a <strong>correlated subquery</strong>.</li>
+                    <li><strong>Test for Duplicates (UNIQUE):</strong> The <code>unique</code> construct returns true if the subquery contains absolutely no duplicate tuples.</li>
+                    <li><strong>The WITH Clause:</strong> Defines a temporary relation whose definition is only available to the current query.</li>
+                </ul>
+
+                <div class="example-block">
+                    <div class="example-header">Set Comparison: SOME and ALL</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Data Context:</p>
+                        <p class="text-sm mb-2 text-slate-700">Assume the Biology department has instructors with salaries: 72000 and 80000.</p>
+
+                        <div class="sql-code">-- Find names of all instructors whose salary is greater than AT LEAST ONE instructor in Biology
+<span class="sql-keyword">select</span> name
+<span class="sql-keyword">from</span> instructor
+<span class="sql-keyword">where</span> salary > <span class="sql-keyword">some</span> (<span class="sql-keyword">select</span> salary 
+                   <span class="sql-keyword">from</span> instructor 
+                   <span class="sql-keyword">where</span> dept_name = 'Biology');</div>
+                        
+                        <div class="output-label">Output Logic</div>
+                        <p class="text-slate-700 italic">Returns any instructor from the database making more than 72000 (because 72000 is the lowest value in the Biology subquery, satisfying "> some").</p>
+                        
+                        <div class="sql-code mt-4">-- Find names of all instructors whose salary is greater than ALL instructors in Biology
+<span class="sql-keyword">select</span> name
+<span class="sql-keyword">from</span> instructor
+<span class="sql-keyword">where</span> salary > <span class="sql-keyword">all</span> (<span class="sql-keyword">select</span> salary 
+                  <span class="sql-keyword">from</span> instructor 
+                  <span class="sql-keyword">where</span> dept_name = 'Biology');</div>
+                        <div class="output-label">Output Logic</div>
+                        <p class="text-slate-700 italic">Returns only instructors making strictly more than 80000 (must be greater than every single value returned by the subquery).</p>
+                    </div>
+                </div>
+
+                <div class="example-block">
+                    <div class="example-header">The WITH Clause (Temporary Views)</div>
+                    <div class="example-content">
+                        <div class="sql-code">-- Find those departments with the maximum budget
+<span class="sql-keyword">with</span> max_budget (value) <span class="sql-keyword">as</span>
+    (<span class="sql-keyword">select max</span>(budget) <span class="sql-keyword">from</span> department)
+<span class="sql-keyword">select</span> budget
+<span class="sql-keyword">from</span> department, max_budget
+<span class="sql-keyword">where</span> department.budget = max_budget.value;</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. JOINS -->
+        <section id="joins" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">8. SQL Joins</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>A JOIN clause is used to combine rows from two or more tables based on a related column between them. The <code>on</code> condition allows a general predicate to govern the join.</p>
+                <p><strong>EQUI JOIN</strong> uses the equal sign (=), while <strong>NON EQUI JOIN</strong> uses operators like >, <, >=, or <=.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Types of Joins:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>INNER JOIN:</strong> Returns only the rows that have matching values in both participating tables.</li>
+                    <li><strong>LEFT (OUTER) JOIN:</strong> Returns all records from the left table, and the matched records from the right table. Unmatched rows are populated with null values.</li>
+                    <li><strong>RIGHT (OUTER) JOIN:</strong> Returns all records from the right table, and the matched records from the left table.</li>
+                    <li><strong>FULL (OUTER) JOIN:</strong> Returns all records when there is a match in either the left or the right table, combining both left and right outer join results.</li>
+                    <li><strong>NATURAL JOIN:</strong> Considers only those pairs of tuples with the exact same value on identically named attributes. The common columns appear only once in the result.</li>
+                    <li><strong>CROSS JOIN:</strong> Produces a Cartesian Product by multiplying the rows of the first table with the second table.</li>
+                    <li><strong>SELF JOIN:</strong> A regular join where a table is joined with itself.</li>
+                </ul>
+                
+                <div class="example-block">
+                    <div class="example-header">Outer Joins (LEFT, RIGHT, FULL)</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Table 1: `student`</p>
+                        <table class="data-table">
+                            <tr><th>ID</th><th>name</th></tr>
+                            <tr><td>123</td><td>Shankar</td></tr>
+                            <tr><td>705</td><td>Snow</td></tr> <!-- Did not take any course -->
+                        </table>
+                        <p class="text-sm font-bold text-slate-800 mb-1">Sample Table 2: `takes`</p>
+                        <table class="data-table">
+                            <tr><th>ID</th><th>course_id</th></tr>
+                            <tr><td>123</td><td>CS-101</td></tr>
+                            <tr><td>987</td><td>CS-315</td></tr> <!-- Student not in student table -->
+                        </table>
+
+                        <div class="sql-code">-- LEFT OUTER JOIN
+<span class="sql-keyword">select</span> * <span class="sql-keyword">from</span> student <span class="sql-keyword">natural left outer join</span> takes;</div>
+                        <div class="output-label">Output Table (LEFT OUTER JOIN)</div>
+                        <table class="data-table">
+                            <tr><th>ID</th><th>name</th><th>course_id</th></tr>
+                            <tr><td>123</td><td>Shankar</td><td>CS-101</td></tr>
+                            <tr><td>705</td><td>Snow</td><td>null</td></tr>
+                        </table>
+                        <p class="text-sm text-slate-600 mb-4"><em>Explanation: All students are kept. Since Snow took no course, course_id is padded with null.</em></p>
+
+                        <div class="sql-code">-- FULL OUTER JOIN
+<span class="sql-keyword">select</span> * <span class="sql-keyword">from</span> student <span class="sql-keyword">natural full outer join</span> takes;</div>
+                        <div class="output-label">Output Table (FULL OUTER JOIN)</div>
+                        <table class="data-table">
+                            <tr><th>ID</th><th>name</th><th>course_id</th></tr>
+                            <tr><td>123</td><td>Shankar</td><td>CS-101</td></tr>
+                            <tr><td>705</td><td>Snow</td><td>null</td></tr>
+                            <tr><td>987</td><td>null</td><td>CS-315</td></tr>
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 9. VIEWS AND TRIGGERS -->
+        <section id="views" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">9. Views, Triggers & PL/SQL</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                
+                <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Views in SQL</h3>
+                <p>A view acts as a virtual relation. The database system only stores the query expression, calculating the result whenever accessed.</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Materialized Views:</strong> Some databases allow view relations to be actually stored on disk. The system ensures that if the underlying relations change, the view is automatically kept up-to-date.</li>
+                    <li><strong>Updatable Views:</strong> Updates, inserts, or deletes can be applied directly to a view only if it satisfies strict conditions: The FROM clause has only one relation, no aggregate/DISTINCT expressions, no GROUP BY/HAVING clauses, and unlisted attributes can be safely set to null.</li>
+                </ul>
+
+                <div class="example-block">
+                    <div class="example-header">Creating a View</div>
+                    <div class="example-content">
+                        <p class="text-sm text-slate-700 mb-2">A view is a virtual table whose contents are defined by a query. It provides data abstraction.</p>
+                        <div class="sql-code">-- Hide salary data from a clerk by providing a specific view
+<span class="sql-keyword">create view</span> faculty <span class="sql-keyword">as</span>
+<span class="sql-keyword">select</span> ID, name, dept_name
+<span class="sql-keyword">from</span> instructor;
+
+-- You can query a view exactly like a real table
+<span class="sql-keyword">select</span> * <span class="sql-keyword">from</span> faculty;</div>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">B. Triggers</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Mechanism:</strong> Requires specifying <strong>when</strong> the trigger executes (the event and condition) and the <strong>actions</strong> to be taken.</li>
+                    <li><strong>Need:</strong> Used to implement complex integrity constraints that cannot be handled by standard SQL constraints. Useful for alerting humans or automatically starting tasks.</li>
+                    <li><strong>When NOT to use Triggers:</strong> Modern databases handle materialized view maintenance and replication automatically, making triggers unnecessary for these. Triggers can also cause massive issues via unintended execution when data is loaded from a backup copy.</li>
+                </ul>
+
+                <div class="example-block">
+                    <div class="example-header">Creating a Trigger</div>
+                    <div class="example-content">
+                        <p class="text-sm text-slate-700 mb-2">A trigger executes automatically as a side effect of a modification (Event + Condition &rarr; Action).</p>
+                        <div class="sql-code">-- Maintain credits earned values when a grade is updated
+<span class="sql-keyword">create trigger</span> credits_earned <span class="sql-keyword">after update of</span> takes <span class="sql-keyword">on</span> (grade)
+<span class="sql-keyword">referencing new row as</span> nrow
+<span class="sql-keyword">referencing old row as</span> orow
+<span class="sql-keyword">for each row</span>
+<span class="sql-keyword">when</span> nrow.grade &lt;&gt; 'F' <span class="sql-keyword">and</span> nrow.grade <span class="sql-keyword">is not null</span>
+    <span class="sql-keyword">and</span> (orow.grade = 'F' <span class="sql-keyword">or</span> orow.grade <span class="sql-keyword">is null</span>)
+<span class="sql-keyword">begin atomic</span>
+    <span class="sql-keyword">update</span> student
+    <span class="sql-keyword">set</span> tot_cred = tot_cred + (<span class="sql-keyword">select</span> credits <span class="sql-keyword">from</span> course <span class="sql-keyword">where</span> course.course_id = nrow.course_id)
+    <span class="sql-keyword">where</span> student.id = nrow.id;
+<span class="sql-keyword">end</span>;</div>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">C. PL/SQL Block Structure</h3>
+                <p>PL/SQL (Procedural Language extension to SQL) allows writing procedural code that executes within the Database. The fundamental unit is a Block.</p>
+                <div class="example-block">
+                    <div class="example-header">PL/SQL Block Syntax</div>
+                    <div class="example-content">
+                        <div class="sql-code"><span class="sql-keyword">DECLARE</span>
+    -- (Optional) Declare variables, constants, cursors
+    v_name <span class="sql-keyword">varchar</span>(20);
+<span class="sql-keyword">BEGIN</span>
+    -- (Mandatory) Executable statements & core logic
+    <span class="sql-keyword">SELECT</span> name <span class="sql-keyword">INTO</span> v_name <span class="sql-keyword">FROM</span> instructor <span class="sql-keyword">WHERE</span> ID = '10101';
+<span class="sql-keyword">EXCEPTION</span>
+    -- (Optional) Error handling to prevent crashes
+    <span class="sql-keyword">WHEN</span> NO_DATA_FOUND <span class="sql-keyword">THEN</span>
+        <span class="sql-keyword">DBMS_OUTPUT.PUT_LINE</span>('No such instructor found');
+<span class="sql-keyword">END</span>; -- (Mandatory) Marks conclusion</div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

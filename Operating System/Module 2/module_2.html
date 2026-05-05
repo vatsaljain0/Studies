@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Module 2 - Exam Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .diagram-box {
+            background-color: #f8fafc;
+            border: 2px dashed #94a3b8;
+            color: #475569;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1.25rem 0;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        section { scroll-margin-top: 6rem; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#process" class="hover:text-blue-400 transition-colors">Process Concepts & States</a></li>
+                <li><a href="#operations" class="hover:text-blue-400 transition-colors">Operations & PCB</a></li>
+                <li><a href="#context" class="hover:text-blue-400 transition-colors">Context Switching</a></li>
+                <li><a href="#threads" class="hover:text-blue-400 transition-colors">Threads & Models</a></li>
+                <li><a href="#schedulers" class="hover:text-blue-400 transition-colors">Schedulers</a></li>
+                <li><a href="#algorithms" class="hover:text-blue-400 transition-colors">Scheduling Algorithms</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            Operating System: Module 2 (Process Management)
+        </h1>
+
+        <!-- 1. PROCESS CONCEPTS & STATES -->
+        <section id="process" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. Basic Concepts of Process & State Transition</h2>
+            
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>The Process:</strong> A process is a program in execution. It needs resources (CPU time, memory, files, I/O devices) to accomplish its task. The status of its current activity is represented by the <em>program counter</em> and <em>processor registers</em>.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Memory Layout of a Process:</h3>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>Text section:</strong> The executable code.</li>
+                    <li><strong>Data section:</strong> Global and static variables (initialized and uninitialized).</li>
+                    <li><strong>Heap section:</strong> Memory dynamically allocated during program run time.</li>
+                    <li><strong>Stack section:</strong> Temporary data storage when invoking functions (function parameters, return addresses, local variables).</li>
+                </ul>
+                <div class="diagram-box">Figures: Layout of a process in memory / Memory layout of a C program showing Stack and Heap growing towards each other.</div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process State Transition Model:</h3>
+                <p>A process goes through different states during execution. The State Transition Diagram visually represents these transitions:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>New:</strong> The process is being created (Admitted into the Ready queue).</li>
+                    <li><strong>Ready:</strong> The process is waiting to be assigned to a processor (Waiting for CPU scheduling).</li>
+                    <li><strong>Running:</strong> Instructions are being executed (CPU is allocated).</li>
+                    <li><strong>Waiting (Blocked):</strong> The process is waiting for some event to occur (e.g., I/O completion or reception of a signal). Once I/O is complete, it moves back to <em>Ready</em>.</li>
+                    <li><strong>Terminated:</strong> The process has finished execution or is forcefully terminated.</li>
+                </ul>
+                <div class="diagram-box">Figures: Diagram of process state (New, Ready, Running, Waiting, Terminated) / 7-Process States Diagram (including Suspended Ready & Suspended Blocked).</div>
+            </div>
+        </section>
+
+        <!-- 2. OPERATIONS ON PROCESSES & PCB -->
+        <section id="operations" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Operations on Processes & PCB</h2>
+
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Process Creation:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>A process (<strong>parent</strong>) may create several new processes (<strong>children</strong>), forming a tree of processes.</li>
+                    <li>Identified by a unique process identifier (<strong>pid</strong>). <em>(Example: Linux <code>systemd</code> process has pid = 1, serving as the root parent process for all user processes).</em></li>
+                    <li><strong>Execution Possibilities:</strong> 1. Parent executes concurrently with children. 2. Parent waits until children terminate.</li>
+                    <li><strong>Address Space Possibilities:</strong> 1. Child is a duplicate of the parent (same program/data). 2. Child has a new program loaded into it.</li>
+                    <li><strong>UNIX Example:</strong> The <code>fork()</code> system call creates a child process (child pid=0, parent gets child's actual pid). The child inherits privileges/open files. The child overlays its address space using <code>exec()</code>. The parent waits using <code>wait()</code> and resumes when the child invokes <code>exit()</code>.</li>
+                </ul>
+                <div class="diagram-box">Figures: A tree of processes on a typical Linux system / Process creation using the fork() system call.</div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process Termination:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>A process terminates when it finishes its final statement and asks the OS to delete it using the <code>exit()</code> system call. Returns status to waiting parent via <code>wait()</code>.</li>
+                    <li>All resources (physical/virtual memory, open files, I/O buffers) are deallocated.</li>
+                    <li>A parent may terminate a child if: 
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600">
+                            <li>Child exceeded resource usage.</li>
+                            <li>Task assigned to child is no longer required.</li>
+                            <li>Parent is exiting, and OS does not allow a child to continue (Cascading termination).</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process Control Block (PCB):</h3>
+                <p>Each process is represented in the OS by a PCB (Task Control Block). It serves as the repository for all data needed to start/restart a process:</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>Process state:</strong> New, ready, running, waiting, etc.</li>
+                    <li><strong>Program counter:</strong> Address of the next instruction to be executed.</li>
+                    <li><strong>CPU registers:</strong> Accumulators, index registers, stack pointers. Saved during interrupts to continue correctly later.</li>
+                    <li><strong>CPU-scheduling info:</strong> Priority, pointers to scheduling queues.</li>
+                    <li><strong>Memory-management info:</strong> Base/limit registers, page tables.</li>
+                    <li><strong>Accounting info:</strong> CPU time used, time limits, process numbers.</li>
+                    <li><strong>I/O status info:</strong> List of I/O devices allocated, list of open files.</li>
+                </ul>
+                <div class="diagram-box">Figure: Process control block (PCB).</div>
+            </div>
+        </section>
+
+        <!-- 3. CONTEXT SWITCHING -->
+        <section id="context" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">3. Context Switching</h2>
+
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Definition:</strong> The process where the CPU stops running one process, saves its current state in its PCB, and loads the saved state of another process so that multiple processes can share the CPU effectively.</p>
+                
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Need in Multitasking:</strong> CPU keeps switching between processes, giving the illusion of parallel execution. Without it, one process could monopolize the CPU indefinitely.</li>
+                    <li><strong>Role in Scheduling:</strong> The scheduler decides the next process; the <strong>dispatcher</strong> performs the actual switch.</li>
+                    <li><strong>Triggers for Context Switch:</strong> High-priority process arrives, Interrupt occurs, User/Kernel mode switch, or Preemptive CPU scheduling ends a time slice.</li>
+                    <li><strong>Overhead:</strong> Time spent switching is called <em>context switch overhead</em>. The CPU does no useful work during this time. If switching happens too often, efficiency drops.</li>
+                </ul>
+
+                <p class="font-semibold text-slate-900 mt-4">Step-by-Step Execution Phase (P0 to P1):</p>
+                <ol class="list-decimal pl-6 space-y-1">
+                    <li>P0 is executing. Interrupt or system call occurs.</li>
+                    <li><strong>Save State (P0 → PCB0):</strong> OS pauses P0 and saves its register values/PC into PCB0.</li>
+                    <li><strong>Load State (PCB1 → P1):</strong> OS retrieves the saved state of P1 from PCB1.</li>
+                    <li>P1 starts executing while P0 remains idle.</li>
+                </ol>
+                <div class="diagram-box">Figures: Diagram showing context switch from process to process / Interleaved execution flowchart.</div>
+            </div>
+        </section>
+
+        <!-- 4. THREADS & MODELS -->
+        <section id="threads" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Introduction to Threads & Thread Models</h2>
+
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Thread:</strong> A single sequence stream within a process. Often called a "lightweight process." It is a basic unit of CPU utilization comprising a Thread ID, Program Counter (PC), Register set, and Stack.</p>
+                <p>Multiple threads within the same process <strong>share</strong> the code section, data section, and OS resources (like open files).</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process vs. Thread (6 Key Differences):</h3>
+                <ul class="list-disc pl-6 space-y-1 text-sm md:text-base">
+                    <li><strong>Weight:</strong> Process is heavy-weight/resource-intensive. Thread is light-weight, using fewer resources.</li>
+                    <li><strong>Switching:</strong> Process switching needs interaction with the OS. Thread switching does not need OS interaction.</li>
+                    <li><strong>Resources:</strong> Each process has its own memory/file resources. Threads share the same set of open files/child processes.</li>
+                    <li><strong>Blocking:</strong> If one process blocks, no other process can execute. If one thread blocks, a second thread in the same task can still run.</li>
+                    <li><strong>Resource Usage:</strong> Multiple processes use more resources; multithreaded processes use fewer resources.</li>
+                    <li><strong>Independence:</strong> Processes operate independently. One thread can read, write, or change another thread's data.</li>
+                </ul>
+                <div class="diagram-box">Figure: Single-threaded process vs multithreaded process layout.</div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Types of Threads:</h3>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li>
+                        <strong>User-Level Thread (ULT):</strong> Implemented in user-level libraries. Kernel doesn't know about them. 
+                        <br><em>Pros:</em> Fast context switching, portable, no kernel intervention needed. 
+                        <br><em>Cons:</em> If one thread causes a page fault/blocking system call, the entire process blocks.
+                    </li>
+                    <li>
+                        <strong>Kernel-Level Thread (KLT):</strong> Managed directly by the OS. Kernel has a master thread table.
+                        <br><em>Pros:</em> True parallel execution on multiprocessors; if one thread blocks, others can run.
+                        <br><em>Cons:</em> Slower and inefficient context switching due to OS intervention overhead.
+                    </li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Multithreading Models:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Many-to-One:</strong> Maps many ULTs to one KLT. Efficient, but entire process blocks if one thread blocks. Cannot run in parallel on multicore systems.</li>
+                    <li><strong>One-to-One:</strong> Maps each ULT to a KLT. Provides maximum concurrency. Drawback: creating a user thread requires creating a kernel thread, burdening performance (used by Windows, Linux).</li>
+                    <li><strong>Many-to-Many:</strong> Multiplexes many ULTs to a smaller/equal number of KLTs. Best of both worlds. (A variation is the <em>Two-level model</em> which also allows a ULT to be strictly bound to a KLT).</li>
+                </ul>
+                <div class="diagram-box">Figures: User Level Thread vs Kernel Level Thread / Many-to-One Model / One-to-One Model / Many-to-Many Model / Two-level Model.</div>
+            </div>
+        </section>
+
+        <!-- 5. SCHEDULERS -->
+        <section id="schedulers" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">5. Basic Concepts of Scheduling & Types of Schedulers</h2>
+
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Basic Concepts:</strong> Process scheduling manages removing a running process from the CPU and selecting another to maximize CPU utilization. A process moves between queues (Job queue, Ready queue, Waiting queue) throughout its lifetime.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Types of Schedulers:</h3>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li>
+                        <strong>1. Long-Term Scheduler (Job Scheduler):</strong>
+                        <br>Loads processes from disk (Job Queue) into main memory (Ready Queue).
+                        <br><strong>Function:</strong> Controls the <em>degree of multiprogramming</em>. Selects a balanced mix of I/O-bound and CPU-bound processes.
+                        <br><strong>Speed:</strong> Slowest. Operates infrequently. (Almost minimal/nil in modern time-sharing systems).
+                    </li>
+                    <li>
+                        <strong>2. Short-Term Scheduler (CPU Scheduler):</strong>
+                        <br>Selects a process from the ready queue and assigns the CPU to it.
+                        <br><strong>Function:</strong> Maximizes CPU utilization and ensures no starvation. Uses scheduling algorithms.
+                        <br><strong>Speed:</strong> Fastest. Operates very frequently (every few milliseconds).
+                    </li>
+                    <li>
+                        <strong>Dispatcher:</strong> The component called by the Short-Term Scheduler that performs the actual context switch, switches system to user mode, and jumps to the proper program location.
+                    </li>
+                    <li>
+                        <strong>3. Medium-Term Scheduler:</strong>
+                        <br>Manages <strong>swapping</strong>. Temporarily removes processes from memory to disk (Swap out) when they are blocked, and restores them later (Swap in).
+                        <br><strong>Function:</strong> Reduces the degree of multiprogramming to free up memory.
+                        <br><strong>Speed:</strong> Faster than Long-term, slower than Short-term.
+                    </li>
+                </ul>
+                <div class="diagram-box">Figures: Process scheduler queues / Short-Term Scheduler flowchart / Medium-Term Scheduler swapping flowchart.</div>
+            </div>
+        </section>
+
+        <!-- 6. SCHEDULING ALGORITHMS -->
+        <section id="algorithms" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">6. Scheduling Algorithms & Criteria</h2>
+
+            <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
+                
+                <!-- Criteria -->
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Scheduling Definitions & Criteria</h3>
+                    <ul class="list-disc pl-6 space-y-2">
+                        <li><strong>Non-Preemptive:</strong> Once a process gets the CPU, it holds it until it terminates or switches to waiting. It cannot be interrupted.</li>
+                        <li><strong>Preemptive:</strong> OS can interrupt a running process and force it into the ready state to allocate the CPU to another process.</li>
+                    </ul>
+                    <p class="font-semibold text-slate-900 mt-4">Formulas & Criteria:</p>
+                    <ul class="list-disc pl-6 space-y-1 font-mono text-sm bg-slate-100 p-3 rounded-md">
+                        <li>CPU Utilization: Keep CPU as busy as possible (40% to 90%).</li>
+                        <li>Throughput: Number of processes completed per time unit.</li>
+                        <li>Turnaround Time (TAT) = Completion Time (CT) - Arrival Time (AT)</li>
+                        <li>Waiting Time (WT) = Turnaround Time (TAT) - Burst Time (BT)</li>
+                        <li>Response Time = Time from submission until the FIRST response is produced.</li>
+                    </ul>
+                </div>
+
+                <!-- Non-Preemptive Algorithms -->
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">B. Non-Preemptive Scheduling Algorithms</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-700">1. First-Come, First-Served (FCFS)</h4>
+                            <p>Managed with a FIFO queue. The process that requests the CPU first gets it first.</p>
+                            <p><strong>Disadvantage:</strong> High average waiting time. Suffers from the <strong>Convoy Effect</strong>: Short processes are forced to wait behind long processes, leading to inefficiency.</p>
+                            <p class="text-sm text-slate-600 italic">Example Calculation: P1(24), P2(3), P3(3). Order P1, P2, P3 &rarr; Avg WT = 17ms. Order P2, P3, P1 &rarr; Avg WT = 3ms.</p>
+                            <div class="diagram-box p-2 my-2">Gantt Charts: FCFS scheduling examples</div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-700">2. Non-Preemptive Shortest Job First (SJF)</h4>
+                            <p>CPU is assigned to the process that has the smallest next CPU burst. Once assigned, it runs to completion without interruption.</p>
+                            <p><strong>Advantage:</strong> Gives the minimum possible average waiting time for a given set of processes.</p>
+                            <div class="diagram-box p-2 my-2">Gantt Charts: Non-Preemptive SJF</div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-700">3. Non-Preemptive Priority Scheduling</h4>
+                            <p>CPU is allocated to the process with the highest priority (e.g., 0 = highest). Once it starts, it cannot be interrupted even if a higher priority process arrives.</p>
+                            <p class="text-sm text-slate-600 italic mt-2">Example from PPT: P1 (Burst 4, Priority 3), P2 (5, 2), P3 (8, 2), P4 (7, 1), P5 (3, 3).<br>Execution Order: P4 &rarr; P2 &rarr; P3 &rarr; P1 &rarr; P5.</p>
+                            <div class="diagram-box p-2 my-2">Gantt Chart: Priority scheduling execution order</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Preemptive Algorithms -->
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">C. Preemptive Scheduling Algorithms</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-700">1. Round-Robin (RR) Scheduling</h4>
+                            <p>Designed for time-sharing systems. A small unit of time called a <strong>time quantum</strong> (10-100ms) is defined. The ready queue is a circular FIFO queue. Each process gets the CPU for up to 1 quantum. If the burst exceeds it, it is preempted and put at the tail of the ready queue.</p>
+                            <p class="text-sm text-slate-600 italic">Example: P1(24), P2(3), P3(3). Quantum = 4. P1 gets 4ms, preempted. P2 gets 3ms (quits). P3 gets 3ms (quits). P1 gets remaining. Avg WT = 5.66ms.</p>
+                            <div class="diagram-box p-2 my-2">Gantt Chart: Round-Robin scheduling / Figure: Time quantum vs Context switches</div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-700">2. Preemptive SJF (Shortest-Remaining-Time-First / SRTF)</h4>
+                            <p>If a new process arrives with a CPU burst shorter than the <em>remaining</em> time of the currently running process, the running process is preempted.</p>
+                            <p class="text-sm text-slate-600 italic">Example: P1(arr 0, bt 8), P2(arr 1, bt 4), P3(arr 2, bt 9), P4(arr 3, bt 5). Avg WT = 6.5ms.</p>
+                            <div class="diagram-box p-2 my-2">Gantt Charts: Preemptive SJF (SRTF)</div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-bold text-slate-700">3. Preemptive Priority Scheduling</h4>
+                            <p>If a new process arrives with a higher priority than the currently running process, the CPU is preempted and given to the new arrival.</p>
+                            <p><strong>Major Problem:</strong> <em>Starvation (Indefinite blocking)</em>. Low priority processes may wait indefinitely.</p>
+                            <p><strong>Solution:</strong> <em>Aging</em>. Gradually increasing the priority of processes that wait in the system for a long time. <em>(Fact: It would take a little over 2 minutes for a priority-127 process to age to a priority-0 process.)</em></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Multilevel Queue -->
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">D. Multilevel Queue Scheduling</h3>
+                    <p>With both priority and round-robin scheduling, all processes may be placed in a single queue, requiring an O(n) search to determine the highest-priority process. In practice, it is easier to have <strong>separate queues for each distinct priority</strong>.</p>
+                    <p>Priority scheduling simply schedules the process in the highest-priority queue. If there are multiple processes in the highest-priority queue, they are executed in <strong>Round-Robin order</strong>. In its most generalized form, a priority is assigned <em>statically</em> to each process, and it remains in the same queue for the duration of its runtime.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

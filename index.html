@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exam Prep Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { 
+            font-family: 'Inter', system-ui, -apple-system, sans-serif; 
+            background-color: #fdf8f5; 
+            color: #3e2723; 
+        }
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(212, 175, 55, 0.3), 0 4px 6px -2px rgba(212, 175, 55, 0.15);
+        }
+        .gold-accent { color: #d4af37; }
+        .bg-espresso { background-color: #3e2723; }
+        .border-gold { border-color: #d4af37; }
+    </style>
+</head>
+<body class="antialiased min-h-screen flex flex-col">
+
+    <header class="bg-espresso text-white shadow-md py-6 border-b-4 border-gold">
+        <div class="max-w-6xl mx-auto px-6 flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-extrabold tracking-tight">Vatsal's <span class="gold-accent">Study Hub</span></h1>
+                <p class="text-sm font-medium opacity-80 mt-1">Centralized Exam Notes & Concept Canvases</p>
+            </div>
+            <div class="hidden md:block text-right">
+                <p class="text-xs uppercase tracking-wider gold-accent font-bold">Current Semester</p>
+                <p class="text-sm font-mono mt-1">2026</p>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-6xl mx-auto px-6 py-12 w-full">
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+            <!-- Database Management (DBMS) -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-between mb-4 border-b pb-2">
+                    <h2 class="text-xl font-bold text-espresso">Database Management (DBMS)</h2>
+                </div>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="Studies/DBMS/Module 1/module_1.html" class="flex items-center text-gray-700 hover:text-[#d4af37] font-medium transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Module 1: Introduction and Entity-Relationship Model
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Studies/DBMS/Module 2/module_2.html" class="flex items-center text-gray-700 hover:text-[#d4af37] font-medium transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Module 2: Relational Model and Relational Algebra
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Studies/DBMS/Module 3/module_3.html" class="flex items-center text-gray-700 hover:text-[#d4af37] font-medium transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Module 3: Structured Query Language (SQL)
+                        </a>
+                    </li>
+                    <li class="pt-2 mt-2 border-t border-gray-100">
+                        <a href="Studies/DBMS/Module 2/eer_examples.html" class="flex items-center text-espresso font-bold hover:text-[#d4af37] transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                            EER Diagram Gallery
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Operating Systems (OS) -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-between mb-4 border-b pb-2">
+                    <h2 class="text-xl font-bold text-espresso">Operating Systems (OS)</h2>
+                </div>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="Studies/Operating System/Module 1/module_1.html" class="flex items-center text-gray-700 hover:text-[#d4af37] font-medium transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Module 1: Introduction to Operating System
+                        </a>
+                    </li>
+                    <li>
+                        <a href="Studies/Operating System/Module 2/module_2.html" class="flex items-center text-gray-700 hover:text-[#d4af37] font-medium transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Module 2: Process Management
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Telecommunications (FTS) -->
+            <div class="bg-white rounded-xl border border-gray-200 shadow-sm p-6 transition-all duration-300 card-hover">
+                <div class="flex items-center justify-between mb-4 border-b pb-2">
+                    <h2 class="text-xl font-bold text-espresso">Telecommunications (FTS)</h2>
+                </div>
+                <ul class="space-y-3">
+                    <li>
+                        <a href="Studies/Fundamentals of Telecom. Systems/Module 1/module_1.html" class="flex items-center text-gray-700 hover:text-[#d4af37] font-medium transition-colors">
+                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+                            Module 1: Introduction to Telecommunication
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-6 mt-auto">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p class="text-sm font-medium text-gray-500">Structured for rapid revision. Stay focused.</p>
+        </div>
+    </footer>
+
+</body>
+</html>

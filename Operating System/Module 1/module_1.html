@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Module 1 - Exam Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .diagram-box {
+            background-color: #f8fafc;
+            border: 2px dashed #94a3b8;
+            color: #475569;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1.25rem 0;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        section { scroll-margin-top: 6rem; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#boot" class="hover:text-blue-400 transition-colors">System Boot</a></li>
+                <li><a href="#objectives" class="hover:text-blue-400 transition-colors">Objectives</a></li>
+                <li><a href="#functions" class="hover:text-blue-400 transition-colors">Functions</a></li>
+                <li><a href="#structure" class="hover:text-blue-400 transition-colors">Structure & Ops</a></li>
+                <li><a href="#services" class="hover:text-blue-400 transition-colors">Services</a></li>
+                <li><a href="#multi" class="hover:text-blue-400 transition-colors">Multi-Task/Prog/Thread</a></li>
+                <li><a href="#types" class="hover:text-blue-400 transition-colors">OS Types</a></li>
+                <li><a href="#syscalls" class="hover:text-blue-400 transition-colors">System Calls</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            Operating System: Module 1 (Exam Notes)
+        </h1>
+        
+        <p class="text-lg text-slate-600 mb-8 font-medium italic">
+            "An Operating System (OS) is a system program that acts as an intermediary between the computer user and the hardware, managing resources and providing a basis for applications."
+        </p>
+
+        <!-- 1. SYSTEM BOOT -->
+        <section id="boot" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. System Boot</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Definition:</strong> Booting is the procedure of starting a computer by locating the kernel, loading it into main memory, and starting its execution.</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Bootstrap Program:</strong> The initial small piece of code that runs when a computer is powered up or rebooted.</li>
+                    <li><strong>Role of ROM/Firmware:</strong> The bootstrap program is stored in Read-Only Memory (ROM) or firmware. This is essential because RAM is in an unknown, volatile state at startup. ROM is convenient as it needs no initialization and is highly resistant to computer viruses.</li>
+                    <li><strong>Execution Steps:</strong> 
+                        <ul class="list-circle pl-6 mt-1 space-y-1">
+                            <li>The CPU instruction register is loaded with a predefined memory location to start execution.</li>
+                            <li>Runs hardware diagnostics to determine the machine's state.</li>
+                            <li>Initializes all system aspects (CPU registers, device controllers, memory contents).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Two-Step Booting (PCs/Large OS):</strong> For large OS, the bootstrap loader in firmware only runs diagnostics and fetches a more complex <strong>boot block</strong> (block zero) from the disk. This boot block contains a program sophisticated enough to traverse the file system, load the entire OS kernel into memory, and begin execution.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. OBJECTIVES OF OPERATING SYSTEM -->
+        <section id="objectives" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Objectives of Operating System</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>An OS acts as an interface between applications and computer hardware with three primary objectives:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Convenience:</strong> To make the computer system more convenient and user-friendly to use.</li>
+                    <li><strong>Efficiency:</strong> To allow the computer system's hardware resources (CPU, memory, storage) to be managed and utilized in an efficient manner.</li>
+                    <li><strong>Ability to Evolve:</strong> An OS should be constructed in a modular way to permit the effective development, testing, and introduction of new system functions without interfering with existing services.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. FUNCTIONS OF OPERATING SYSTEM -->
+        <section id="functions" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">3. Functions of Operating System</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>The OS acts as a <strong>Resource Manager</strong>, controlling the movement, storage, and processing of data.</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Process Management:</strong> Manages the execution of multiple programs, determines how much processor time is devoted to a user program, and schedules CPU tasks.</li>
+                    <li><strong>Memory Management:</strong> Jointly controls the allocation of main memory (RAM) alongside hardware, preventing conflicts between running applications.</li>
+                    <li><strong>File Management:</strong> Organizes, stores, retrieves, and secures files and directories across storage devices.</li>
+                    <li><strong>Device (I/O) Management:</strong> Decides when an I/O device can be used by a program and communicates with hardware peripherals via drivers.</li>
+                    <li><strong>Security & Protection:</strong> Protects system resources with user authentication and permissions.</li>
+                    <li><strong>Error Detection & Handling:</strong> Identifies and addresses system errors to maintain stability.</li>
+                    <li><strong>Job Accounting:</strong> Tracks resource usage by specific users or processes.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. OS STRUCTURE AND OPERATIONS -->
+        <section id="structure" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Operating System Structure and Operations</h2>
+            
+            <h3 class="text-xl font-semibold text-slate-800 mb-3 border-b pb-2">A. Operating System Structure</h3>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Different architectures dictate how the OS kernel is designed and organized:</p>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li>
+                        <strong>1. Monolithic Structure:</strong> All functionality of the kernel is placed into a single, static binary file running in a single address space. It is a tightly coupled system.
+                        <br><em>Advantages:</em> Highly efficient execution speed since everything is combined.
+                        <br><em>Disadvantages:</em> Difficult to implement and maintain; a change in one part affects the whole system. Interfaces are not well separated.
+                        <br><em>Examples:</em> Original UNIX, MS-DOS.
+                    </li>
+                    <li>
+                        <strong>2. Layered Approach:</strong> A loosely coupled system where the OS is broken into a number of layers (levels). The bottom layer (Layer 0) is the hardware, and the highest layer (Layer N) is the User Interface.
+                        <br><em>Advantages:</em> Simplifies construction and debugging. Each layer only uses functions from lower-level layers, allowing isolated testing. Provides information hiding.
+                        <br><em>Disadvantages:</em> Less efficient due to multiple layer traversals. Difficult to appropriately define what belongs in which layer.
+                    </li>
+                    <li>
+                        <strong>3. Microkernels:</strong> Removes nonessential components from the kernel and implements them as user-level programs residing in separate address spaces. The kernel only provides minimal process/memory management and communication via <strong>message passing</strong>.
+                        <br><em>Advantages:</em> Extremely secure and reliable (if a user-level service fails, the core OS remains untouched). Easier to extend without modifying the kernel.
+                        <br><em>Examples:</em> Mach, Apple's Darwin kernel.
+                    </li>
+                    <li>
+                        <strong>4. Loadable Kernel Modules (LKMs):</strong> The kernel provides a set of core components and links in additional services (like device drivers or file systems) dynamically via modules during boot or runtime.
+                        <br><em>Advantages:</em> Highly flexible (modules can call any other module, unlike strict layering) and efficient (no message passing required, unlike microkernels). No need to recompile the kernel for new features.
+                        <br><em>Examples:</em> Modern Linux, Solaris.
+                    </li>
+                    <li>
+                        <strong>5. Hybrid Systems:</strong> Very few modern OS use a single strict structure. They combine structures for performance, security, and usability.
+                        <br><em>Examples:</em> macOS and iOS (combines Mach microkernel and BSD UNIX), Windows 10 (Monolithic but with microkernel behaviors like dynamic modules).
+                    </li>
+                </ul>
+                <img src="Picture1.png" alt="Monolithic OS Architecture" class="w-full max-w-2xl mx-auto rounded-lg shadow-md my-8 border border-slate-200">
+                <img src="Picture2.png" alt="Layered OS Architecture" class="w-full max-w-2xl mx-auto rounded-lg shadow-md my-8 border border-slate-200">
+                <img src="Picture3.png" alt="Kernel Architecture" class="w-full max-w-2xl mx-auto rounded-lg shadow-md my-8 border border-slate-200">
+                <img src="Picture4.png" alt="Hybrid OS Architecture" class="w-full max-w-2xl mx-auto rounded-lg shadow-md my-8 border border-slate-200">
+            </div>
+
+            <h3 class="text-xl font-semibold text-slate-800 mt-8 mb-3 border-b pb-2">B. Operating System Operations</h3>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Once booted, the OS waits for events to occur. Modern operating systems are <strong>Interrupt Driven</strong>.</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Hardware Interrupts:</strong> Triggered by devices (e.g., keyboard press, disk read completion) sending a signal to the CPU.</li>
+                    <li><strong>Software Interrupts (Traps/Exceptions):</strong> Triggered by software errors (e.g., division by zero, invalid memory access) or by user programs requesting OS services via a <strong>System Call</strong>.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. OS SERVICES -->
+        <section id="services" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">5. Operating System Services</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>The OS provides specific services categorized into two main goals:</p>
+                
+                <p class="font-semibold text-slate-900">A. Services that are helpful to the User:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>User Interface (UI):</strong> Providing environments like Command-Line (CLI), Graphical (GUI), or Batch interfaces.</li>
+                    <li><strong>Program Execution:</strong> Loading programs into memory, running them, and handling normal/abnormal termination.</li>
+                    <li><strong>I/O Operations:</strong> Allowing programs safe access to files or I/O devices (like printers or displays) without needing direct hardware control.</li>
+                    <li><strong>File-System Manipulation:</strong> Reading, writing, creating, deleting, and searching files/directories, as well as managing permissions.</li>
+                    <li><strong>Communications:</strong> Allowing processes to exchange information either via <em>shared memory</em> or <em>message passing</em>.</li>
+                    <li><strong>Error Detection:</strong> Constantly monitoring CPU, memory, and I/O to halt or correct errors, ensuring consistent computing.</li>
+                </ul>
+
+                <p class="font-semibold text-slate-900 mt-4">B. Services for ensuring efficient System Operation:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Resource Allocation:</strong> Distributing limited resources (CPU cycles, memory, storage) among multiple concurrent users or jobs.</li>
+                    <li><strong>Accounting:</strong> Keeping track of which users consume which resources for billing or usage statistics.</li>
+                    <li><strong>Protection and Security:</strong> Ensuring controlled access to system resources and authenticating external users to prevent interference or break-ins.</li>
+                </ul>
+                <img src="Picture5.png" alt="Operating System Services" class="w-full max-w-2xl mx-auto rounded-lg shadow-md my-8 border border-slate-200">
+            </div>
+        </section>
+
+        <!-- 6. MULTIPROGRAMMING, MULTITASKING, MULTITHREADING -->
+        <section id="multi" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">6. Multiprogramming, Multitasking & Multithreading</h2>
+            
+            <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800">A. Multiprogramming (Batch Systems)</h3>
+                    <p>Designed to maximize CPU utilization by organizing programs so the CPU always has one to execute. A subset of total jobs is kept in memory. When the currently executing process has to wait (e.g., for user input or I/O completion), the OS simply switches to execute another process. <strong>The primary goal is that the CPU is never idle.</strong></p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800">B. Multitasking (Time-Sharing)</h3>
+                    <p>A logical extension of multiprogramming. The CPU executes multiple processes by switching among them, but these switches occur <strong>so frequently and rapidly</strong> that it provides users with a fast response time (typically < 1 second). This creates an interactive computing environment where multiple users can share the system simultaneously. It heavily utilizes <em>CPU scheduling</em> and <em>Virtual Memory</em> (to execute processes larger than physical RAM).</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-semibold text-slate-800">C. Multithreading</h3>
+                    <p>A <strong>Thread</strong> is the basic unit of CPU utilization. It comprises a thread ID, a program counter, a register set, and a stack. While a traditional process has a single thread of control, a multithreaded process contains multiple threads that <strong>share</strong> the same code section, data section, and OS resources (like open files).</p>
+                    <p><em>Example benefit:</em> A word processor can use one thread to respond to keystrokes, another to display graphics, and a third to run spell-check simultaneously in the background.</p>
+                </div>
+                
+                <div class="diagram-box">Figures: Memory layout for multiprogramming / Uniprogramming vs Multiprogramming time charts / Single-threaded vs Multithreaded Process architecture.</div>
+            </div>
+        </section>
+
+        <!-- 7. TYPES OF OS -->
+        <section id="types" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">7. Types of Operating System</h2>
+            
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <ul class="list-disc pl-6 space-y-4">
+                    <li><strong>Serial Processing:</strong> The earliest phase (1940s) where no OS existed. Programmers interacted directly with hardware using punch cards, toggle switches, and display lights.</li>
+                    <li><strong>Simple Batch Systems:</strong> Uses a "monitor" software. Users submit jobs to an operator who batches them sequentially on an input device. The monitor automatically loads the next job to save setup time.</li>
+                    <li><strong>Multiprogrammed Batch Systems:</strong> Expands memory to hold multiple user programs. If one job waits for I/O, the processor switches to another, drastically reducing idle time.</li>
+                    <li><strong>Time-Sharing Systems:</strong> Processor time is shared among multiple users simultaneously accessing terminals. The OS interleaves execution in short bursts (quantums).</li>
+                    <li><strong>Mainframe Operating Systems:</strong> Designed for room-sized corporate data centers managing massive disk/data arrays. They offer batch, transaction processing, and time-sharing services.</li>
+                    <li><strong>Server Operating Systems:</strong> Run on powerful networks, allowing multiple users to share hardware/software resources (like print, file, or Web services).</li>
+                    <li><strong>Multiprocessor Operating Systems:</strong> Special OS designed to manage multiple interconnected CPUs (parallel computers/multicore chips) operating as a single system.</li>
+                    <li><strong>Personal Computer (PC) Operating Systems:</strong> Designed to provide excellent support and multiprogramming to a single desktop/laptop user (Windows, macOS, Linux).</li>
+                    <li><strong>Handheld Operating Systems:</strong> Powers small devices (smartphones/tablets). They manage multicore CPUs, sensors, GPS, and third-party apps (Android, iOS).</li>
+                    <li><strong>Embedded Operating Systems:</strong> Controls specialized devices (microwaves, car engines). Software is in ROM, and no untrusted/downloadable software is ever executed, leading to simpler security designs.</li>
+                    <li><strong>Sensor Node Operating Systems:</strong> Tiny, battery-powered event-driven OS (like TinyOS) that manage wireless communication and measurements based on external triggers.</li>
+                    <li><strong>Real-Time Operating Systems (RTOS):</strong> Used where "Time" is the key parameter. 
+                        <br><em>Hard RTOS:</em> Missing a deadline causes permanent failure (e.g., industrial robotics). 
+                        <br><em>Soft RTOS:</em> Missing an occasional deadline is acceptable (e.g., streaming audio/video).
+                    </li>
+                    <li><strong>Smart Card Operating Systems:</strong> The smallest OS running on credit-card-sized CPU chips with severe power/memory constraints (e.g., Java-oriented JVM cards).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 8. TYPES OF SYSTEM CALLS -->
+        <section id="syscalls" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">8. Types of System Calls</h2>
+            
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Definition:</strong> System calls provide the crucial programming interface connecting currently running user programs to the services made available by the OS. They are typically accessed via high-level API routines written in C and C++.</p>
+                
+                <p class="font-semibold text-slate-900 mt-4">System calls are grouped into five major categories:</p>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li><strong>Process Control:</strong> Creating or terminating processes, loading/executing code, getting/setting process attributes, waiting for time/events, allocating and freeing memory. <em>(e.g., fork(), exit(), wait())</em></li>
+                    <li><strong>File Management:</strong> Creating, deleting, opening, closing, reading, writing, and repositioning files, as well as managing file attributes. <em>(e.g., open(), read(), write())</em></li>
+                    <li><strong>Device Management:</strong> Requesting and releasing peripheral devices, reading/writing to devices, and logically attaching or detaching them. <em>(e.g., ioctl())</em></li>
+                    <li><strong>Information Maintenance:</strong> Getting or setting system time, date, and overall system data. Transferring attributes between the OS and user programs. <em>(e.g., getpid(), alarm())</em></li>
+                    <li><strong>Communications:</strong> Creating or deleting communication connections, sending and receiving messages across networks, and transferring status info. <em>(e.g., pipe(), mmap())</em></li>
+                </ul>
+
+                <div class="diagram-box">Tables: Process/File management System calls detail lists / Windows vs Unix System Call Equivalents / Standard C Library printf handling sequence.</div>
+            </div>
+        </section>
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTS Module 1 - Exam Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .diagram-container {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 2rem 0;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        .diagram-caption {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 1rem; 
+            padding-top: 1rem;
+            border-top: 1px dashed #cbd5e1;
+        }
+        section { scroll-margin-top: 6rem; }
+        
+        /* SVG Styles */
+        .svg-text { font-family: 'Inter', sans-serif; fill: #1e293b; }
+        .svg-text-bold { font-weight: bold; fill: #0f172a; }
+        .svg-text-light { fill: #64748b; font-size: 12px; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#intro" class="hover:text-blue-400 transition-colors">Intro & Evolution</a></li>
+                <li><a href="#applications" class="hover:text-blue-400 transition-colors">Industry Applications</a></li>
+                <li><a href="#voice" class="hover:text-blue-400 transition-colors">Voice Comm.</a></li>
+                <li><a href="#video" class="hover:text-blue-400 transition-colors">Video Comm.</a></li>
+                <li><a href="#data" class="hover:text-blue-400 transition-colors">Data Comm.</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            FTS Module 1: Introduction to Telecommunication
+        </h1>
+
+        <!-- 1. INTRODUCTION & EVOLUTION -->
+        <section id="intro" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. Introduction & Evolution of Telecommunications</h2>
+            
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">Definitions</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Communication:</strong> The process of sharing information, ideas, feelings, or opinions between individuals or groups, creating mutual understanding through methods like speech, writing, gestures, or symbols. It is complete <em>only</em> when the message is successfully received and understood.</li>
+                    <li><strong>Telecommunication:</strong> The transmission of information over a distance using electrical or electronic means, typically through cables, radio waves, or other communication technologies.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">Evolution Timeline</h3>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li><strong>Ancient Communication:</strong> Used smoke signals, drums, and semaphore towers. This enabled long-distance messaging across ancient Africa, Asia, and Europe, laying the foundation for organized human connectivity.</li>
+                    <li><strong>1876 - The Telephone Revolution:</strong> Alexander Graham Bell's invention of the telephone transformed society by enabling real-time voice communication across vast distances for the first time.</li>
+                    <li><strong>20th Century Milestones:</strong> Innovations like Radio, television, satellite communication, and the internet reshaped global connectivity. It democratized information access and effectively "shrank" the world.</li>
+                    <li><strong>The Rise of Mobile and Data:</strong> Transition from basic mobile networks to 4G and now 5G, enabling massive data transfer and advanced connectivity.</li>
+                </ul>
+                
+                <!-- Timeline Diagram -->
+                <div class="diagram-container">
+                    <svg width="800" height="150" viewBox="0 0 800 150" style="margin: auto;">
+                        <!-- Timeline Main Axis -->
+                        <line x1="50" y1="75" x2="750" y2="75" stroke="#94a3b8" stroke-width="4" stroke-dasharray="8,4" />
+                        
+                        <!-- Node 1 -->
+                        <circle cx="100" cy="75" r="10" fill="#3b82f6" stroke="#ffffff" stroke-width="3" />
+                        <text x="100" y="45" class="svg-text svg-text-bold" text-anchor="middle">Ancient</text>
+                        <text x="100" y="105" class="svg-text-light" text-anchor="middle">Smoke/Drums</text>
+                        
+                        <!-- Node 2 -->
+                        <circle cx="300" cy="75" r="10" fill="#3b82f6" stroke="#ffffff" stroke-width="3" />
+                        <text x="300" y="45" class="svg-text svg-text-bold" text-anchor="middle">1876</text>
+                        <text x="300" y="105" class="svg-text-light" text-anchor="middle">Telephone</text>
+                        
+                        <!-- Node 3 -->
+                        <circle cx="500" cy="75" r="10" fill="#3b82f6" stroke="#ffffff" stroke-width="3" />
+                        <text x="500" y="45" class="svg-text svg-text-bold" text-anchor="middle">20th Century</text>
+                        <text x="500" y="105" class="svg-text-light" text-anchor="middle">Radio/TV/Internet</text>
+                        
+                        <!-- Node 4 -->
+                        <circle cx="700" cy="75" r="10" fill="#3b82f6" stroke="#ffffff" stroke-width="3" />
+                        <text x="700" y="45" class="svg-text svg-text-bold" text-anchor="middle">Modern</text>
+                        <text x="700" y="105" class="svg-text-light" text-anchor="middle">4G & 5G Networks</text>
+                    </svg>
+                    <div class="diagram-caption">Figure 1: Evolution Timeline from Smoke Signals to 5G Networks</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. IMPORTANCE & APPLICATIONS -->
+        <section id="applications" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Importance and Applications in Various Industries</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Telecommunications form the backbone of modern society. Here is how they apply across key sectors:</p>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li><strong>Healthcare:</strong> Enables <em>Telemedicine</em> and remote patient monitoring, expanding access to care.</li>
+                    <li><strong>Education:</strong> Facilitates <em>E-learning</em> and distance education, providing a global reach for knowledge.</li>
+                    <li><strong>Business & Commerce:</strong> Supports global operations, seamless remote work, and e-commerce transactions.</li>
+                    <li><strong>Transportation & Logistics:</strong> Underpins GPS tracking, real-time fleet tracking, and complex logistics management.</li>
+                    <li><strong>Entertainment & Media:</strong> Makes streaming platforms and social media connectivity possible.</li>
+                    <li><strong>Government & Public Services:</strong> Crucial for rapid emergency response and e-governance platforms.</li>
+                    <li><strong>Finance:</strong> Facilitates online banking and High-Frequency Trading (HFT).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. VOICE COMMUNICATION -->
+        <section id="voice" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">3. Overview of Voice Communication</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Definition:</strong> The real-time exchange of spoken words over a distance. Historically, it evolved from analog signals on the Public Switched Telephone Network (PSTN) to highly efficient digital transmission.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Key Technologies</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>PSTN:</strong> The traditional, circuit-switched telephone network.</li>
+                    <li><strong>VoIP (Voice over Internet Protocol):</strong> Modern packet-switched technology that sends voice data over the internet.</li>
+                    <li><strong>Cellular Networks:</strong> Mobile communication relying on radio frequencies distributed over cell towers.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Characteristics & Applications</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Characteristics:</strong> Real-time nature, requires strict <em>low latency</em> to avoid awkward delays, and is highly bandwidth-efficient compared to video.</li>
+                    <li><strong>Applications:</strong> Personal calls, business telephony, and critical emergency services (like 911).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. VIDEO COMMUNICATION -->
+        <section id="video" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Overview of Video Communication</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Definition:</strong> The transmission of moving visual images and audio in real time, simulating a face-to-face interaction.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Requirements & Key Technologies</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Requirements:</strong> Demands high bandwidth, very low latency, and specialized codecs to compress heavy video files.</li>
+                    <li><strong>Codecs:</strong> Software/hardware (like H.264) used to compress and decompress digital video.</li>
+                    <li><strong>Protocols:</strong> Rules like SIP (Session Initiation Protocol) and WebRTC.</li>
+                    <li><strong>Infrastructure:</strong> Relies on high-speed broadband and 4G/5G networks.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Applications</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Teleconferencing:</strong> Virtual meetings (Zoom, Teams).</li>
+                    <li><strong>Telemedicine:</strong> Remote consultations where visual diagnosis is needed.</li>
+                    <li><strong>Distance Learning:</strong> Live virtual classrooms.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. DATA COMMUNICATION -->
+        <section id="data" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">5. Overview of Data Communication</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Definition:</strong> The exchange of digital data between devices over a transmission medium (wired/wireless). It forms the backbone of networks like the internet, enabling emails, video calls, and web browsing.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Key Components</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Message:</strong> The actual data (text, numbers, images, audio, video) to be sent.</li>
+                    <li><strong>Sender & Receiver:</strong> The devices initiating and ending the data transfer (e.g., laptops, servers).</li>
+                    <li><strong>Transmission Medium:</strong> The physical path (cables, optical fibers, airwaves) the data travels through.</li>
+                    <li><strong>Protocol:</strong> The strict rules governing data exchange (e.g., TCP/IP).</li>
+                </ul>
+                
+                <!-- Data Comm Components Diagram -->
+                <div class="diagram-container">
+                    <svg width="800" height="200" viewBox="0 0 800 200" style="margin: auto;">
+                        <defs>
+                            <!-- Arrowhead Definition -->
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#3b82f6" />
+                            </marker>
+                        </defs>
+                        
+                        <!-- Sender Box -->
+                        <rect x="100" y="60" width="100" height="80" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2" />
+                        <text x="150" y="105" class="svg-text svg-text-bold" text-anchor="middle">Sender</text>
+                        
+                        <!-- Receiver Box -->
+                        <rect x="600" y="60" width="100" height="80" rx="8" fill="#e0f2fe" stroke="#0284c7" stroke-width="2" />
+                        <text x="650" y="105" class="svg-text svg-text-bold" text-anchor="middle">Receiver</text>
+                        
+                        <!-- Transmission Medium Line -->
+                        <line x1="210" y1="100" x2="580" y2="100" stroke="#3b82f6" stroke-width="3" stroke-dasharray="5,5" marker-end="url(#arrow)" />
+                        <text x="400" y="140" class="svg-text svg-text-bold" text-anchor="middle" fill="#2563eb">Transmission Medium</text>
+                        
+                        <!-- Message Box -->
+                        <rect x="350" y="70" width="100" height="40" rx="4" fill="#fef08a" stroke="#ca8a04" stroke-width="2" />
+                        <text x="400" y="95" class="svg-text" font-size="14" text-anchor="middle">Message</text>
+                        
+                        <!-- Protocols -->
+                        <text x="150" y="40" class="svg-text-light" text-anchor="middle">Protocol (Rules)</text>
+                        <text x="650" y="40" class="svg-text-light" text-anchor="middle">Protocol (Rules)</text>
+                        <path d="M150,45 L150,55 M650,45 L650,55" stroke="#94a3b8" stroke-width="2" />
+                    </svg>
+                    <div class="diagram-caption">Figure 2: Five Components of Data Communication</div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Modes of Communication</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Simplex:</strong> One-way communication only (e.g., a radio broadcast or keyboard to computer).</li>
+                    <li><strong>Half-Duplex:</strong> Two-way communication, but <em>only one direction at a time</em> (e.g., a walkie-talkie).</li>
+                    <li><strong>Full-Duplex:</strong> Two-way communication <em>simultaneously</em> (e.g., a phone call or most internet traffic).</li>
+                </ul>
+
+                <!-- Modes of Communication Diagram -->
+                <div class="diagram-container">
+                    <svg width="800" height="300" viewBox="0 0 800 300" style="margin: auto;">
+                        <defs>
+                            <marker id="arrow-solid" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                                <path d="M0,0 L0,8 L8,4 z" fill="#16a34a" />
+                            </marker>
+                            <marker id="arrow-solid-rev" markerWidth="8" markerHeight="8" refX="1" refY="4" orient="auto">
+                                <path d="M8,0 L8,8 L0,4 z" fill="#16a34a" />
+                            </marker>
+                        </defs>
+
+                        <!-- Style settings for devices -->
+                        <style>
+                            .dev-box { fill: #f8fafc; stroke: #475569; stroke-width: 2; rx: 4; }
+                        </style>
+
+                        <!-- Row 1: Simplex -->
+                        <text x="100" y="55" class="svg-text svg-text-bold" text-anchor="end">Simplex:</text>
+                        <rect x="150" y="30" width="80" height="40" class="dev-box" />
+                        <text x="190" y="55" class="svg-text" font-size="12" text-anchor="middle">Device A</text>
+                        
+                        <rect x="550" y="30" width="80" height="40" class="dev-box" />
+                        <text x="590" y="55" class="svg-text" font-size="12" text-anchor="middle">Device B</text>
+                        
+                        <line x1="240" y1="50" x2="540" y2="50" stroke="#16a34a" stroke-width="3" marker-end="url(#arrow-solid)" />
+                        <text x="390" y="40" class="svg-text-light" text-anchor="middle">Direction of Data (Only One Way)</text>
+
+                        <!-- Row 2: Half-Duplex -->
+                        <text x="100" y="155" class="svg-text svg-text-bold" text-anchor="end">Half-Duplex:</text>
+                        <rect x="150" y="130" width="80" height="40" class="dev-box" />
+                        <text x="190" y="155" class="svg-text" font-size="12" text-anchor="middle">Device A</text>
+                        
+                        <rect x="550" y="130" width="80" height="40" class="dev-box" />
+                        <text x="590" y="155" class="svg-text" font-size="12" text-anchor="middle">Device B</text>
+                        
+                        <!-- Top arrow -->
+                        <line x1="240" y1="140" x2="540" y2="140" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-solid)" />
+                        <!-- Bottom arrow -->
+                        <line x1="240" y1="160" x2="540" y2="160" stroke="#16a34a" stroke-width="2" stroke-dasharray="4,4" marker-start="url(#arrow-solid-rev)" />
+                        <text x="390" y="130" class="svg-text-light" text-anchor="middle">Direction of Data (At Time 1)</text>
+                        <text x="390" y="180" class="svg-text-light" text-anchor="middle">Direction of Data (At Time 2)</text>
+
+                        <!-- Row 3: Full-Duplex -->
+                        <text x="100" y="255" class="svg-text svg-text-bold" text-anchor="end">Full-Duplex:</text>
+                        <rect x="150" y="230" width="80" height="40" class="dev-box" />
+                        <text x="190" y="255" class="svg-text" font-size="12" text-anchor="middle">Device A</text>
+                        
+                        <rect x="550" y="230" width="80" height="40" class="dev-box" />
+                        <text x="590" y="255" class="svg-text" font-size="12" text-anchor="middle">Device B</text>
+                        
+                        <line x1="240" y1="240" x2="540" y2="240" stroke="#16a34a" stroke-width="3" marker-end="url(#arrow-solid)" />
+                        <line x1="240" y1="260" x2="540" y2="260" stroke="#16a34a" stroke-width="3" marker-start="url(#arrow-solid-rev)" />
+                        <text x="390" y="225" class="svg-text-light" text-anchor="middle">Direction of Data all the time</text>
+                        <text x="390" y="280" class="svg-text-light" text-anchor="middle">Direction of Data all the time</text>
+
+                    </svg>
+                    <div class="diagram-caption">Figure 3: Simplex, Half-Duplex, and Full-Duplex flow directions</div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Essential Characteristics for Success</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>Delivery:</strong> The system must deliver data exactly to the correct and intended destination.</li>
+                    <li><strong>Accuracy:</strong> Data must not be altered or corrupted during transmission.</li>
+                    <li><strong>Timeliness:</strong> Data must arrive without significant delay (crucial for real-time systems).</li>
+                    <li><strong>Jitter:</strong> Refers to the variation in packet arrival times. Minimizing uneven delays (jitter) is highly crucial for real-time media like audio/video streams.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
