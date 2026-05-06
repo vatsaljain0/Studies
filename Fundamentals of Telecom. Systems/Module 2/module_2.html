@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTS Module 2 - Exam Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .diagram-box {
+            background-color: #f8fafc;
+            border: 2px dashed #94a3b8;
+            color: #475569;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 1.25rem 0;
+            border-radius: 0.5rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+        .diagram-caption {
+            font-size: 0.85rem;
+            color: #64748b;
+            margin-top: 0.75rem;
+            font-weight: normal;
+        }
+        section { scroll-margin-top: 6rem; }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            text-align: left;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #cbd5e1;
+            padding: 0.75rem;
+        }
+        .data-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+        .highlight-box {
+            background-color: #eff6ff;
+            border-left: 4px solid #3b82f6;
+            padding: 1rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#signals" class="hover:text-blue-400 transition-colors">Signals & Characteristics</a></li>
+                <li><a href="#analog-digital" class="hover:text-blue-400 transition-colors">Analog vs Digital</a></li>
+                <li><a href="#spectrum" class="hover:text-blue-400 transition-colors">Bandwidth & Spectrum</a></li>
+                <li><a href="#impairments" class="hover:text-blue-400 transition-colors">Impairments</a></li>
+                <li><a href="#wired" class="hover:text-blue-400 transition-colors">Wired Media</a></li>
+                <li><a href="#wireless" class="hover:text-blue-400 transition-colors">Wireless Media</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            FTS Module 2: Basics of Signals and Transmission
+        </h1>
+
+        <!-- 1. SIGNALS OVERVIEW & CHARACTERISTICS -->
+        <section id="signals" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. What is a Signal? & Key Characteristics</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <div class="highlight-box">
+                    <p><strong>Definition:</strong> A signal is a physical quantity (like voltage, current, or electromagnetic waves) that varies over time or space to carry information. It represents data such as speech, video, or text, allowing it to be transmitted from a source to a destination.</p>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Examples of Signals:</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Human voice and sound waves.</li>
+                    <li>Voltage variations in electrical circuits.</li>
+                    <li>Room temperature controlled by a thermostat system.</li>
+                    <li>Electromagnetic waves used in wireless computer networks.</li>
+                    <li>Digital music recordings and digital photographs.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Key Characteristics of a Signal:</h3>
+                <p>To fully understand signals (especially periodic analog signals like sine waves), we must define their three fundamental properties:</p>
+                <ul class="list-disc pl-6 space-y-3 mt-2">
+                    <li><strong>Amplitude (A):</strong> The absolute value of the highest intensity (peak) of a signal, proportional to the energy it carries. Measured in Volts (V), Amperes (A), or Watts (W).</li>
+                    <li><strong>Frequency (f) and Period (T):</strong> 
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600">
+                            <li><em>Period (T):</em> The amount of time (in seconds) a signal needs to complete 1 full cycle.</li>
+                            <li><em>Frequency (f):</em> The number of cycles completed in one second. Measured in Hertz (Hz).</li>
+                            <li><em>Relationship:</em> They are inversely proportional: <strong>f = 1/T</strong> and <strong>T = 1/f</strong>.</li>
+                        </ul>
+                    </li>
+                    <li><strong>Phase (&phi;):</strong> Describes the position of the waveform relative to time zero. It indicates how far the signal is shifted forward or backward along the time axis. Measured in degrees or radians.</li>
+                    <li><strong>Wavelength (&lambda;):</strong> The physical distance a simple signal travels in one period. It ties frequency and the propagation speed of the medium together: <strong>&lambda; = c / f</strong> (where c is the speed of light).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. ANALOG VS DIGITAL -->
+        <section id="analog-digital" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Analog vs. Digital Signals</h2>
+            <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
+                
+                <p>Data can be represented either as analog (continuous) or digital (discrete) signals. The choice of signal drastically impacts transmission quality, hardware requirements, and noise immunity.</p>
+
+                <!-- Waveform Diagrams -->
+                <div class="diagram-box p-6 bg-white">
+                    <svg width="600" height="200" viewBox="0 0 600 200" class="mx-auto block">
+                        <style>
+                            .axis { stroke: #94a3b8; stroke-width: 2; }
+                            .wave-analog { stroke: #ef4444; stroke-width: 3; fill: none; }
+                            .wave-digital { stroke: #3b82f6; stroke-width: 3; fill: none; }
+                            .label { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: bold; fill: #1e293b; }
+                            .sub-label { font-family: 'Inter', sans-serif; font-size: 12px; fill: #64748b; }
+                        </style>
+                        
+                        <!-- Analog Graph -->
+                        <text x="150" y="20" class="label" text-anchor="middle">Analog Signal (Continuous)</text>
+                        <line x1="20" y1="110" x2="280" y2="110" class="axis" /> <!-- X-axis -->
+                        <line x1="20" y1="40" x2="20" y2="180" class="axis" /> <!-- Y-axis -->
+                        <!-- Sine Wave -->
+                        <path d="M 20 110 Q 52.5 40, 85 110 T 150 110 T 215 110 T 280 110" class="wave-analog" />
+                        
+                        <!-- Digital Graph -->
+                        <text x="450" y="20" class="label" text-anchor="middle">Digital Signal (Discrete)</text>
+                        <line x1="320" y1="150" x2="580" y2="150" class="axis" /> <!-- X-axis -->
+                        <line x1="320" y1="40" x2="320" y2="180" class="axis" /> <!-- Y-axis -->
+                        <!-- Square Wave -->
+                        <path d="M 320 150 L 320 70 L 370 70 L 370 150 L 420 150 L 420 70 L 470 70 L 470 150 L 520 150 L 520 70 L 570 70 L 570 150" class="wave-digital" />
+                        
+                        <!-- Binary labels -->
+                        <text x="345" y="60" class="sub-label">1</text>
+                        <text x="395" y="170" class="sub-label">0</text>
+                        <text x="445" y="60" class="sub-label">1</text>
+                        <text x="495" y="170" class="sub-label">0</text>
+                        <text x="545" y="60" class="sub-label">1</text>
+                    </svg>
+                    <div class="diagram-caption">Figure 1: Smooth, continuous Sine Wave (Analog) vs. Discrete Square Wave (Digital)</div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Detailed Comparison</h3>
+                <div class="overflow-x-auto mt-4">
+                    <table class="data-table">
+                        <tr>
+                            <th class="w-1/4">Feature</th>
+                            <th class="w-2/5">Analog Signal</th>
+                            <th class="w-2/5">Digital Signal</th>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Nature</td>
+                            <td>Continuous and smooth varying over time.</td>
+                            <td>Discrete (non-continuous), jumping between specific levels.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Values</td>
+                            <td>Infinite number of values within a given range.</td>
+                            <td>Finite number of values (typically two: 0 and 1).</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Waveform Type</td>
+                            <td>Sine wave.</td>
+                            <td>Square wave.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Noise Immunity</td>
+                            <td>Highly susceptible to noise. Degradation heavily alters the original data.</td>
+                            <td>Highly immune to noise. Minor voltage shifts don't flip a 0 to a 1 easily.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Bandwidth</td>
+                            <td>Consumes less bandwidth.</td>
+                            <td>Requires higher bandwidth to transmit the sharp edges of square waves.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Error Correction</td>
+                            <td>Difficult or impossible to perfectly regenerate original signal if corrupted.</td>
+                            <td>Easy to detect and correct errors using checksums and parity bits.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Examples</td>
+                            <td>Human voice, traditional thermometers, AM/FM radio, analog clocks.</td>
+                            <td>Computers, optical drives, digital clocks, digital streaming.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. BANDWIDTH AND FREQUENCY SPECTRUM -->
+        <section id="spectrum" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">3. Bandwidth, Frequency Spectrum, and The EM Spectrum</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                
+                <ul class="list-disc pl-6 space-y-3">
+                    <li><strong>Frequency Spectrum:</strong> A real-world signal is almost never a single perfect sine wave; it is a composite of many different frequencies. The <em>frequency spectrum</em> is the entire collection of all individual frequencies present in a specific signal.</li>
+                    <li><strong>Bandwidth:</strong> The width of the frequency spectrum. It is the absolute difference between the highest and lowest frequencies contained in the signal.
+                        <br>
+                        <span class="font-mono text-sm bg-slate-100 px-2 py-1 rounded inline-block mt-2">Bandwidth = Highest Frequency (f<sub>max</sub>) - Lowest Frequency (f<sub>min</sub>)</span>
+                        <br><span class="text-sm text-slate-600"><em>Significance:</em> A higher bandwidth acts like a wider highway, allowing vastly more data or information to be transmitted in a given amount of time (which translates to higher data speeds in networks).</span>
+                    </li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">The Electromagnetic (EM) Spectrum</h3>
+                <p>When electrons move, they create electromagnetic waves that can propagate through space. The entire range of these frequencies is the EM Spectrum. Different frequency bands behave differently and are used for different telecommunication purposes:</p>
+
+                <div class="overflow-x-auto mt-4">
+                    <table class="data-table">
+                        <tr>
+                            <th class="w-1/4">Band</th>
+                            <th class="w-1/4">Approx. Frequency Range</th>
+                            <th>Characteristics & Telecom Use Cases</th>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Radio Waves</td>
+                            <td>3 kHz – 1 GHz</td>
+                            <td>Omnidirectional. Easily penetrates walls. Used in AM/FM radio, Maritime communication, standard Wi-Fi.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Microwaves</td>
+                            <td>1 GHz – 300 GHz</td>
+                            <td>Unidirectional (requires Line-of-Sight). Cannot penetrate solid objects well. Used in Cellular networks (4G/5G), Radar, Satellite links.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Infrared</td>
+                            <td>300 GHz – 400 THz</td>
+                            <td>Cannot penetrate walls (good for security). Very short range. Used in TV remotes, short-range wireless mice.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Visible Light</td>
+                            <td>400 THz – 900 THz</td>
+                            <td>Used in Fiber Optic cables via lasers/LEDs to transmit massive amounts of digital data globally.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50 text-slate-400">UV / X-Ray / Gamma</td>
+                            <td class="text-slate-400">> 900 THz</td>
+                            <td class="text-slate-400">Harmful to humans; very difficult to produce/modulate safely. Not used for standard telecommunications.</td>
+                        </tr>
+                    </table>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. TRANSMISSION IMPAIRMENTS -->
+        <section id="impairments" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Transmission Impairments</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>As a signal travels through a medium, it is never perfect. The signal received at the destination is always slightly different from the one sent. This degradation is caused by three major impairments:</p>
+
+                <ul class="list-disc pl-6 space-y-4 mt-4">
+                    <li>
+                        <strong>1. Attenuation (Energy Loss):</strong> As a signal travels, it loses energy to overcome the resistance of the medium. The amplitude of the signal decreases. 
+                        <br><span class="text-sm text-slate-600"><em>Solution:</em> We use <strong>Amplifiers</strong> (for analog) or <strong>Repeaters</strong> (for digital) at specific intervals to boost the signal strength back up.</span>
+                    </li>
+                    <li>
+                        <strong>2. Distortion (Shape Alteration):</strong> Occurs primarily in composite signals (signals made of multiple frequencies). Because different frequencies travel at slightly different speeds through a wire, they arrive at the receiver at different times, changing the overall shape of the wave.
+                        <br><span class="text-sm text-slate-600"><em>Solution:</em> Equalizers are used to delay faster frequencies so all frequencies arrive together.</span>
+                    </li>
+                    <li>
+                        <strong>3. Noise:</strong> Unwanted external energy that corrupts the signal. This is the biggest enemy of data transmission.
+                        <ul class="list-circle pl-6 mt-2 text-sm text-slate-700 space-y-1">
+                            <li><em>Thermal Noise:</em> Random motion of electrons in the wire creating extra signals.</li>
+                            <li><em>Induced Noise:</em> From external sources like motors or appliances acting as transmitting antennas.</li>
+                            <li><em>Crosstalk:</em> The effect of one wire's magnetic field bleeding into an adjacent wire (e.g., hearing someone else's conversation on a phone line).</li>
+                            <li><em>Impulse Noise:</em> Sudden high-energy spikes (like lightning or a power surge) that can destroy data.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. TRANSMISSION MEDIA & WIRED -->
+        <section id="wired" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">5. Transmission Media: Guided vs. Unguided</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Transmission media is the physical path between the transmitter and the receiver. It is broadly classified into two categories: <strong>Guided (Wired)</strong> and <strong>Unguided (Wireless)</strong>.</p>
+                
+                <!-- Tree Diagram -->
+                <div class="diagram-box bg-white p-4">
+                    <svg width="600" height="240" viewBox="0 0 600 240" class="mx-auto block">
+                        <style>
+                            .node-box { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 6; }
+                            .node-text { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
+                            .tree-line { stroke: #64748b; stroke-width: 2; fill: none; }
+                        </style>
+                        
+                        <!-- Root -->
+                        <rect x="225" y="10" width="150" height="40" class="node-box" />
+                        <text x="300" y="35" class="node-text">Transmission Media</text>
+
+                        <!-- Level 1 Lines -->
+                        <path d="M 300 50 L 300 80 L 150 80 L 150 100" class="tree-line" />
+                        <path d="M 300 50 L 300 80 L 450 80 L 450 100" class="tree-line" />
+
+                        <!-- Level 1 Nodes -->
+                        <rect x="75" y="100" width="150" height="40" class="node-box" fill="#e0f2fe" stroke="#0284c7" />
+                        <text x="150" y="125" class="node-text" fill="#0369a1">Guided (Wired)</text>
+
+                        <rect x="375" y="100" width="150" height="40" class="node-box" fill="#fef08a" stroke="#ca8a04" />
+                        <text x="450" y="125" class="node-text" fill="#a16207">Unguided (Wireless)</text>
+
+                        <!-- Level 2 Lines Guided -->
+                        <path d="M 150 140 L 150 160 L 50 160 L 50 180" class="tree-line" />
+                        <path d="M 150 140 L 150 180" class="tree-line" />
+                        <path d="M 150 140 L 150 160 L 250 160 L 250 180" class="tree-line" />
+
+                        <!-- Level 2 Nodes Guided -->
+                        <rect x="10" y="180" width="80" height="30" class="node-box" />
+                        <text x="50" y="200" class="node-text" font-size="12">Twisted Pair</text>
+                        
+                        <rect x="110" y="180" width="80" height="30" class="node-box" />
+                        <text x="150" y="200" class="node-text" font-size="12">Coaxial</text>
+                        
+                        <rect x="210" y="180" width="80" height="30" class="node-box" />
+                        <text x="250" y="200" class="node-text" font-size="12">Fiber Optic</text>
+
+                        <!-- Level 2 Lines Unguided -->
+                        <path d="M 450 140 L 450 160 L 350 160 L 350 180" class="tree-line" />
+                        <path d="M 450 140 L 450 180" class="tree-line" />
+                        <path d="M 450 140 L 450 160 L 550 160 L 550 180" class="tree-line" />
+
+                        <!-- Level 2 Nodes Unguided -->
+                        <rect x="310" y="180" width="80" height="30" class="node-box" />
+                        <text x="350" y="200" class="node-text" font-size="12">Radio</text>
+                        
+                        <rect x="410" y="180" width="80" height="30" class="node-box" />
+                        <text x="450" y="200" class="node-text" font-size="12">Microwave</text>
+                        
+                        <rect x="510" y="180" width="80" height="30" class="node-box" />
+                        <text x="550" y="200" class="node-text" font-size="12">Infrared</text>
+                    </svg>
+                </div>
+                
+                <h3 class="text-xl font-semibold text-slate-800 mt-8 mb-2 border-b pb-1">Comparison: Guided vs Unguided Media</h3>
+                <div class="overflow-x-auto mt-4 mb-8">
+                    <table class="data-table">
+                        <tr>
+                            <th class="w-1/4">Basis</th>
+                            <th class="w-2/5">Guided (Wired) Media</th>
+                            <th class="w-2/5">Unguided (Wireless) Media</th>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Signal Direction</td>
+                            <td>Signals are directed and confined within a solid physical path.</td>
+                            <td>Signals are broadcasted through the air in multiple directions.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Security</td>
+                            <td>Highly secure. Difficult to tap into the physical wire.</td>
+                            <td>Less secure. Anyone with an antenna in range can intercept.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Installation</td>
+                            <td>Requires physical laying of cables (difficult over difficult terrain).</td>
+                            <td>Easier to deploy across difficult terrains (e.g., mountains).</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Attenuation</td>
+                            <td>Lower attenuation (signals travel further without massive loss).</td>
+                            <td>High attenuation (signals degrade quickly in open air/rain).</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-blue-700 mt-10 mb-4 border-b pb-2">A. Guided (Wired) Media Breakdown</h3>
+            <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
+                
+                <div>
+                    <h4 class="text-xl font-semibold text-slate-800">1. Twisted Pair Cable</h4>
+                    <p class="text-base mb-2">Consists of two independently insulated copper wires twisted around each other. The twisting is crucial: it helps cancel out electromagnetic interference (crosstalk) from adjacent pairs and external sources.</p>
+                    <ul class="list-disc pl-6 space-y-1 text-base">
+                        <li><strong>Unshielded Twisted Pair (UTP):</strong> The most common type. Very cheap, easy to install. Used heavily in local area networks (LANs) and telephones. Susceptible to external interference.</li>
+                        <li><strong>Shielded Twisted Pair (STP):</strong> Has an extra metal foil wrapper around the pairs to block electromagnetic interference. Used in industrial environments. More expensive and thicker.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-semibold text-slate-800">2. Coaxial Cable</h4>
+                    <p class="text-base">Consists of an inner solid copper core, surrounded by an insulating layer, covered by a braided metal mesh (shielding), and finally an outer plastic jacket. It carries much higher frequency signals than twisted pair due to its superior shielding.</p>
+                    <ul class="list-disc pl-6 space-y-1 text-base">
+                        <li>Used historically in Cable TV networks, broadband internet drops, and CCTV systems.</li>
+                        <li>More resistant to interference than UTP but bulkier to handle.</li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="text-xl font-semibold text-slate-800">3. Fiber-Optic Cable</h4>
+                    <p class="text-base">Transmits data not as electrical signals, but as <strong>light pulses</strong>. It uses the physical principle of <em>Total Internal Reflection</em>.</p>
+                    <ul class="list-disc pl-6 space-y-1 text-base">
+                        <li><strong>Components:</strong> An ultra-thin glass <strong>Core</strong>, surrounded by a <strong>Cladding</strong> (glass/plastic with lower refractive index to trap light inside), and an outer protective <strong>Jacket</strong>.</li>
+                        <li><strong>Advantages:</strong> Extremely high bandwidth, zero electromagnetic interference (completely immune to noise/crosstalk), excellent for long-distance communication (internet backbones).</li>
+                        <li><strong>Disadvantages:</strong> High cost, fragile (requires careful installation), and difficult to splice/connect. Unidirectional (needs two fibers for 2-way communication).</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. WIRELESS MEDIA -->
+        <section id="wireless" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4 border-b pb-2">B. Unguided (Wireless) Media Breakdown</h2>
+            <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
+                <p>Wireless media carry electromagnetic waves without using a physical conductor. They broadcast signals through the air (or vacuum).</p>
+
+                <div class="overflow-x-auto mt-4">
+                    <table class="data-table">
+                        <tr>
+                            <th class="w-1/4">Feature</th>
+                            <th class="w-1/4">Radio Waves</th>
+                            <th class="w-1/4">Microwaves</th>
+                            <th class="w-1/4">Infrared Waves</th>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Frequency Range</td>
+                            <td>3 kHz – 1 GHz</td>
+                            <td>1 GHz – 300 GHz</td>
+                            <td>300 GHz – 400 THz</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Directionality</td>
+                            <td><strong>Omnidirectional</strong> (propagates in all directions). Antenna does not need alignment.</td>
+                            <td><strong>Unidirectional</strong> (moves in a focused single line). Antennas must be strictly aligned.</td>
+                            <td>Highly directional / Unidirectional.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Wall Penetration</td>
+                            <td>Can easily penetrate solid objects (walls, buildings).</td>
+                            <td><strong>Cannot</strong> penetrate solid objects well (blocked by walls, hills, rain).</td>
+                            <td><strong>Cannot</strong> penetrate solid objects at all.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Special Requirements</td>
+                            <td>Regulated heavily by governments to avoid interference.</td>
+                            <td>Requires strict <strong>Line-of-Sight</strong> (antennas must face each other without obstruction).</td>
+                            <td>Requires direct line-of-sight over very short ranges. Prevents interference between rooms.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-semibold bg-slate-50">Applications</td>
+                            <td>AM/FM Radio, TV broadcasting, standard Wi-Fi, maritime comms.</td>
+                            <td>Point-to-point links, Radar, Satellite communication, Cellular networks.</td>
+                            <td>TV Remote controls, Bluetooth, Wireless mice/keyboards, Mobile-to-printer.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

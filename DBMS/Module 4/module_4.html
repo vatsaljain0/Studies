@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Module 4 - Database Normalization</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        section { scroll-margin-top: 6rem; }
+        
+        /* Custom Styling */
+        .example-block {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        .example-header {
+            background-color: #f8fafc;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .example-content { padding: 1rem; }
+        
+        /* Syntax/Definition Box */
+        .syntax-box {
+            background-color: #fef2f2;
+            border-left: 4px solid #ef4444;
+            padding: 1rem;
+            border-radius: 0 0.25rem 0.25rem 0;
+            margin-bottom: 1rem;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 0.9rem;
+            color: #991b1b;
+        }
+        .syntax-label {
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.75rem;
+            color: #ef4444;
+            margin-bottom: 0.25rem;
+            display: block;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem;
+            text-align: left;
+        }
+        .data-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+        .output-label {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #16a34a;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+        .math-text { font-family: 'Times New Roman', Times, serif; font-weight: bold; color: #1d4ed8; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#pitfalls" class="hover:text-blue-400 transition-colors">Pitfalls & Anomalies</a></li>
+                <li><a href="#fd" class="hover:text-blue-400 transition-colors">Functional Dependencies</a></li>
+                <li><a href="#1nf" class="hover:text-blue-400 transition-colors">1NF</a></li>
+                <li><a href="#2nf" class="hover:text-blue-400 transition-colors">2NF</a></li>
+                <li><a href="#3nf" class="hover:text-blue-400 transition-colors">3NF</a></li>
+                <li><a href="#bcnf" class="hover:text-blue-400 transition-colors">BCNF</a></li>
+                <li><a href="#4nf" class="hover:text-blue-400 transition-colors">4NF</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            DBMS Module 4: Database Normalization
+        </h1>
+
+        <section id="pitfalls" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. Pitfalls in Relational Design & Concept of Normalization</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p><strong>Normalization</strong> is the process of organizing data in a database to minimize redundancy and prevent data anomalies. Poorly designed (un-normalized) tables suffer from major pitfalls known as <strong>Anomalies</strong>.</p>
+                
+                
+                <div class="example-block">
+                    <div class="example-header">The Three Anomalies</div>
+                    <div class="example-content">
+                        <p class="text-sm font-bold text-slate-800 mb-1">Bad Design Example: `Student_Course`</p>
+                        <table class="data-table">
+                            <tr><th>StudentID</th><th>StudentName</th><th>CourseID</th><th>InstructorName</th></tr>
+                            <tr><td>101</td><td>Alice</td><td>CS1</td><td>Dr. Smith</td></tr>
+                            <tr><td>102</td><td>Bob</td><td>CS1</td><td>Dr. Smith</td></tr>
+                        </table>
+
+                        <ul class="list-disc pl-6 space-y-3 mt-4 text-sm text-slate-700">
+                            <li><strong>1. Insertion Anomaly:</strong> Inability to add data to the database due to absence of other data. <br><em>Example:</em> We cannot add a new course (e.g., CS2 taught by Dr. Brown) until at least one student enrolls in it, because StudentID is the primary key and cannot be NULL.</li>
+                            <li><strong>2. Deletion Anomaly:</strong> Unintentional loss of data due to deletion of other data. <br><em>Example:</em> If Alice and Bob both drop course CS1, we must delete their rows. Doing so completely erases the fact that Dr. Smith teaches CS1.</li>
+                            <li><strong>3. Updation Anomaly:</strong> Data inconsistency resulting from data redundancy. <br><em>Example:</em> If Dr. Smith changes his name, we have to update multiple rows. If we miss one, the database becomes inconsistent.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="fd" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Functional Dependencies & FD Closure</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>A <strong>Functional Dependency (FD)</strong> is a relationship that exists when one attribute uniquely determines another attribute.</p>
+                
+
+                <div class="example-block">
+                    <div class="example-header">Functional Dependency (FD) Definition</div>
+                    <div class="example-content">
+                        <div class="syntax-box">
+                            <span class="syntax-label">Notation</span>
+                            X &rarr; Y <br>
+                            "X functionally determines Y", or "Y is functionally dependent on X"
+                        </div>
+                        <p class="text-sm text-slate-700">If two rows share the exact same value for X, they MUST share the exact same value for Y. <br><em>Example:</em> <strong>EmpID &rarr; EmpName</strong>. If two rows have EmpID = 5, their EmpName must be exactly the same.</p>
+                        
+                        <h4 class="font-bold text-blue-700 mt-4 mb-1 text-sm">Trivial vs. Non-Trivial FD</h4>
+                        <ul class="text-sm list-disc pl-5">
+                            <li><strong>Trivial:</strong> X &rarr; Y is trivial if Y is a subset of X. (e.g., {EmpID, EmpName} &rarr; EmpID).</li>
+                            <li><strong>Non-Trivial:</strong> X &rarr; Y is non-trivial if Y is not a subset of X. (e.g., EmpID &rarr; EmpName).</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">FD Closure (Armstrong's Axioms)</h3>
+                <p>The <strong>Closure</strong> of a set of FDs (denoted as <span class="math-text">F<sup>+</sup></span>) is the complete set of all FDs that can be logically deduced from the original set using Armstrong's Axioms.</p>
+                
+                <div class="example-block">
+                    <div class="example-header">Armstrong's Axioms & Attribute Closure</div>
+                    <div class="example-content">
+                        <div class="syntax-box">
+                            <span class="syntax-label">The 3 Primary Rules (Axioms)</span>
+                            1. <strong>Reflexivity:</strong> If Y &subseteq; X, then X &rarr; Y<br>
+                            2. <strong>Augmentation:</strong> If X &rarr; Y, then XZ &rarr; YZ<br>
+                            3. <strong>Transitivity:</strong> If X &rarr; Y and Y &rarr; Z, then X &rarr; Z
+                        </div>
+
+                        <h4 class="font-bold text-blue-700 mt-4 mb-2 text-sm">Attribute Closure Example (X<sup>+</sup>)</h4>
+                        <p class="text-sm text-slate-700 mb-2">Finding the closure of an attribute X (denoted X<sup>+</sup>) means finding all attributes that X can determine.</p>
+                        <p class="text-sm font-mono bg-slate-100 p-2 rounded">
+                            Given Relation R(A, B, C, D) and FDs: {A &rarr; B, B &rarr; C}<br>
+                            Find the closure of A (A<sup>+</sup>):<br>
+                            1. Start with the attribute itself: {A}<br>
+                            2. Since A &rarr; B, add B: {A, B}<br>
+                            3. Since B &rarr; C, add C: {A, B, C}<br>
+                            Result: A<sup>+</sup> = {A, B, C}. (Because A cannot determine D, A is NOT a superkey).
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <h2 class="text-2xl font-bold text-blue-700 mt-12 mb-4 border-t-2 pt-4 border-blue-200">The Normal Forms</h2>
+        <p class="text-slate-700 text-lg mb-6">Each normal form tackles a specific type of dependency to progressively eliminate redundancy.</p>
+        
+
+        <section id="1nf" class="mb-12">
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <div class="example-block">
+                    <div class="example-header">1. First Normal Form (1NF)</div>
+                    <div class="example-content">
+                        <div class="syntax-box">
+                            <span class="syntax-label">Rule for 1NF</span>
+                            A relation is in 1NF if and only if every attribute contains <strong>Atomic (indivisible) values</strong>. No multi-valued attributes or nested relations are allowed.
+                        </div>
+
+                        <p class="text-sm font-bold text-slate-800 mb-1">❌ BEFORE (Not in 1NF due to multi-valued Phone):</p>
+                        <table class="data-table">
+                            <tr><th>EmpID</th><th>Name</th><th class="text-red-600 bg-red-50">PhoneNumbers</th></tr>
+                            <tr><td>1</td><td>John</td><td class="text-red-600 bg-red-50">999-1234, 888-5678</td></tr>
+                        </table>
+
+                        <div class="output-label mt-4">✅ AFTER (Converted to 1NF by splitting rows):</div>
+                        <table class="data-table">
+                            <tr><th>EmpID</th><th>Name</th><th class="text-green-700 bg-green-50">Phone</th></tr>
+                            <tr><td>1</td><td>John</td><td class="text-green-700 bg-green-50">999-1234</td></tr>
+                            <tr><td>1</td><td>John</td><td class="text-green-700 bg-green-50">888-5678</td></tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="2nf" class="mb-12">
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <div class="example-block">
+                    <div class="example-header">2. Second Normal Form (2NF)</div>
+                    <div class="example-content">
+                        <div class="syntax-box">
+                            <span class="syntax-label">Rule for 2NF</span>
+                            1. It must be in 1NF.<br>
+                            2. <strong>No Partial Dependencies.</strong> Every non-prime attribute (attributes not part of the Primary Key) must depend on the ENTIRE Primary Key, not just a part of it.
+                        </div>
+
+                        <p class="text-sm text-slate-700 mb-2"><em>Scenario:</em> Primary Key is composite: <strong>{StudentID, CourseID}</strong>.</p>
+                        
+                        <p class="text-sm font-bold text-slate-800 mb-1">❌ BEFORE (Not in 2NF):</p>
+                        <table class="data-table">
+                            <tr><th class="bg-blue-50">StudentID (PK)</th><th class="bg-blue-50">CourseID (PK)</th><th class="text-red-600 bg-red-50">CourseName</th><th>Grade</th></tr>
+                            <tr><td>101</td><td>C1</td><td class="text-red-600 bg-red-50">Physics</td><td>A</td></tr>
+                            <tr><td>102</td><td>C1</td><td class="text-red-600 bg-red-50">Physics</td><td>B</td></tr>
+                        </table>
+                        <p class="text-xs text-red-600 mb-4 font-bold">Problem: CourseName only depends on CourseID (a part of the PK). This is a Partial Dependency.</p>
+
+                        <div class="output-label">✅ AFTER (Decomposed into 2NF tables):</div>
+                        <div class="flex gap-4">
+                            <div class="w-1/2">
+                                <p class="text-sm font-bold text-slate-800 mb-1">`Enrollment` Table</p>
+                                <table class="data-table">
+                                    <tr><th>StudentID</th><th>CourseID</th><th>Grade</th></tr>
+                                    <tr><td>101</td><td>C1</td><td>A</td></tr>
+                                    <tr><td>102</td><td>C1</td><td>B</td></tr>
+                                </table>
+                            </div>
+                            <div class="w-1/2">
+                                <p class="text-sm font-bold text-slate-800 mb-1">`Course` Table</p>
+                                <table class="data-table">
+                                    <tr><th>CourseID</th><th class="text-green-700 bg-green-50">CourseName</th></tr>
+                                    <tr><td>C1</td><td class="text-green-700 bg-green-50">Physics</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="3nf" class="mb-12">
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <div class="example-block">
+                    <div class="example-header">3. Third Normal Form (3NF)</div>
+                    <div class="example-content">
+                        <div class="syntax-box">
+                            <span class="syntax-label">Rule for 3NF</span>
+                            1. It must be in 2NF.<br>
+                            2. <strong>No Transitive Dependencies.</strong> Non-prime attributes must depend ONLY on the Primary Key, and not on other non-prime attributes. (If A &rarr; B and B &rarr; C, then A &rarr; C is transitive).
+                        </div>
+
+                        <p class="text-sm text-slate-700 mb-2"><em>Scenario:</em> Primary Key is <strong>{EmpID}</strong>.</p>
+                        
+                        <p class="text-sm font-bold text-slate-800 mb-1">❌ BEFORE (Not in 3NF):</p>
+                        <table class="data-table">
+                            <tr><th class="bg-blue-50">EmpID (PK)</th><th>Name</th><th>DeptID</th><th class="text-red-600 bg-red-50">DeptName</th></tr>
+                            <tr><td>1</td><td>John</td><td>D1</td><td class="text-red-600 bg-red-50">Sales</td></tr>
+                        </table>
+                        <p class="text-xs text-red-600 mb-4 font-bold">Problem: DeptName depends on DeptID, which depends on EmpID. This is a Transitive Dependency.</p>
+
+                        <div class="output-label">✅ AFTER (Decomposed into 3NF tables):</div>
+                        <div class="flex gap-4">
+                            <div class="w-1/2">
+                                <p class="text-sm font-bold text-slate-800 mb-1">`Employee` Table</p>
+                                <table class="data-table">
+                                    <tr><th>EmpID</th><th>Name</th><th>DeptID</th></tr>
+                                    <tr><td>1</td><td>John</td><td>D1</td></tr>
+                                </table>
+                            </div>
+                            <div class="w-1/2">
+                                <p class="text-sm font-bold text-slate-800 mb-1">`Department` Table</p>
+                                <table class="data-table">
+                                    <tr><th>DeptID</th><th class="text-green-700 bg-green-50">DeptName</th></tr>
+                                    <tr><td>D1</td><td class="text-green-700 bg-green-50">Sales</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="bcnf" class="mb-12">
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <div class="example-block">
+                    <div class="example-header">4. Boyce-Codd Normal Form (BCNF)</div>
+                    <div class="example-content">
+                        <div class="syntax-box">
+                            <span class="syntax-label">Rule for BCNF (Stricter 3NF)</span>
+                            1. It must be in 3NF.<br>
+                            2. For every non-trivial functional dependency <strong>X &rarr; Y</strong>, <strong>X must be a Super Key</strong>.
+                        </div>
+
+                        <p class="text-sm text-slate-700 mb-2"><em>Scenario:</em> A student can enroll in a course. A course can have multiple instructors, but an instructor teaches only ONE course. <br>
+                        <strong>Keys:</strong> {StudentID, Course} OR {StudentID, Instructor}.<br>
+                        <strong>FD:</strong> Instructor &rarr; Course.</p>
+                        
+                        <p class="text-sm font-bold text-slate-800 mb-1">❌ BEFORE (Not in BCNF):</p>
+                        <table class="data-table">
+                            <tr><th>StudentID</th><th class="text-red-600 bg-red-50">Course</th><th>Instructor</th></tr>
+                            <tr><td>101</td><td class="text-red-600 bg-red-50">Java</td><td>Dr. A</td></tr>
+                            <tr><td>102</td><td class="text-red-600 bg-red-50">Java</td><td>Dr. A</td></tr>
+                        </table>
+                        <p class="text-xs text-red-600 mb-4 font-bold">Problem: Instructor &rarr; Course, but 'Instructor' is NOT a super key (Dr. A can have multiple students). A non-prime attribute is determining a prime attribute.</p>
+
+                        <div class="output-label">✅ AFTER (Decomposed into BCNF tables):</div>
+                        <div class="flex gap-4">
+                            <div class="w-1/2">
+                                <p class="text-sm font-bold text-slate-800 mb-1">`Student_Instructor` Table</p>
+                                <table class="data-table">
+                                    <tr><th>StudentID</th><th>Instructor</th></tr>
+                                    <tr><td>101</td><td>Dr. A</td></tr>
+                                    <tr><td>102</td><td>Dr. A</td></tr>
+                                </table>
+                            </div>
+                            <div class="w-1/2">
+                                <p class="text-sm font-bold text-slate-800 mb-1">`Instructor_Course` Table</p>
+                                <table class="data-table">
+                                    <tr><th>Instructor</th><th class="text-green-700 bg-green-50">Course</th></tr>
+                                    <tr><td>Dr. A</td><td class="text-green-700 bg-green-50">Java</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="4nf" class="mb-12">
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <div class="example-block">
+                    <div class="example-header">5. Fourth Normal Form (4NF)</div>
+                    <div class="example-content">
+                        <div class="syntax-box">
+                            <span class="syntax-label">Rule for 4NF</span>
+                            1. It must be in BCNF.<br>
+                            2. <strong>No Multi-Valued Dependencies (MVDs).</strong> For a dependency <strong>X &rarr;&rarr; Y</strong>, X must be a super key. You cannot have two independent multi-valued attributes in the same table.
+                        </div>
+
+                        <p class="text-sm text-slate-700 mb-2"><em>Scenario:</em> An employee can have multiple Skills and speak multiple Languages. Skills and Languages are completely independent of each other. (EmpID &rarr;&rarr; Skill and EmpID &rarr;&rarr; Language).</p>
+                        
+                        <p class="text-sm font-bold text-slate-800 mb-1">❌ BEFORE (Not in 4NF):</p>
+                        <table class="data-table">
+                            <tr><th>EmpID</th><th class="text-red-600 bg-red-50">Skill</th><th class="text-red-600 bg-red-50">Language</th></tr>
+                            <tr><td>1</td><td class="text-red-600 bg-red-50">Coding</td><td class="text-red-600 bg-red-50">English</td></tr>
+                            <tr><td>1</td><td class="text-red-600 bg-red-50">Coding</td><td class="text-red-600 bg-red-50">French</td></tr>
+                            <tr><td>1</td><td class="text-red-600 bg-red-50">Design</td><td class="text-red-600 bg-red-50">English</td></tr>
+                            <tr><td>1</td><td class="text-red-600 bg-red-50">Design</td><td class="text-red-600 bg-red-50">French</td></tr>
+                        </table>
+                        <p class="text-xs text-red-600 mb-4 font-bold">Problem: Massive redundancy is generated to show all combinations of independent multi-valued facts.</p>
+
+                        <div class="output-label">✅ AFTER (Decomposed into 4NF tables):</div>
+                        <div class="flex gap-4">
+                            <div class="w-1/2">
+                                <p class="text-sm font-bold text-slate-800 mb-1">`Emp_Skill` Table</p>
+                                <table class="data-table">
+                                    <tr><th>EmpID</th><th class="text-green-700 bg-green-50">Skill</th></tr>
+                                    <tr><td>1</td><td class="text-green-700 bg-green-50">Coding</td></tr>
+                                    <tr><td>1</td><td class="text-green-700 bg-green-50">Design</td></tr>
+                                </table>
+                            </div>
+                            <div class="w-1/2">
+                                <p class="text-sm font-bold text-slate-800 mb-1">`Emp_Language` Table</p>
+                                <table class="data-table">
+                                    <tr><th>EmpID</th><th class="text-green-700 bg-green-50">Language</th></tr>
+                                    <tr><td>1</td><td class="text-green-700 bg-green-50">English</td></tr>
+                                    <tr><td>1</td><td class="text-green-700 bg-green-50">French</td></tr>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>

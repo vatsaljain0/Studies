@@ -19,6 +19,43 @@
             font-weight: 600;
         }
         section { scroll-margin-top: 6rem; }
+
+        /* Algorithm Example Block Styles */
+        .example-block {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            overflow: hidden;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        .example-header {
+            background-color: #f8fafc;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .example-content { padding: 1.25rem; }
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1rem;
+            font-size: 0.875rem;
+            text-align: center;
+        }
+        .data-table th, .data-table td {
+            border: 1px solid #cbd5e1;
+            padding: 0.5rem;
+        }
+        .data-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+        .gantt-box { fill: #dbeafe; stroke: #3b82f6; stroke-width: 2; }
+        .gantt-text { font-family: 'Inter', sans-serif; font-weight: 600; fill: #1e293b; text-anchor: middle; dominant-baseline: middle; }
+        .gantt-time { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #64748b; text-anchor: middle; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
@@ -48,27 +85,122 @@
             <h2 class="text-2xl font-bold text-blue-700 mb-4">1. Basic Concepts of Process & State Transition</h2>
             
             <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
-                <p><strong>The Process:</strong> A process is a program in execution. It needs resources (CPU time, memory, files, I/O devices) to accomplish its task. The status of its current activity is represented by the <em>program counter</em> and <em>processor registers</em>.</p>
+                <p><strong>The Process:</strong> A process is a program in execution. While a program is a passive entity (a file stored on disk), a process is an active entity. It needs resources (CPU time, memory, files, I/O devices) to accomplish its task. The status of its current activity is represented by the <em>program counter</em> and <em>processor registers</em>.</p>
 
                 <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Memory Layout of a Process:</h3>
                 <ul class="list-disc pl-6 space-y-1">
-                    <li><strong>Text section:</strong> The executable code.</li>
-                    <li><strong>Data section:</strong> Global and static variables (initialized and uninitialized).</li>
-                    <li><strong>Heap section:</strong> Memory dynamically allocated during program run time.</li>
-                    <li><strong>Stack section:</strong> Temporary data storage when invoking functions (function parameters, return addresses, local variables).</li>
+                    <li><strong>Text section:</strong> The executable compiled code.</li>
+                    <li><strong>Data section:</strong> Global and static variables (initialized and uninitialized) that have a fixed size.</li>
+                    <li><strong>Heap section:</strong> Memory dynamically allocated during program run time (e.g., using <code>malloc()</code> in C or <code>new</code> in Java). Grows upward.</li>
+                    <li><strong>Stack section:</strong> Temporary data storage when invoking functions (function parameters, return addresses, local variables). Grows downward toward the heap.</li>
                 </ul>
-                <div class="diagram-box">Figures: Layout of a process in memory / Memory layout of a C program showing Stack and Heap growing towards each other.</div>
+                
+                <svg width="200" height="300" viewBox="0 0 200 300" class="mx-auto block mt-6 mb-4">
+                    <rect x="50" y="20" width="100" height="260" fill="#f8fafc" stroke="#334155" stroke-width="2" />
+                    <!-- Stack -->
+                    <rect x="50" y="20" width="100" height="40" fill="#fca5a5" stroke="#334155" stroke-width="1" />
+                    <text x="100" y="40" class="gantt-text">Stack</text>
+                    <path d="M100 65 L100 95" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+                    <!-- Gap -->
+                    <text x="100" y="130" class="gantt-text" fill="#94a3b8">↓ Free Space ↑</text>
+                    <!-- Heap -->
+                    <path d="M100 195 L100 165" stroke="#334155" stroke-width="2" marker-end="url(#arrow)" />
+                    <rect x="50" y="200" width="100" height="40" fill="#fef08a" stroke="#334155" stroke-width="1" />
+                    <text x="100" y="220" class="gantt-text">Heap</text>
+                    <!-- Data -->
+                    <rect x="50" y="240" width="100" height="20" fill="#bbf7d0" stroke="#334155" stroke-width="1" />
+                    <text x="100" y="252" class="gantt-text" font-size="12">Data</text>
+                    <!-- Text -->
+                    <rect x="50" y="260" width="100" height="20" fill="#bfdbfe" stroke="#334155" stroke-width="1" />
+                    <text x="100" y="272" class="gantt-text" font-size="12">Text</text>
+                </svg>
 
-                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process State Transition Model:</h3>
-                <p>A process goes through different states during execution. The State Transition Diagram visually represents these transitions:</p>
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">The 7-State Process Transition Model:</h3>
+                <p>A process goes through different states during its lifecycle. While basic models show 5 states, the complete advanced model includes 7 states to account for memory swapping (virtual memory management):</p>
                 <ul class="list-disc pl-6 space-y-2">
-                    <li><strong>New:</strong> The process is being created (Admitted into the Ready queue).</li>
-                    <li><strong>Ready:</strong> The process is waiting to be assigned to a processor (Waiting for CPU scheduling).</li>
-                    <li><strong>Running:</strong> Instructions are being executed (CPU is allocated).</li>
-                    <li><strong>Waiting (Blocked):</strong> The process is waiting for some event to occur (e.g., I/O completion or reception of a signal). Once I/O is complete, it moves back to <em>Ready</em>.</li>
-                    <li><strong>Terminated:</strong> The process has finished execution or is forcefully terminated.</li>
+                    <li><strong>1. New:</strong> The process is being created and admitted to the system.</li>
+                    <li><strong>2. Ready:</strong> The process is loaded into main memory and is waiting to be assigned to a processor by the Short-Term Scheduler.</li>
+                    <li><strong>3. Running:</strong> Instructions are actively being executed (CPU is allocated).</li>
+                    <li><strong>4. Waiting (Blocked):</strong> The process is waiting for some event to occur (e.g., waiting for user input, file I/O completion).</li>
+                    <li><strong>5. Terminated:</strong> The process has finished execution or is forcefully terminated.</li>
+                    <li><strong>6. Suspended Ready:</strong> If main memory is full, a Ready process is swapped out to secondary storage (disk) to free up RAM. It is ready to run but not in main memory.</li>
+                    <li><strong>7. Suspended Blocked (Suspended Wait):</strong> A blocked/waiting process is swapped out to disk. If the I/O event completes while it is on disk, it transitions to Suspended Ready.</li>
                 </ul>
-                <div class="diagram-box">Figures: Diagram of process state (New, Ready, Running, Waiting, Terminated) / 7-Process States Diagram (including Suspended Ready & Suspended Blocked).</div>
+                
+                <svg width="700" height="320" viewBox="0 0 700 320" class="mx-auto block mt-6">
+                    <style>
+                        .state-box { fill: #e0f2fe; stroke: #0284c7; stroke-width: 2; rx: 8; ry: 8; }
+                        .state-text { font-family: 'Inter', sans-serif; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; font-size: 13px; }
+                        .edge { stroke: #64748b; stroke-width: 2; fill: none; }
+                        .edge-label { font-family: 'Inter', sans-serif; font-size: 11px; fill: #475569; text-anchor: middle; font-weight: bold; background: white;}
+                    </style>
+                    <defs>
+                        <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                            <path d="M0,0 L0,8 L8,4 z" fill="#64748b" />
+                        </marker>
+                    </defs>
+                    
+                    <!-- Nodes -->
+                    <rect x="20" y="30" width="80" height="40" class="state-box" />
+                    <text x="60" y="50" class="state-text">New</text>
+
+                    <rect x="200" y="30" width="80" height="40" class="state-box" />
+                    <text x="240" y="50" class="state-text">Ready</text>
+
+                    <rect x="420" y="30" width="80" height="40" class="state-box" />
+                    <text x="460" y="50" class="state-text">Running</text>
+
+                    <rect x="600" y="30" width="80" height="40" class="state-box" />
+                    <text x="640" y="50" class="state-text">Terminated</text>
+
+                    <rect x="420" y="130" width="80" height="40" class="state-box" />
+                    <text x="460" y="150" class="state-text">Blocked/Wait</text>
+
+                    <rect x="200" y="230" width="100" height="40" class="state-box" fill="#fef08a" stroke="#ca8a04" />
+                    <text x="250" y="250" class="state-text">Suspended Ready</text>
+                    
+                    <rect x="410" y="230" width="100" height="40" class="state-box" fill="#fef08a" stroke="#ca8a04" />
+                    <text x="460" y="250" class="state-text">Suspended Wait</text>
+
+                    <!-- Edges -->
+                    <!-- New -> Ready -->
+                    <path d="M100 50 L190 50" class="edge" marker-end="url(#arrow)" />
+                    <text x="150" y="40" class="edge-label">Admit</text>
+
+                    <!-- Ready <-> Running -->
+                    <path d="M280 40 L410 40" class="edge" marker-end="url(#arrow)" />
+                    <text x="345" y="30" class="edge-label">Dispatch</text>
+                    <path d="M420 60 L290 60" class="edge" marker-end="url(#arrow)" />
+                    <text x="355" y="75" class="edge-label">Interrupt/Time out</text>
+
+                    <!-- Running -> Terminated -->
+                    <path d="M500 50 L590 50" class="edge" marker-end="url(#arrow)" />
+                    <text x="545" y="40" class="edge-label">Exit</text>
+
+                    <!-- Running -> Blocked -->
+                    <path d="M460 70 L460 120" class="edge" marker-end="url(#arrow)" />
+                    <text x="495" y="100" class="edge-label">I/O Request</text>
+
+                    <!-- Blocked -> Ready -->
+                    <path d="M420 150 L260 70" class="edge" marker-end="url(#arrow)" />
+                    <text x="310" y="130" class="edge-label">I/O Complete</text>
+
+                    <!-- Blocked -> Suspended Blocked -->
+                    <path d="M460 170 L460 220" class="edge" marker-end="url(#arrow)" />
+                    <text x="500" y="200" class="edge-label">Swap Out</text>
+                    
+                    <!-- Suspended Blocked -> Suspended Ready -->
+                    <path d="M410 250 L310 250" class="edge" marker-end="url(#arrow)" />
+                    <text x="360" y="240" class="edge-label">I/O Complete</text>
+
+                    <!-- Suspended Ready -> Ready -->
+                    <path d="M240 230 L240 80" class="edge" marker-end="url(#arrow)" />
+                    <text x="210" y="160" class="edge-label">Swap In</text>
+
+                    <!-- Ready -> Suspended Ready -->
+                    <path d="M260 70 L260 220" class="edge" marker-end="url(#arrow)" />
+                    <text x="290" y="160" class="edge-label">Swap Out</text>
+                </svg>
             </div>
         </section>
 
@@ -81,37 +213,40 @@
                 <ul class="list-disc pl-6 space-y-2">
                     <li>A process (<strong>parent</strong>) may create several new processes (<strong>children</strong>), forming a tree of processes.</li>
                     <li>Identified by a unique process identifier (<strong>pid</strong>). <em>(Example: Linux <code>systemd</code> process has pid = 1, serving as the root parent process for all user processes).</em></li>
-                    <li><strong>Execution Possibilities:</strong> 1. Parent executes concurrently with children. 2. Parent waits until children terminate.</li>
-                    <li><strong>Address Space Possibilities:</strong> 1. Child is a duplicate of the parent (same program/data). 2. Child has a new program loaded into it.</li>
                     <li><strong>UNIX Example:</strong> The <code>fork()</code> system call creates a child process (child pid=0, parent gets child's actual pid). The child inherits privileges/open files. The child overlays its address space using <code>exec()</code>. The parent waits using <code>wait()</code> and resumes when the child invokes <code>exit()</code>.</li>
                 </ul>
-                <div class="diagram-box">Figures: A tree of processes on a typical Linux system / Process creation using the fork() system call.</div>
 
                 <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process Termination:</h3>
                 <ul class="list-disc pl-6 space-y-2">
-                    <li>A process terminates when it finishes its final statement and asks the OS to delete it using the <code>exit()</code> system call. Returns status to waiting parent via <code>wait()</code>.</li>
-                    <li>All resources (physical/virtual memory, open files, I/O buffers) are deallocated.</li>
-                    <li>A parent may terminate a child if: 
-                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600">
-                            <li>Child exceeded resource usage.</li>
-                            <li>Task assigned to child is no longer required.</li>
-                            <li>Parent is exiting, and OS does not allow a child to continue (Cascading termination).</li>
-                        </ul>
-                    </li>
+                    <li>A process terminates when it finishes its final statement and asks the OS to delete it using the <code>exit()</code> system call. It returns a status value to its waiting parent via <code>wait()</code>.</li>
+                    <li>All resources (physical/virtual memory, open files, I/O buffers) are deallocated by the OS.</li>
+                    <li><strong>Cascading Termination:</strong> If a parent process terminates, the OS often does not allow its child processes to continue, forcefully terminating the entire subtree.</li>
                 </ul>
 
                 <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process Control Block (PCB):</h3>
-                <p>Each process is represented in the OS by a PCB (Task Control Block). It serves as the repository for all data needed to start/restart a process:</p>
-                <ul class="list-disc pl-6 space-y-1">
-                    <li><strong>Process state:</strong> New, ready, running, waiting, etc.</li>
-                    <li><strong>Program counter:</strong> Address of the next instruction to be executed.</li>
-                    <li><strong>CPU registers:</strong> Accumulators, index registers, stack pointers. Saved during interrupts to continue correctly later.</li>
-                    <li><strong>CPU-scheduling info:</strong> Priority, pointers to scheduling queues.</li>
-                    <li><strong>Memory-management info:</strong> Base/limit registers, page tables.</li>
-                    <li><strong>Accounting info:</strong> CPU time used, time limits, process numbers.</li>
-                    <li><strong>I/O status info:</strong> List of I/O devices allocated, list of open files.</li>
-                </ul>
-                <div class="diagram-box">Figure: Process control block (PCB).</div>
+                <p>Each process is represented in the OS by a PCB (Task Control Block). It serves as the repository for all data needed to start, pause, or restart a process:</p>
+                
+                <svg width="250" height="250" viewBox="0 0 250 250" class="mx-auto block mt-4">
+                    <style>
+                        .pcb-box { fill: #f8fafc; stroke: #334155; stroke-width: 2; }
+                        .pcb-text { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+                    </style>
+                    <rect x="25" y="10" width="200" height="230" class="pcb-box" rx="5" />
+                    <rect x="25" y="10" width="200" height="30" class="pcb-box" rx="5" fill="#e2e8f0" />
+                    <text x="125" y="25" class="pcb-text">Process State</text>
+                    <rect x="25" y="40" width="200" height="30" class="pcb-box" />
+                    <text x="125" y="55" class="pcb-text">Process ID / Pointer</text>
+                    <rect x="25" y="70" width="200" height="30" class="pcb-box" />
+                    <text x="125" y="85" class="pcb-text">Program Counter</text>
+                    <rect x="25" y="100" width="200" height="30" class="pcb-box" />
+                    <text x="125" y="115" class="pcb-text">CPU Registers</text>
+                    <rect x="25" y="130" width="200" height="30" class="pcb-box" />
+                    <text x="125" y="145" class="pcb-text">Memory Limits</text>
+                    <rect x="25" y="160" width="200" height="30" class="pcb-box" />
+                    <text x="125" y="175" class="pcb-text">List of Open Files</text>
+                    <rect x="25" y="190" width="200" height="50" class="pcb-box" rx="5" />
+                    <text x="125" y="215" class="pcb-text">...</text>
+                </svg>
             </div>
         </section>
 
@@ -123,63 +258,150 @@
                 <p><strong>Definition:</strong> The process where the CPU stops running one process, saves its current state in its PCB, and loads the saved state of another process so that multiple processes can share the CPU effectively.</p>
                 
                 <ul class="list-disc pl-6 space-y-2">
-                    <li><strong>Need in Multitasking:</strong> CPU keeps switching between processes, giving the illusion of parallel execution. Without it, one process could monopolize the CPU indefinitely.</li>
                     <li><strong>Role in Scheduling:</strong> The scheduler decides the next process; the <strong>dispatcher</strong> performs the actual switch.</li>
-                    <li><strong>Triggers for Context Switch:</strong> High-priority process arrives, Interrupt occurs, User/Kernel mode switch, or Preemptive CPU scheduling ends a time slice.</li>
-                    <li><strong>Overhead:</strong> Time spent switching is called <em>context switch overhead</em>. The CPU does no useful work during this time. If switching happens too often, efficiency drops.</li>
+                    <li><strong>Overhead:</strong> Time spent switching is called <em>context switch overhead</em>. The CPU does no useful work during this time. If context switching is too frequent, system performance drastically drops.</li>
                 </ul>
 
-                <p class="font-semibold text-slate-900 mt-4">Step-by-Step Execution Phase (P0 to P1):</p>
-                <ol class="list-decimal pl-6 space-y-1">
-                    <li>P0 is executing. Interrupt or system call occurs.</li>
-                    <li><strong>Save State (P0 → PCB0):</strong> OS pauses P0 and saves its register values/PC into PCB0.</li>
-                    <li><strong>Load State (PCB1 → P1):</strong> OS retrieves the saved state of P1 from PCB1.</li>
-                    <li>P1 starts executing while P0 remains idle.</li>
-                </ol>
-                <div class="diagram-box">Figures: Diagram showing context switch from process to process / Interleaved execution flowchart.</div>
+                <svg width="600" height="350" viewBox="0 0 600 350" class="mx-auto block mt-6">
+                    <style>
+                        .c-box { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 4; }
+                        .c-lbl { font-family: 'Inter', sans-serif; font-size: 15px; font-weight: 700; fill: #0f172a; text-anchor: middle; }
+                        .c-txt { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; fill: #1e293b; text-anchor: middle; }
+                        .c-line { stroke: #334155; stroke-width: 2; fill: none; }
+                    </style>
+                    <!-- OS timeline -->
+                    <rect x="250" y="20" width="100" height="310" fill="#f1f5f9" />
+                    <text x="300" y="40" class="c-lbl">OS</text>
+
+                    <text x="100" y="40" class="c-lbl">Process P0</text>
+                    <text x="500" y="40" class="c-lbl">Process P1</text>
+
+                    <!-- P0 executing -->
+                    <line x1="100" y1="50" x2="100" y2="100" class="c-line" stroke-width="4" stroke="#10b981" />
+                    <text x="50" y="75" class="c-txt" fill="#10b981">Executing</text>
+
+                    <!-- interrupt -->
+                    <path d="M100 100 L250 120" class="c-line" marker-end="url(#arrow)" />
+                    <text x="175" y="105" class="c-txt">Interrupt / Call</text>
+
+                    <!-- OS saving / loading -->
+                    <rect x="260" y="120" width="80" height="30" class="c-box" />
+                    <text x="300" y="140" class="c-txt">Save state P0</text>
+
+                    <rect x="260" y="170" width="80" height="30" class="c-box" />
+                    <text x="300" y="190" class="c-txt">Load state P1</text>
+
+                    <!-- switch to P1 -->
+                    <path d="M350 200 L500 220" class="c-line" marker-end="url(#arrow)" />
+
+                    <!-- P1 executing -->
+                    <line x1="500" y1="220" x2="500" y2="270" class="c-line" stroke-width="4" stroke="#10b981" />
+                    <text x="550" y="245" class="c-txt" fill="#10b981">Executing</text>
+                    
+                    <path d="M500 270 L350 290" class="c-line" marker-end="url(#arrow)" />
+                    <text x="425" y="275" class="c-txt">Interrupt</text>
+                    
+                    <rect x="260" y="290" width="80" height="30" class="c-box" />
+                    <text x="300" y="310" class="c-txt">Save state P1</text>
+                </svg>
             </div>
         </section>
 
         <!-- 4. THREADS & MODELS -->
         <section id="threads" class="mb-12">
-            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Introduction to Threads & Thread Models</h2>
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Threads & Process Differences</h2>
 
             <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
-                <p><strong>Thread:</strong> A single sequence stream within a process. Often called a "lightweight process." It is a basic unit of CPU utilization comprising a Thread ID, Program Counter (PC), Register set, and Stack.</p>
-                <p>Multiple threads within the same process <strong>share</strong> the code section, data section, and OS resources (like open files).</p>
+                <p><strong>Thread:</strong> Often called a "lightweight process." It is a basic unit of CPU utilization comprising a Thread ID, Program Counter (PC), Register set, and Stack. Multiple threads within the same process <strong>share</strong> the code section, data section, and OS resources (like open files).</p>
 
-                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process vs. Thread (6 Key Differences):</h3>
-                <ul class="list-disc pl-6 space-y-1 text-sm md:text-base">
-                    <li><strong>Weight:</strong> Process is heavy-weight/resource-intensive. Thread is light-weight, using fewer resources.</li>
-                    <li><strong>Switching:</strong> Process switching needs interaction with the OS. Thread switching does not need OS interaction.</li>
-                    <li><strong>Resources:</strong> Each process has its own memory/file resources. Threads share the same set of open files/child processes.</li>
-                    <li><strong>Blocking:</strong> If one process blocks, no other process can execute. If one thread blocks, a second thread in the same task can still run.</li>
-                    <li><strong>Resource Usage:</strong> Multiple processes use more resources; multithreaded processes use fewer resources.</li>
-                    <li><strong>Independence:</strong> Processes operate independently. One thread can read, write, or change another thread's data.</li>
-                </ul>
-                <div class="diagram-box">Figure: Single-threaded process vs multithreaded process layout.</div>
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process vs. Thread (Key Differences):</h3>
+                <div class="overflow-x-auto mt-4 mb-4">
+                    <table class="data-table">
+                        <tr>
+                            <th class="w-1/2">Process</th>
+                            <th class="w-1/2">Thread</th>
+                        </tr>
+                        <tr>
+                            <td><strong>Heavyweight:</strong> Takes more time to create, terminate, and manage.</td>
+                            <td><strong>Lightweight:</strong> Faster to create, terminate, and manage.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Isolated Memory:</strong> Each process has its own isolated memory address space.</td>
+                            <td><strong>Shared Memory:</strong> Threads within a process share the same memory (Code, Data, Heap) but have their own Stack.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Context Switching:</strong> High overhead. OS must swap out entire memory mappings and PCBs.</td>
+                            <td><strong>Context Switching:</strong> Low overhead. No need to switch memory maps.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Communication:</strong> Requires slow Inter-Process Communication (IPC) like Pipes or Message Passing.</td>
+                            <td><strong>Communication:</strong> Fast and direct through shared memory variables.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Fault Isolation:</strong> If one process crashes, it does not affect other processes.</td>
+                            <td><strong>Fault Vulnerability:</strong> If one thread crashes, the entire process (and all its threads) can crash.</td>
+                        </tr>
+                    </table>
+                </div>
 
-                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Types of Threads:</h3>
-                <ul class="list-disc pl-6 space-y-4">
-                    <li>
-                        <strong>User-Level Thread (ULT):</strong> Implemented in user-level libraries. Kernel doesn't know about them. 
-                        <br><em>Pros:</em> Fast context switching, portable, no kernel intervention needed. 
-                        <br><em>Cons:</em> If one thread causes a page fault/blocking system call, the entire process blocks.
-                    </li>
-                    <li>
-                        <strong>Kernel-Level Thread (KLT):</strong> Managed directly by the OS. Kernel has a master thread table.
-                        <br><em>Pros:</em> True parallel execution on multiprocessors; if one thread blocks, others can run.
-                        <br><em>Cons:</em> Slower and inefficient context switching due to OS intervention overhead.
-                    </li>
-                </ul>
+                <svg width="450" height="200" viewBox="0 0 450 200" class="mx-auto block mt-6">
+                    <style>
+                        .th-box { fill: none; stroke: #334155; stroke-width: 2; rx: 5; }
+                        .th-fill { fill: #e0f2fe; stroke: #0284c7; stroke-width: 1; }
+                        .th-text { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #0f172a; text-anchor: middle; }
+                    </style>
+                    <!-- Single Threaded -->
+                    <rect x="30" y="20" width="140" height="150" class="th-box" />
+                    <text x="100" y="190" class="th-text font-bold" font-size="14">Single-Threaded</text>
+                    
+                    <rect x="40" y="30" width="40" height="20" class="th-fill" />
+                    <text x="60" y="45" class="th-text">Code</text>
+                    <rect x="80" y="30" width="40" height="20" class="th-fill" />
+                    <text x="100" y="45" class="th-text">Data</text>
+                    <rect x="120" y="30" width="40" height="20" class="th-fill" />
+                    <text x="140" y="45" class="th-text">Files</text>
+
+                    <rect x="70" y="70" width="60" height="20" fill="#fef08a" stroke="#ca8a04" />
+                    <text x="100" y="85" class="th-text">Registers</text>
+                    <rect x="70" y="100" width="60" height="20" fill="#fca5a5" stroke="#dc2626" />
+                    <text x="100" y="115" class="th-text">Stack</text>
+                    
+                    <!-- Multi Threaded -->
+                    <rect x="220" y="20" width="200" height="150" class="th-box" />
+                    <text x="320" y="190" class="th-text font-bold" font-size="14">Multi-Threaded</text>
+                    
+                    <rect x="240" y="30" width="50" height="20" class="th-fill" />
+                    <text x="265" y="45" class="th-text">Code</text>
+                    <rect x="295" y="30" width="50" height="20" class="th-fill" />
+                    <text x="320" y="45" class="th-text">Data</text>
+                    <rect x="350" y="30" width="50" height="20" class="th-fill" />
+                    <text x="375" y="45" class="th-text">Files</text>
+
+                    <!-- Thread 1 -->
+                    <rect x="235" y="70" width="50" height="20" fill="#fef08a" stroke="#ca8a04" />
+                    <text x="260" y="85" class="th-text">Regs</text>
+                    <rect x="235" y="100" width="50" height="20" fill="#fca5a5" stroke="#dc2626" />
+                    <text x="260" y="115" class="th-text">Stack</text>
+
+                    <!-- Thread 2 -->
+                    <rect x="295" y="70" width="50" height="20" fill="#fef08a" stroke="#ca8a04" />
+                    <text x="320" y="85" class="th-text">Regs</text>
+                    <rect x="295" y="100" width="50" height="20" fill="#fca5a5" stroke="#dc2626" />
+                    <text x="320" y="115" class="th-text">Stack</text>
+
+                    <!-- Thread 3 -->
+                    <rect x="355" y="70" width="50" height="20" fill="#fef08a" stroke="#ca8a04" />
+                    <text x="380" y="85" class="th-text">Regs</text>
+                    <rect x="355" y="100" width="50" height="20" fill="#fca5a5" stroke="#dc2626" />
+                    <text x="380" y="115" class="th-text">Stack</text>
+                </svg>
 
                 <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Multithreading Models:</h3>
                 <ul class="list-disc pl-6 space-y-2">
-                    <li><strong>Many-to-One:</strong> Maps many ULTs to one KLT. Efficient, but entire process blocks if one thread blocks. Cannot run in parallel on multicore systems.</li>
-                    <li><strong>One-to-One:</strong> Maps each ULT to a KLT. Provides maximum concurrency. Drawback: creating a user thread requires creating a kernel thread, burdening performance (used by Windows, Linux).</li>
-                    <li><strong>Many-to-Many:</strong> Multiplexes many ULTs to a smaller/equal number of KLTs. Best of both worlds. (A variation is the <em>Two-level model</em> which also allows a ULT to be strictly bound to a KLT).</li>
+                    <li><strong>Many-to-One:</strong> Maps many User-Level Threads to one Kernel-Level Thread. Entire process blocks if one thread blocks.</li>
+                    <li><strong>One-to-One:</strong> Maps each User Thread to a Kernel Thread. Maximum concurrency, but high OS overhead (used by Windows, Linux).</li>
+                    <li><strong>Many-to-Many:</strong> Multiplexes many User Threads to a smaller/equal number of Kernel Threads.</li>
                 </ul>
-                <div class="diagram-box">Figures: User Level Thread vs Kernel Level Thread / Many-to-One Model / One-to-One Model / Many-to-Many Model / Two-level Model.</div>
             </div>
         </section>
 
@@ -188,115 +410,414 @@
             <h2 class="text-2xl font-bold text-blue-700 mb-4">5. Basic Concepts of Scheduling & Types of Schedulers</h2>
 
             <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
-                <p><strong>Basic Concepts:</strong> Process scheduling manages removing a running process from the CPU and selecting another to maximize CPU utilization. A process moves between queues (Job queue, Ready queue, Waiting queue) throughout its lifetime.</p>
-
-                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Types of Schedulers:</h3>
                 <ul class="list-disc pl-6 space-y-4">
                     <li>
-                        <strong>1. Long-Term Scheduler (Job Scheduler):</strong>
-                        <br>Loads processes from disk (Job Queue) into main memory (Ready Queue).
-                        <br><strong>Function:</strong> Controls the <em>degree of multiprogramming</em>. Selects a balanced mix of I/O-bound and CPU-bound processes.
-                        <br><strong>Speed:</strong> Slowest. Operates infrequently. (Almost minimal/nil in modern time-sharing systems).
+                        <strong>1. Long-Term Scheduler (Job Scheduler):</strong> Loads processes from disk into main memory. Controls the <em>degree of multiprogramming</em>.
                     </li>
                     <li>
-                        <strong>2. Short-Term Scheduler (CPU Scheduler):</strong>
-                        <br>Selects a process from the ready queue and assigns the CPU to it.
-                        <br><strong>Function:</strong> Maximizes CPU utilization and ensures no starvation. Uses scheduling algorithms.
-                        <br><strong>Speed:</strong> Fastest. Operates very frequently (every few milliseconds).
+                        <strong>2. Short-Term Scheduler (CPU Scheduler):</strong> Selects a process from the ready queue and assigns the CPU. Operates extremely fast (every few milliseconds).
                     </li>
                     <li>
-                        <strong>Dispatcher:</strong> The component called by the Short-Term Scheduler that performs the actual context switch, switches system to user mode, and jumps to the proper program location.
-                    </li>
-                    <li>
-                        <strong>3. Medium-Term Scheduler:</strong>
-                        <br>Manages <strong>swapping</strong>. Temporarily removes processes from memory to disk (Swap out) when they are blocked, and restores them later (Swap in).
-                        <br><strong>Function:</strong> Reduces the degree of multiprogramming to free up memory.
-                        <br><strong>Speed:</strong> Faster than Long-term, slower than Short-term.
+                        <strong>3. Medium-Term Scheduler:</strong> Manages <strong>swapping</strong>. It temporarily removes processes from main memory to disk (Swap out to <em>Suspended Blocked/Ready</em> states) to free up space, and brings them back later (Swap in). Reduces the degree of multiprogramming.
                     </li>
                 </ul>
-                <div class="diagram-box">Figures: Process scheduler queues / Short-Term Scheduler flowchart / Medium-Term Scheduler swapping flowchart.</div>
+
+                <svg width="550" height="180" viewBox="0 0 550 180" class="mx-auto block mt-6">
+                    <style>
+                        .q-box { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 4; }
+                        .q-text { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+                        .q-line { stroke: #334155; stroke-width: 2; fill: none; }
+                        .q-label { font-family: 'Inter', sans-serif; font-size: 12px; font-weight:bold; fill: #475569; text-anchor: middle; }
+                    </style>
+                    <rect x="220" y="20" width="100" height="40" class="q-box" />
+                    <text x="270" y="40" class="q-text">Ready Queue</text>
+
+                    <rect x="420" y="20" width="80" height="40" class="q-box" fill="#bae6fd" />
+                    <text x="460" y="40" class="q-text">CPU</text>
+
+                    <path d="M320 40 L410 40" class="q-line" marker-end="url(#arrow)" />
+                    <text x="365" y="30" class="q-label">Dispatch</text>
+                    
+                    <path d="M500 40 L520 40 L520 140 L270 140 L270 60" class="q-line" marker-end="url(#arrow)" />
+                    <text x="420" y="130" class="q-label">Time slice expired / Interrupt</text>
+
+                    <rect x="220" y="80" width="100" height="40" class="q-box" fill="#fee2e2" />
+                    <text x="270" y="100" class="q-text">I/O Queue</text>
+
+                    <path d="M460 60 L460 100 L320 100" class="q-line" marker-end="url(#arrow)" />
+                    <text x="400" y="90" class="q-label">I/O Request</text>
+
+                    <path d="M220 100 L160 100 L160 40 L210 40" class="q-line" marker-end="url(#arrow)" />
+                    <text x="110" y="60" class="q-label">I/O Completion</text>
+                </svg>
             </div>
         </section>
 
         <!-- 6. SCHEDULING ALGORITHMS -->
         <section id="algorithms" class="mb-12">
-            <h2 class="text-2xl font-bold text-blue-700 mb-4">6. Scheduling Algorithms & Criteria</h2>
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">6. Scheduling Algorithms & Examples</h2>
 
             <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
                 
                 <!-- Criteria -->
                 <div>
-                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Scheduling Definitions & Criteria</h3>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Definitions & Formulas</h3>
                     <ul class="list-disc pl-6 space-y-2">
-                        <li><strong>Non-Preemptive:</strong> Once a process gets the CPU, it holds it until it terminates or switches to waiting. It cannot be interrupted.</li>
-                        <li><strong>Preemptive:</strong> OS can interrupt a running process and force it into the ready state to allocate the CPU to another process.</li>
+                        <li><strong>Non-Preemptive:</strong> A process holds the CPU until it terminates or waits. It cannot be interrupted.</li>
+                        <li><strong>Preemptive:</strong> OS can interrupt a running process and force it into the ready state to allocate the CPU to a higher priority process.</li>
                     </ul>
-                    <p class="font-semibold text-slate-900 mt-4">Formulas & Criteria:</p>
-                    <ul class="list-disc pl-6 space-y-1 font-mono text-sm bg-slate-100 p-3 rounded-md">
-                        <li>CPU Utilization: Keep CPU as busy as possible (40% to 90%).</li>
-                        <li>Throughput: Number of processes completed per time unit.</li>
-                        <li>Turnaround Time (TAT) = Completion Time (CT) - Arrival Time (AT)</li>
-                        <li>Waiting Time (WT) = Turnaround Time (TAT) - Burst Time (BT)</li>
-                        <li>Response Time = Time from submission until the FIRST response is produced.</li>
+                    <ul class="list-disc pl-6 space-y-1 font-mono text-sm bg-slate-100 p-3 rounded-md mt-4 border-l-4 border-blue-500">
+                        <li><strong>Turnaround Time (TAT)</strong> = Completion Time (CT) - Arrival Time (AT)</li>
+                        <li><strong>Waiting Time (WT)</strong> = Turnaround Time (TAT) - Burst Time (BT)</li>
                     </ul>
                 </div>
 
-                <!-- Non-Preemptive Algorithms -->
-                <div>
-                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">B. Non-Preemptive Scheduling Algorithms</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-700">1. First-Come, First-Served (FCFS)</h4>
-                            <p>Managed with a FIFO queue. The process that requests the CPU first gets it first.</p>
-                            <p><strong>Disadvantage:</strong> High average waiting time. Suffers from the <strong>Convoy Effect</strong>: Short processes are forced to wait behind long processes, leading to inefficiency.</p>
-                            <p class="text-sm text-slate-600 italic">Example Calculation: P1(24), P2(3), P3(3). Order P1, P2, P3 &rarr; Avg WT = 17ms. Order P2, P3, P1 &rarr; Avg WT = 3ms.</p>
-                            <div class="diagram-box p-2 my-2">Gantt Charts: FCFS scheduling examples</div>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-700">2. Non-Preemptive Shortest Job First (SJF)</h4>
-                            <p>CPU is assigned to the process that has the smallest next CPU burst. Once assigned, it runs to completion without interruption.</p>
-                            <p><strong>Advantage:</strong> Gives the minimum possible average waiting time for a given set of processes.</p>
-                            <div class="diagram-box p-2 my-2">Gantt Charts: Non-Preemptive SJF</div>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-700">3. Non-Preemptive Priority Scheduling</h4>
-                            <p>CPU is allocated to the process with the highest priority (e.g., 0 = highest). Once it starts, it cannot be interrupted even if a higher priority process arrives.</p>
-                            <p class="text-sm text-slate-600 italic mt-2">Example from PPT: P1 (Burst 4, Priority 3), P2 (5, 2), P3 (8, 2), P4 (7, 1), P5 (3, 3).<br>Execution Order: P4 &rarr; P2 &rarr; P3 &rarr; P1 &rarr; P5.</p>
-                            <div class="diagram-box p-2 my-2">Gantt Chart: Priority scheduling execution order</div>
+                <!-- 1. FCFS -->
+                <div class="mt-8">
+                    <h4 class="text-xl font-bold text-slate-800">1. First-Come, First-Served (FCFS) [Non-Preemptive]</h4>
+                    <p>Managed with a FIFO queue. The process that arrives first gets the CPU first. It suffers from the <strong>Convoy Effect</strong> (short processes forced to wait behind long processes).</p>
+                    
+                    <div class="example-block">
+                        <div class="example-header">Example Problem: FCFS</div>
+                        <div class="example-content">
+                            <table class="data-table">
+                                <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
+                                <tr><td>P1</td><td>0</td><td>24</td></tr>
+                                <tr><td>P2</td><td>0</td><td>3</td></tr>
+                                <tr><td>P3</td><td>0</td><td>3</td></tr>
+                            </table>
+
+                            <h5 class="output-label">Gantt Chart</h5>
+                            <svg width="100%" height="80" viewBox="0 0 500 80" class="mx-auto block mt-2">
+                                <rect x="50" y="20" width="240" height="40" class="gantt-box" />
+                                <text x="170" y="40" class="gantt-text">P1</text>
+                                <rect x="290" y="20" width="30" height="40" class="gantt-box" />
+                                <text x="305" y="40" class="gantt-text">P2</text>
+                                <rect x="320" y="20" width="30" height="40" class="gantt-box" />
+                                <text x="335" y="40" class="gantt-text">P3</text>
+                                
+                                <text x="50" y="75" class="gantt-time">0</text>
+                                <text x="290" y="75" class="gantt-time">24</text>
+                                <text x="320" y="75" class="gantt-time">27</text>
+                                <text x="350" y="75" class="gantt-time">30</text>
+                            </svg>
+
+                            <h5 class="output-label mt-4">Calculations</h5>
+                            <ul class="list-none space-y-1 font-mono text-sm bg-slate-50 p-3 border rounded">
+                                <li>P1: CT=24, TAT = 24-0 = 24. WT = 24-24 = <strong>0</strong></li>
+                                <li>P2: CT=27, TAT = 27-0 = 27. WT = 27-3 = <strong>24</strong></li>
+                                <li>P3: CT=30, TAT = 30-0 = 30. WT = 30-3 = <strong>27</strong></li>
+                                <li class="text-blue-700 font-bold mt-2">Average Waiting Time = (0 + 24 + 27) / 3 = 17 ms</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Preemptive Algorithms -->
-                <div>
-                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">C. Preemptive Scheduling Algorithms</h3>
-                    <div class="space-y-4">
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-700">1. Round-Robin (RR) Scheduling</h4>
-                            <p>Designed for time-sharing systems. A small unit of time called a <strong>time quantum</strong> (10-100ms) is defined. The ready queue is a circular FIFO queue. Each process gets the CPU for up to 1 quantum. If the burst exceeds it, it is preempted and put at the tail of the ready queue.</p>
-                            <p class="text-sm text-slate-600 italic">Example: P1(24), P2(3), P3(3). Quantum = 4. P1 gets 4ms, preempted. P2 gets 3ms (quits). P3 gets 3ms (quits). P1 gets remaining. Avg WT = 5.66ms.</p>
-                            <div class="diagram-box p-2 my-2">Gantt Chart: Round-Robin scheduling / Figure: Time quantum vs Context switches</div>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-700">2. Preemptive SJF (Shortest-Remaining-Time-First / SRTF)</h4>
-                            <p>If a new process arrives with a CPU burst shorter than the <em>remaining</em> time of the currently running process, the running process is preempted.</p>
-                            <p class="text-sm text-slate-600 italic">Example: P1(arr 0, bt 8), P2(arr 1, bt 4), P3(arr 2, bt 9), P4(arr 3, bt 5). Avg WT = 6.5ms.</p>
-                            <div class="diagram-box p-2 my-2">Gantt Charts: Preemptive SJF (SRTF)</div>
-                        </div>
-                        <div>
-                            <h4 class="text-lg font-bold text-slate-700">3. Preemptive Priority Scheduling</h4>
-                            <p>If a new process arrives with a higher priority than the currently running process, the CPU is preempted and given to the new arrival.</p>
-                            <p><strong>Major Problem:</strong> <em>Starvation (Indefinite blocking)</em>. Low priority processes may wait indefinitely.</p>
-                            <p><strong>Solution:</strong> <em>Aging</em>. Gradually increasing the priority of processes that wait in the system for a long time. <em>(Fact: It would take a little over 2 minutes for a priority-127 process to age to a priority-0 process.)</em></p>
+                <!-- 2. SJF -->
+                <div class="mt-8">
+                    <h4 class="text-xl font-bold text-slate-800">2. Shortest Job First (SJF) [Non-Preemptive]</h4>
+                    <p>CPU is assigned to the process that has the smallest next CPU burst. It provides the <strong>minimum possible average waiting time</strong>.</p>
+                    
+                    <div class="example-block">
+                        <div class="example-header">Example Problem: SJF (Non-Preemptive)</div>
+                        <div class="example-content">
+                            <table class="data-table">
+                                <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
+                                <tr><td>P1</td><td>0</td><td>6</td></tr>
+                                <tr><td>P2</td><td>0</td><td>8</td></tr>
+                                <tr><td>P3</td><td>0</td><td>7</td></tr>
+                                <tr><td>P4</td><td>0</td><td>3</td></tr>
+                            </table>
+
+                            <h5 class="output-label">Gantt Chart</h5>
+                            <svg width="100%" height="80" viewBox="0 0 500 80" class="mx-auto block mt-2">
+                                <rect x="50" y="20" width="60" height="40" class="gantt-box" />
+                                <text x="80" y="40" class="gantt-text">P4</text>
+                                <rect x="110" y="20" width="120" height="40" class="gantt-box" />
+                                <text x="170" y="40" class="gantt-text">P1</text>
+                                <rect x="230" y="20" width="140" height="40" class="gantt-box" />
+                                <text x="300" y="40" class="gantt-text">P3</text>
+                                <rect x="370" y="20" width="160" height="40" class="gantt-box" />
+                                <text x="450" y="40" class="gantt-text">P2</text>
+                                
+                                <text x="50" y="75" class="gantt-time">0</text>
+                                <text x="110" y="75" class="gantt-time">3</text>
+                                <text x="230" y="75" class="gantt-time">9</text>
+                                <text x="370" y="75" class="gantt-time">16</text>
+                                <text x="530" y="75" class="gantt-time">24</text>
+                            </svg>
+
+                            <h5 class="output-label mt-4">Calculations</h5>
+                            <ul class="list-none space-y-1 font-mono text-sm bg-slate-50 p-3 border rounded">
+                                <li>Order: P4 &rarr; P1 &rarr; P3 &rarr; P2 (Shortest burst picked first).</li>
+                                <li>P1 WT = 3. P2 WT = 16. P3 WT = 9. P4 WT = 0.</li>
+                                <li class="text-blue-700 font-bold mt-2">Average Waiting Time = (3 + 16 + 9 + 0) / 4 = 7 ms</li>
+                            </ul>
                         </div>
                     </div>
                 </div>
 
-                <!-- Multilevel Queue -->
-                <div>
+                <!-- 3. Priority -->
+                <div class="mt-8">
+                    <h4 class="text-xl font-bold text-slate-800">3. Priority Scheduling [Non-Preemptive]</h4>
+                    <p>CPU is allocated to the process with the highest priority (0 or 1 = highest). Major problem is <strong>Starvation</strong> (low priority never runs). Solution is <strong>Aging</strong> (gradually increasing priority over time).</p>
+                    
+                    <div class="example-block">
+                        <div class="example-header">Example Problem: Priority Scheduling</div>
+                        <div class="example-content">
+                            <table class="data-table">
+                                <tr><th>Process</th><th>Burst Time (BT)</th><th>Priority</th></tr>
+                                <tr><td>P1</td><td>10</td><td>3</td></tr>
+                                <tr><td>P2</td><td>1</td><td class="font-bold text-red-600">1 (Highest)</td></tr>
+                                <tr><td>P3</td><td>2</td><td>4</td></tr>
+                                <tr><td>P4</td><td>1</td><td>5</td></tr>
+                                <tr><td>P5</td><td>5</td><td>2</td></tr>
+                            </table>
+
+                            <h5 class="output-label">Gantt Chart</h5>
+                            <svg width="100%" height="80" viewBox="0 0 500 80" class="mx-auto block mt-2">
+                                <rect x="20" y="20" width="25" height="40" class="gantt-box" />
+                                <text x="32" y="40" class="gantt-text" font-size="12">P2</text>
+                                <rect x="45" y="20" width="125" height="40" class="gantt-box" />
+                                <text x="107" y="40" class="gantt-text">P5</text>
+                                <rect x="170" y="20" width="250" height="40" class="gantt-box" />
+                                <text x="295" y="40" class="gantt-text">P1</text>
+                                <rect x="420" y="20" width="50" height="40" class="gantt-box" />
+                                <text x="445" y="40" class="gantt-text">P3</text>
+                                <rect x="470" y="20" width="25" height="40" class="gantt-box" />
+                                <text x="482" y="40" class="gantt-text" font-size="12">P4</text>
+                                
+                                <text x="20" y="75" class="gantt-time">0</text>
+                                <text x="45" y="75" class="gantt-time">1</text>
+                                <text x="170" y="75" class="gantt-time">6</text>
+                                <text x="420" y="75" class="gantt-time">16</text>
+                                <text x="470" y="75" class="gantt-time">18</text>
+                                <text x="495" y="75" class="gantt-time">19</text>
+                            </svg>
+
+                            <h5 class="output-label mt-4">Calculations</h5>
+                            <ul class="list-none space-y-1 font-mono text-sm bg-slate-50 p-3 border rounded">
+                                <li>Order (By priority): P2 &rarr; P5 &rarr; P1 &rarr; P3 &rarr; P4.</li>
+                                <li>P1 WT = 6. P2 WT = 0. P3 WT = 16. P4 WT = 18. P5 WT = 1.</li>
+                                <li class="text-blue-700 font-bold mt-2">Average Waiting Time = (6 + 0 + 16 + 18 + 1) / 5 = 8.2 ms</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Round Robin -->
+                <div class="mt-8">
+                    <h4 class="text-xl font-bold text-slate-800">4. Round-Robin (RR) [Preemptive]</h4>
+                    <p>Designed for time-sharing systems. Each process gets the CPU for a fixed <strong>Time Quantum</strong>. If it exceeds it, it is preempted and put at the tail of the Ready queue.</p>
+                    
+                    <div class="example-block">
+                        <div class="example-header">Example Problem: Round-Robin (Quantum = 2)</div>
+                        <div class="example-content">
+                            <table class="data-table">
+                                <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
+                                <tr><td>P1</td><td>0</td><td>5</td></tr>
+                                <tr><td>P2</td><td>0</td><td>4</td></tr>
+                                <tr><td>P3</td><td>0</td><td>3</td></tr>
+                            </table>
+
+                            <h5 class="output-label">Gantt Chart (Quantum = 2)</h5>
+                            <svg width="100%" height="80" viewBox="0 0 500 80" class="mx-auto block mt-2">
+                                <!-- Pass 1 -->
+                                <rect x="20" y="20" width="60" height="40" class="gantt-box" />
+                                <text x="50" y="40" class="gantt-text">P1</text>
+                                <rect x="80" y="20" width="60" height="40" class="gantt-box" />
+                                <text x="110" y="40" class="gantt-text">P2</text>
+                                <rect x="140" y="20" width="60" height="40" class="gantt-box" />
+                                <text x="170" y="40" class="gantt-text">P3</text>
+                                
+                                <!-- Pass 2 -->
+                                <rect x="200" y="20" width="60" height="40" class="gantt-box" />
+                                <text x="230" y="40" class="gantt-text">P1</text>
+                                <rect x="260" y="20" width="60" height="40" class="gantt-box" />
+                                <text x="290" y="40" class="gantt-text">P2</text>
+                                <rect x="320" y="20" width="30" height="40" class="gantt-box" />
+                                <text x="335" y="40" class="gantt-text text-sm">P3</text>
+                                
+                                <!-- Pass 3 -->
+                                <rect x="350" y="20" width="30" height="40" class="gantt-box" />
+                                <text x="365" y="40" class="gantt-text text-sm">P1</text>
+
+                                <text x="20" y="75" class="gantt-time">0</text>
+                                <text x="80" y="75" class="gantt-time">2</text>
+                                <text x="140" y="75" class="gantt-time">4</text>
+                                <text x="200" y="75" class="gantt-time">6</text>
+                                <text x="260" y="75" class="gantt-time">8</text>
+                                <text x="320" y="75" class="gantt-time">10</text>
+                                <text x="350" y="75" class="gantt-time">11</text>
+                                <text x="380" y="75" class="gantt-time">12</text>
+                            </svg>
+
+                            <h5 class="output-label mt-4">Calculations</h5>
+                            <ul class="list-none space-y-1 font-mono text-sm bg-slate-50 p-3 border rounded">
+                                <li>P1: CT=12. TAT = 12-0 = 12. WT = 12-5(BT) = <strong>7</strong></li>
+                                <li>P2: CT=10. TAT = 10-0 = 10. WT = 10-4(BT) = <strong>6</strong></li>
+                                <li>P3: CT=11. TAT = 11-0 = 11. WT = 11-3(BT) = <strong>8</strong></li>
+                                <li class="text-blue-700 font-bold mt-2">Average Waiting Time = (7 + 6 + 8) / 3 = 7 ms</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. SRTF -->
+                <div class="mt-8">
+                    <h4 class="text-xl font-bold text-slate-800">5. Shortest Remaining Time First (SRTF) [Preemptive SJF]</h4>
+                    <p>If a new process arrives with a CPU burst shorter than the <em>remaining</em> time of the currently running process, the running process is interrupted (preempted).</p>
+                    
+                    <div class="example-block">
+                        <div class="example-header">Example Problem: Preemptive SJF (SRTF)</div>
+                        <div class="example-content">
+                            <table class="data-table">
+                                <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
+                                <tr><td>P1</td><td>0</td><td>8</td></tr>
+                                <tr><td>P2</td><td>1</td><td>4</td></tr>
+                                <tr><td>P3</td><td>2</td><td>9</td></tr>
+                                <tr><td>P4</td><td>3</td><td>5</td></tr>
+                            </table>
+
+                            <h5 class="output-label">Gantt Chart</h5>
+                            <svg width="100%" height="80" viewBox="0 0 500 80" class="mx-auto block mt-2">
+                                <rect x="20" y="20" width="20" height="40" class="gantt-box" />
+                                <text x="30" y="40" class="gantt-text text-sm">P1</text>
+                                
+                                <rect x="40" y="20" width="80" height="40" class="gantt-box" />
+                                <text x="80" y="40" class="gantt-text">P2</text>
+                                
+                                <rect x="120" y="20" width="100" height="40" class="gantt-box" />
+                                <text x="170" y="40" class="gantt-text">P4</text>
+                                
+                                <rect x="220" y="20" width="140" height="40" class="gantt-box" />
+                                <text x="290" y="40" class="gantt-text">P1</text>
+
+                                <rect x="360" y="20" width="180" height="40" class="gantt-box" />
+                                <text x="450" y="40" class="gantt-text">P3</text>
+                                
+                                <text x="20" y="75" class="gantt-time">0</text>
+                                <text x="40" y="75" class="gantt-time">1</text>
+                                <text x="120" y="75" class="gantt-time">5</text>
+                                <text x="220" y="75" class="gantt-time">10</text>
+                                <text x="360" y="75" class="gantt-time">17</text>
+                                <text x="540" y="75" class="gantt-time">26</text>
+                            </svg>
+
+                            <h5 class="output-label mt-4">Logic Breakdown</h5>
+                            <ul class="list-disc pl-5 space-y-1 text-sm bg-slate-50 p-3 border rounded text-slate-700">
+                                <li><strong>t=0:</strong> P1 arrives and starts.</li>
+                                <li><strong>t=1:</strong> P2 arrives (BT=4). P1's remaining time is 7. P2 is shorter, so P1 is preempted. P2 starts.</li>
+                                <li><strong>t=2:</strong> P3 arrives (BT=9). P2's remaining time is 3. P2 continues.</li>
+                                <li><strong>t=3:</strong> P4 arrives (BT=5). P2's remaining time is 2. P2 continues until t=5.</li>
+                                <li><strong>t=5:</strong> P2 done. Remaining: P1(7), P3(9), P4(5). P4 is shortest, runs until t=10.</li>
+                            </ul>
+
+                            <h5 class="output-label mt-4">Calculations</h5>
+                            <ul class="list-none space-y-1 font-mono text-sm bg-slate-50 p-3 border rounded">
+                                <li>P1: CT=17. TAT = 17-0 = 17. WT = 17-8 = <strong>9</strong></li>
+                                <li>P2: CT=5.  TAT = 5-1  = 4.  WT = 4-4  = <strong>0</strong></li>
+                                <li>P3: CT=26. TAT = 26-2 = 24. WT = 24-9 = <strong>15</strong></li>
+                                <li>P4: CT=10. TAT = 10-3 = 7.  WT = 7-5  = <strong>2</strong></li>
+                                <li class="text-blue-700 font-bold mt-2">Average Waiting Time = (9 + 0 + 15 + 2) / 4 = 6.5 ms</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Preemptive Priority -->
+                <div class="mt-8">
+                    <h4 class="text-xl font-bold text-slate-800">6. Preemptive Priority Scheduling</h4>
+                    <p>If a new process arrives with a higher priority than the currently running process, the CPU is preempted and given to the new arrival.</p>
+                    
+                    <div class="example-block">
+                        <div class="example-header">Example Problem: Preemptive Priority</div>
+                        <div class="example-content">
+                            <table class="data-table">
+                                <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th><th>Priority</th></tr>
+                                <tr><td>P1</td><td>0</td><td>4</td><td>3</td></tr>
+                                <tr><td>P2</td><td>1</td><td>5</td><td class="font-bold text-red-600">2 (Higher)</td></tr>
+                                <tr><td>P3</td><td>2</td><td>1</td><td>4</td></tr>
+                                <tr><td>P4</td><td>3</td><td>2</td><td class="font-bold text-red-600">1 (Highest)</td></tr>
+                            </table>
+
+                            <h5 class="output-label">Gantt Chart</h5>
+                            <svg width="100%" height="80" viewBox="0 0 500 80" class="mx-auto block mt-2">
+                                <rect x="20" y="20" width="40" height="40" class="gantt-box" />
+                                <text x="40" y="40" class="gantt-text">P1</text>
+                                
+                                <rect x="60" y="20" width="80" height="40" class="gantt-box" />
+                                <text x="100" y="40" class="gantt-text">P2</text>
+                                
+                                <rect x="140" y="20" width="80" height="40" class="gantt-box" />
+                                <text x="180" y="40" class="gantt-text">P4</text>
+                                
+                                <rect x="220" y="20" width="120" height="40" class="gantt-box" />
+                                <text x="280" y="40" class="gantt-text">P2</text>
+
+                                <rect x="340" y="20" width="120" height="40" class="gantt-box" />
+                                <text x="400" y="40" class="gantt-text">P1</text>
+                                
+                                <rect x="460" y="20" width="40" height="40" class="gantt-box" />
+                                <text x="480" y="40" class="gantt-text">P3</text>
+
+                                <text x="20" y="75" class="gantt-time">0</text>
+                                <text x="60" y="75" class="gantt-time">1</text>
+                                <text x="140" y="75" class="gantt-time">3</text>
+                                <text x="220" y="75" class="gantt-time">5</text>
+                                <text x="340" y="75" class="gantt-time">8</text>
+                                <text x="460" y="75" class="gantt-time">11</text>
+                                <text x="500" y="75" class="gantt-time">12</text>
+                            </svg>
+
+                            <h5 class="output-label mt-4">Calculations</h5>
+                            <ul class="list-none space-y-1 font-mono text-sm bg-slate-50 p-3 border rounded">
+                                <li>P1: CT=11. TAT = 11-0 = 11. WT = 11-4(BT) = <strong>7</strong></li>
+                                <li>P2: CT=8.  TAT = 8-1  = 7.  WT = 7-5(BT)  = <strong>2</strong></li>
+                                <li>P3: CT=12. TAT = 12-2 = 10. WT = 10-1(BT) = <strong>9</strong></li>
+                                <li>P4: CT=5.  TAT = 5-3  = 2.  WT = 2-2(BT)  = <strong>0</strong></li>
+                                <li class="text-blue-700 font-bold mt-2">Average Waiting Time = (7 + 2 + 9 + 0) / 4 = 4.5 ms</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Multilevel Queue -->
+                <div class="mt-8">
                     <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">D. Multilevel Queue Scheduling</h3>
                     <p>With both priority and round-robin scheduling, all processes may be placed in a single queue, requiring an O(n) search to determine the highest-priority process. In practice, it is easier to have <strong>separate queues for each distinct priority</strong>.</p>
                     <p>Priority scheduling simply schedules the process in the highest-priority queue. If there are multiple processes in the highest-priority queue, they are executed in <strong>Round-Robin order</strong>. In its most generalized form, a priority is assigned <em>statically</em> to each process, and it remains in the same queue for the duration of its runtime.</p>
+                    
+                    <svg width="400" height="230" viewBox="0 0 400 230" class="mx-auto block mt-6 mb-4">
+                        <style>
+                            .mq-box { fill: #f8fafc; stroke: #334155; stroke-width: 2; rx: 4; }
+                            .mq-text { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+                            .mq-line { stroke: #334155; stroke-width: 2; fill: none; }
+                        </style>
+                        <defs>
+                            <marker id="arrow2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                                <path d="M0,0 L0,8 L8,4 z" fill="#334155" />
+                            </marker>
+                        </defs>
+                        
+                        <text x="60" y="30" class="mq-text" font-size="12">Highest Priority</text>
+                        
+                        <rect x="150" y="20" width="180" height="30" class="mq-box" fill="#fee2e2" />
+                        <text x="240" y="35" class="mq-text">System Processes</text>
+                        
+                        <rect x="150" y="70" width="180" height="30" class="mq-box" fill="#fef3c7" />
+                        <text x="240" y="85" class="mq-text">Interactive Processes</text>
+
+                        <rect x="150" y="120" width="180" height="30" class="mq-box" fill="#e0f2fe" />
+                        <text x="240" y="135" class="mq-text">Batch Processes</text>
+
+                        <rect x="150" y="170" width="180" height="30" class="mq-box" fill="#dcfce3" />
+                        <text x="240" y="185" class="mq-text">Student Processes</text>
+
+                        <text x="60" y="180" class="mq-text" font-size="12">Lowest Priority</text>
+                        
+                        <path d="M90 40 L90 160" class="mq-line" marker-end="url(#arrow2)" />
+                    </svg>
                 </div>
             </div>
         </section>
