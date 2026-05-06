@@ -42,11 +42,11 @@
             border-collapse: collapse;
             margin-bottom: 1rem;
             font-size: 0.875rem;
-            text-align: center;
+            text-align: left;
         }
         .data-table th, .data-table td {
             border: 1px solid #cbd5e1;
-            padding: 0.5rem;
+            padding: 0.75rem;
         }
         .data-table th {
             background-color: #f1f5f9;
@@ -56,6 +56,7 @@
         .gantt-box { fill: #dbeafe; stroke: #3b82f6; stroke-width: 2; }
         .gantt-text { font-family: 'Inter', sans-serif; font-weight: 600; fill: #1e293b; text-anchor: middle; dominant-baseline: middle; }
         .gantt-time { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #64748b; text-anchor: middle; }
+        .data-table-center th, .data-table-center td { text-align: center; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
@@ -213,14 +214,22 @@
                 <ul class="list-disc pl-6 space-y-2">
                     <li>A process (<strong>parent</strong>) may create several new processes (<strong>children</strong>), forming a tree of processes.</li>
                     <li>Identified by a unique process identifier (<strong>pid</strong>). <em>(Example: Linux <code>systemd</code> process has pid = 1, serving as the root parent process for all user processes).</em></li>
+                    <li><strong>Execution Possibilities:</strong> 1. Parent executes concurrently with children. 2. Parent waits until children terminate.</li>
+                    <li><strong>Address Space Possibilities:</strong> 1. Child is a duplicate of the parent (same program/data). 2. Child has a new program loaded into it.</li>
                     <li><strong>UNIX Example:</strong> The <code>fork()</code> system call creates a child process (child pid=0, parent gets child's actual pid). The child inherits privileges/open files. The child overlays its address space using <code>exec()</code>. The parent waits using <code>wait()</code> and resumes when the child invokes <code>exit()</code>.</li>
                 </ul>
 
                 <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process Termination:</h3>
                 <ul class="list-disc pl-6 space-y-2">
-                    <li>A process terminates when it finishes its final statement and asks the OS to delete it using the <code>exit()</code> system call. It returns a status value to its waiting parent via <code>wait()</code>.</li>
-                    <li>All resources (physical/virtual memory, open files, I/O buffers) are deallocated by the OS.</li>
-                    <li><strong>Cascading Termination:</strong> If a parent process terminates, the OS often does not allow its child processes to continue, forcefully terminating the entire subtree.</li>
+                    <li>A process terminates when it finishes its final statement and asks the OS to delete it using the <code>exit()</code> system call. Returns status to waiting parent via <code>wait()</code>.</li>
+                    <li>All resources (physical/virtual memory, open files, I/O buffers) are deallocated.</li>
+                    <li>A parent may terminate a child if: 
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600">
+                            <li>Child exceeded resource usage.</li>
+                            <li>Task assigned to child is no longer required.</li>
+                            <li>Parent is exiting, and OS does not allow a child to continue (Cascading termination).</li>
+                        </ul>
+                    </li>
                 </ul>
 
                 <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Process Control Block (PCB):</h3>
@@ -455,32 +464,90 @@
 
         <!-- 6. SCHEDULING ALGORITHMS -->
         <section id="algorithms" class="mb-12">
-            <h2 class="text-2xl font-bold text-blue-700 mb-4">6. Scheduling Algorithms & Examples</h2>
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">6. Scheduling Algorithms & Criteria</h2>
 
             <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
                 
-                <!-- Criteria -->
+                <!-- Criteria & Triggers -->
                 <div>
-                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Definitions & Formulas</h3>
-                    <ul class="list-disc pl-6 space-y-2">
-                        <li><strong>Non-Preemptive:</strong> A process holds the CPU until it terminates or waits. It cannot be interrupted.</li>
-                        <li><strong>Preemptive:</strong> OS can interrupt a running process and force it into the ready state to allocate the CPU to a higher priority process.</li>
-                    </ul>
-                    <ul class="list-disc pl-6 space-y-1 font-mono text-sm bg-slate-100 p-3 rounded-md mt-4 border-l-4 border-blue-500">
-                        <li><strong>Turnaround Time (TAT)</strong> = Completion Time (CT) - Arrival Time (AT)</li>
-                        <li><strong>Waiting Time (WT)</strong> = Turnaround Time (TAT) - Burst Time (BT)</li>
-                    </ul>
+                    <h3 class="text-xl font-semibold text-slate-800 mb-2 border-b pb-1">A. Scheduling Definitions, Triggers & Criteria</h3>
+                    
+                    <div class="space-y-4">
+                        <p>CPU scheduling decisions may take place under the following four circumstances:</p>
+                        <ol class="list-decimal pl-6 space-y-1">
+                            <li>When a process switches from the <strong>running state to the waiting state</strong> (e.g., an I/O request).</li>
+                            <li>When a process switches from the <strong>running state to the ready state</strong> (e.g., when an interrupt occurs or a time slice expires).</li>
+                            <li>When a process switches from the <strong>waiting state to the ready state</strong> (e.g., completion of I/O).</li>
+                            <li>When a process <strong>terminates</strong>.</li>
+                        </ol>
+                        <p class="text-sm text-slate-600 italic">Note: When scheduling takes place only under circumstances 1 and 4, the scheduling scheme is strictly <strong>Non-preemptive</strong>. If scheduling can also happen during 2 and 3, it is <strong>Preemptive</strong>.</p>
+
+                        <h4 class="text-lg font-bold text-slate-800 mt-8 mb-2">Preemptive vs. Non-Preemptive Scheduling (Detailed Comparison)</h4>
+                        <div class="overflow-x-auto mt-2 mb-6">
+                            <table class="data-table">
+                                <tr>
+                                    <th class="w-1/5">Parameter</th>
+                                    <th class="w-2/5">Non-Preemptive Scheduling</th>
+                                    <th class="w-2/5">Preemptive Scheduling</th>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold bg-slate-50">Basic Definition</td>
+                                    <td>Once the CPU is allocated to a process, it keeps the CPU until it voluntarily releases it by terminating or switching to the waiting state. It cannot be forcefully interrupted.</td>
+                                    <td>The OS can forcefully interrupt a currently executing process and move it back to the Ready queue to allocate the CPU to another (often higher-priority) process.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold bg-slate-50">Hardware Requirement</td>
+                                    <td>Does not require special hardware timers to forcefully pull the CPU away.</td>
+                                    <td>Strictly requires a hardware timer (generating interrupts) to ensure the OS regains control of the CPU after a time slice.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold bg-slate-50">Overhead</td>
+                                    <td>Low overhead. Context switching only happens when a process finishes its burst or requests I/O.</td>
+                                    <td>High overhead due to frequent context switching and constant saving/loading of PCBs.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold bg-slate-50">Response Time</td>
+                                    <td>Poor response time for newly arrived short or high-priority processes if a massive process is currently executing.</td>
+                                    <td>Excellent response time. Highly suitable for time-sharing and interactive systems where users expect immediate feedback.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold bg-slate-50">CPU Utilization</td>
+                                    <td>Lower, as a process with a massive CPU burst can monopolize the processor, leading to the Convoy Effect.</td>
+                                    <td>Higher and more strictly managed, as CPU time is shared fairly or based on strict priority algorithms.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold bg-slate-50">Starvation Risk</td>
+                                    <td>Short jobs may starve while waiting for a massive, infinite-looping job to finish.</td>
+                                    <td>Low-priority jobs may starve if a constant stream of high-priority jobs keep arriving.</td>
+                                </tr>
+                                <tr>
+                                    <td class="font-semibold bg-slate-50">Examples</td>
+                                    <td>FCFS, Non-Preemptive SJF, Non-Preemptive Priority.</td>
+                                    <td>Round-Robin, SRTF (Preemptive SJF), Preemptive Priority.</td>
+                                </tr>
+                            </table>
+                        </div>
+
+                        <p class="font-semibold text-slate-900 mt-6">Scheduling Criteria & Formulas:</p>
+                        <ul class="list-disc pl-6 space-y-2 font-mono text-sm bg-slate-100 p-4 rounded-md">
+                            <li><strong>CPU Utilization:</strong> Keep the CPU as busy as possible (ranging from 40% to 90% in real systems).</li>
+                            <li><strong>Throughput:</strong> The number of processes that complete their execution per time unit.</li>
+                            <li><strong>Turnaround Time (TAT):</strong> The amount of time to execute a particular process from submission to completion.<br><span class="text-blue-700 font-bold ml-4">TAT = Completion Time (CT) - Arrival Time (AT)</span></li>
+                            <li><strong>Waiting Time (WT):</strong> The sum of the periods spent waiting in the ready queue.<br><span class="text-blue-700 font-bold ml-4">WT = Turnaround Time (TAT) - Burst Time (BT)</span></li>
+                            <li><strong>Response Time:</strong> The time from the submission of a request until the FIRST response is produced.</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <!-- 1. FCFS -->
-                <div class="mt-8">
+                <div class="mt-10 pt-6 border-t border-slate-200">
                     <h4 class="text-xl font-bold text-slate-800">1. First-Come, First-Served (FCFS) [Non-Preemptive]</h4>
                     <p>Managed with a FIFO queue. The process that arrives first gets the CPU first. It suffers from the <strong>Convoy Effect</strong> (short processes forced to wait behind long processes).</p>
                     
                     <div class="example-block">
                         <div class="example-header">Example Problem: FCFS</div>
                         <div class="example-content">
-                            <table class="data-table">
+                            <table class="data-table data-table-center">
                                 <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
                                 <tr><td>P1</td><td>0</td><td>24</td></tr>
                                 <tr><td>P2</td><td>0</td><td>3</td></tr>
@@ -521,7 +588,7 @@
                     <div class="example-block">
                         <div class="example-header">Example Problem: SJF (Non-Preemptive)</div>
                         <div class="example-content">
-                            <table class="data-table">
+                            <table class="data-table data-table-center">
                                 <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
                                 <tr><td>P1</td><td>0</td><td>6</td></tr>
                                 <tr><td>P2</td><td>0</td><td>8</td></tr>
@@ -565,7 +632,7 @@
                     <div class="example-block">
                         <div class="example-header">Example Problem: Priority Scheduling</div>
                         <div class="example-content">
-                            <table class="data-table">
+                            <table class="data-table data-table-center">
                                 <tr><th>Process</th><th>Burst Time (BT)</th><th>Priority</th></tr>
                                 <tr><td>P1</td><td>10</td><td>3</td></tr>
                                 <tr><td>P2</td><td>1</td><td class="font-bold text-red-600">1 (Highest)</td></tr>
@@ -613,7 +680,7 @@
                     <div class="example-block">
                         <div class="example-header">Example Problem: Round-Robin (Quantum = 2)</div>
                         <div class="example-content">
-                            <table class="data-table">
+                            <table class="data-table data-table-center">
                                 <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
                                 <tr><td>P1</td><td>0</td><td>5</td></tr>
                                 <tr><td>P2</td><td>0</td><td>4</td></tr>
@@ -671,7 +738,7 @@
                     <div class="example-block">
                         <div class="example-header">Example Problem: Preemptive SJF (SRTF)</div>
                         <div class="example-content">
-                            <table class="data-table">
+                            <table class="data-table data-table-center">
                                 <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th></tr>
                                 <tr><td>P1</td><td>0</td><td>8</td></tr>
                                 <tr><td>P2</td><td>1</td><td>4</td></tr>
@@ -733,7 +800,7 @@
                     <div class="example-block">
                         <div class="example-header">Example Problem: Preemptive Priority</div>
                         <div class="example-content">
-                            <table class="data-table">
+                            <table class="data-table data-table-center">
                                 <tr><th>Process</th><th>Arrival Time (AT)</th><th>Burst Time (BT)</th><th>Priority</th></tr>
                                 <tr><td>P1</td><td>0</td><td>4</td><td>3</td></tr>
                                 <tr><td>P2</td><td>1</td><td>5</td><td class="font-bold text-red-600">2 (Higher)</td></tr>
