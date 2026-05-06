@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computational Theory - Decidability and Computability</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        .diagram-container {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            color: #475569;
+            padding: 1.5rem;
+            text-align: center;
+            margin: 2rem 0;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            overflow-x: auto;
+        }
+        .diagram-caption {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px dashed #cbd5e1;
+        }
+        section { scroll-margin-top: 6rem; }
+        
+        /* Math/Logic Styles */
+        .math-text { font-family: 'Times New Roman', Times, serif; font-style: italic; font-weight: bold; color: #1d4ed8; }
+        .tm-box { fill: #f8fafc; stroke: #0f172a; stroke-width: 2; rx: 8; ry: 8; }
+        .svg-text { font-family: 'Inter', sans-serif; fill: #1e293b; }
+        .svg-text-bold { font-weight: bold; fill: #0f172a; }
+        .highlight-box { background-color: #eff6ff; border-left: 4px solid #3b82f6; padding: 1rem; border-radius: 0 0.5rem 0.5rem 0; margin: 1rem 0; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation Bar -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center space-x-3 md:space-x-5 py-3 text-xs md:text-sm font-semibold tracking-wide">
+                <li><a href="#re-rec" class="hover:text-blue-400 transition-colors">RE & REC Languages</a></li>
+                <li><a href="#decidability" class="hover:text-blue-400 transition-colors">Decidability</a></li>
+                <li><a href="#halting" class="hover:text-blue-400 transition-colors">Halting Problem</a></li>
+                <li><a href="#rices" class="hover:text-blue-400 transition-colors">Rice’s Theorem</a></li>
+                <li><a href="#pcp" class="hover:text-blue-400 transition-colors">Post Correspondence (PCP)</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-4xl mx-auto px-5 md:px-10 py-8 bg-white shadow-lg min-h-screen my-6 rounded-xl border border-slate-200">
+        <h1 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-8 pb-4 border-b-[3px] border-blue-600">
+            Computational Theory: Decidability and Computability
+        </h1>
+
+        <!-- 1. RECURSIVE & RECURSIVELY ENUMERABLE -->
+        <section id="re-rec" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">1. Recursive and Recursively Enumerable Languages</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                
+                <div class="highlight-box">
+                    <p>The concepts of Recursive (REC) and Recursively Enumerable (RE) languages classify how Turing Machines (TMs) interact with inputs.</p>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Recursively Enumerable (RE) Language</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Also known as <strong>Turing Recognizable</strong> or Partially Decidable.</li>
+                    <li>A language <span class="math-text">L</span> is RE if there exists a Turing Machine <span class="math-text">M</span> such that if a string <span class="math-text">w &isin; L</span>, the TM will eventually halt and accept it.</li>
+                    <li><strong>The Catch:</strong> If <span class="math-text">w &notin; L</span>, the TM might halt and reject, OR it might loop indefinitely. It is not guaranteed to give a "No" answer.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Recursive (REC) Language</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Also known as <strong>Turing Decidable</strong> or simply Decidable.</li>
+                    <li>A language <span class="math-text">L</span> is Recursive if there exists a Turing Machine <span class="math-text">M</span> that will <strong>always halt</strong>.</li>
+                    <li>If <span class="math-text">w &isin; L</span>, it halts and accepts. If <span class="math-text">w &notin; L</span>, it halts and rejects. There are no infinite loops.</li>
+                </ul>
+
+                <!-- Venn Diagram -->
+                <div class="diagram-container">
+                    <svg width="500" height="300" viewBox="0 0 500 300" style="margin: auto;">
+                        <!-- Outer Box: All Languages -->
+                        <rect x="10" y="10" width="480" height="280" fill="#f1f5f9" stroke="#94a3b8" stroke-width="2" rx="5" />
+                        <text x="250" y="30" class="svg-text svg-text-bold" text-anchor="middle" font-size="14">All Languages</text>
+                        
+                        <!-- RE Circle -->
+                        <ellipse cx="250" cy="160" rx="200" ry="120" fill="#bae6fd" stroke="#0284c7" stroke-width="2" />
+                        <text x="250" y="70" class="svg-text svg-text-bold" text-anchor="middle" font-size="14" fill="#0369a1">Recursively Enumerable (RE)</text>
+                        <text x="250" y="90" class="svg-text" text-anchor="middle" font-size="12" fill="#0369a1">TM accepts if valid, might loop if invalid</text>
+
+                        <!-- REC Circle -->
+                        <ellipse cx="250" cy="200" rx="140" ry="60" fill="#fef08a" stroke="#ca8a04" stroke-width="2" />
+                        <text x="250" y="195" class="svg-text svg-text-bold" text-anchor="middle" font-size="14" fill="#a16207">Recursive (REC)</text>
+                        <text x="250" y="215" class="svg-text" text-anchor="middle" font-size="12" fill="#a16207">TM ALWAYS Halts (Accepts or Rejects)</text>
+                        
+                        <!-- Non-RE point -->
+                        <circle cx="60" cy="250" r="4" fill="#dc2626" />
+                        <text x="70" y="255" class="svg-text" font-size="12" fill="#dc2626">Non-RE Languages</text>
+                    </svg>
+                    <div class="diagram-caption">Figure 1: Every Recursive language is also Recursively Enumerable, but not vice-versa.</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. DECIDABILITY & UNDECIDABILITY -->
+        <section id="decidability" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">2. Decidability and Undecidability</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>In computability theory, a "problem" is typically phrased as a question that requires a "Yes" or "No" answer for a given input.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Decidable Problems</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>A problem is decidable if there exists an algorithm (a Turing Machine) that <strong>always halts</strong> with the correct Yes/No answer for every possible input.</li>
+                    <li><em>Example:</em> "Is string <span class="math-text">w</span> a palindrome?" – Decidable, because we can write a program that definitively checks this and stops.</li>
+                </ul>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Undecidable Problems</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>A problem is undecidable if <strong>no such algorithm can ever exist</strong>. It is mathematically impossible to write a program that will always halt and give the correct answer for *every* input.</li>
+                    <li>Note: This doesn't mean we can't solve it for *some* inputs. It means we cannot guarantee a solution for *all* infinite possible inputs.</li>
+                    <li><em>Example:</em> "Will this piece of code run forever or eventually stop?" (This is the Halting Problem).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. THE HALTING PROBLEM -->
+        <section id="halting" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">3. The Halting Problem</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>The Halting Problem, famously proven by Alan Turing in 1936, is the foundational example of an undecidable problem.</p>
+
+                <div class="highlight-box">
+                    <strong>The Question:</strong> Given a description of a Turing Machine <span class="math-text">M</span> and an input string <span class="math-text">w</span>, is it possible to write a universal program <span class="math-text">H</span> that can definitively say whether <span class="math-text">M</span> will eventually halt on <span class="math-text">w</span>, or loop forever?
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Proof by Contradiction</h3>
+                <p>We prove it is undecidable by assuming it IS decidable, and then showing this leads to a logical paradox.</p>
+                <ol class="list-decimal pl-6 space-y-3">
+                    <li>Assume there is a magic machine <span class="math-text">H</span>. If we feed it <span class="math-text">(M, w)</span>, it prints "Halts" or "Loops".</li>
+                    <li>Now, let's build a new, tricky machine <span class="math-text">D</span>. Machine <span class="math-text">D</span> uses machine <span class="math-text">H</span> internally as a subroutine.</li>
+                    <li>Machine <span class="math-text">D</span> takes a program description <span class="math-text">M</span> as input, and asks <span class="math-text">H</span>: "What does <span class="math-text">M</span> do when fed its own description <span class="math-text">M</span>?"</li>
+                    <li>Machine <span class="math-text">D</span> then does the <strong>exact opposite</strong> of what <span class="math-text">H</span> predicts:
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600">
+                            <li>If <span class="math-text">H</span> says <span class="math-text">M</span> halts, <span class="math-text">D</span> enters an infinite loop.</li>
+                            <li>If <span class="math-text">H</span> says <span class="math-text">M</span> loops, <span class="math-text">D</span> immediately halts.</li>
+                        </ul>
+                    </li>
+                    <li><strong>The Paradox:</strong> What happens if we feed machine <span class="math-text">D</span> its own description? (We ask <span class="math-text">D(D)</span>).
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600 font-bold text-red-600">
+                            <li>If D halts, H predicts "Halts", causing D to loop forever!</li>
+                            <li>If D loops, H predicts "Loops", causing D to halt!</li>
+                        </ul>
+                    </li>
+                </ol>
+
+                <!-- Halting Problem Diagram -->
+                <div class="diagram-container">
+                    <svg width="600" height="300" viewBox="0 0 600 300" style="margin: auto;">
+                        <!-- Arrow Definitions -->
+                        <defs>
+                            <marker id="arrowHead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#334155" />
+                            </marker>
+                        </defs>
+
+                        <!-- Machine H -->
+                        <rect x="250" y="50" width="100" height="60" class="tm-box" />
+                        <text x="300" y="85" class="svg-text svg-text-bold" text-anchor="middle">Machine H</text>
+                        <text x="300" y="40" class="svg-text-light" text-anchor="middle">Input: (M, w)</text>
+                        <line x1="300" y1="10" x2="300" y2="40" stroke="#334155" stroke-width="2" marker-end="url(#arrowHead)" />
+
+                        <!-- H outputs -->
+                        <line x1="300" y1="110" x2="150" y2="160" stroke="#16a34a" stroke-width="2" marker-end="url(#arrowHead)" />
+                        <text x="210" y="130" class="svg-text" font-size="12" fill="#16a34a" text-anchor="middle">Says "Halts"</text>
+
+                        <line x1="300" y1="110" x2="450" y2="160" stroke="#dc2626" stroke-width="2" marker-end="url(#arrowHead)" />
+                        <text x="390" y="130" class="svg-text" font-size="12" fill="#dc2626" text-anchor="middle">Says "Loops"</text>
+
+                        <!-- Machine D Logic -->
+                        <rect x="100" y="170" width="100" height="50" fill="#fee2e2" stroke="#dc2626" stroke-width="2" rx="4" />
+                        <text x="150" y="195" class="svg-text svg-text-bold" fill="#991b1b" text-anchor="middle">D LOOPS</text>
+                        <text x="150" y="210" class="svg-text-light" text-anchor="middle">(Does Opposite)</text>
+
+                        <rect x="400" y="170" width="100" height="50" fill="#dcfce3" stroke="#16a34a" stroke-width="2" rx="4" />
+                        <text x="450" y="195" class="svg-text svg-text-bold" fill="#166534" text-anchor="middle">D HALTS</text>
+                        <text x="450" y="210" class="svg-text-light" text-anchor="middle">(Does Opposite)</text>
+
+                        <!-- Outer Machine D wrapper -->
+                        <rect x="80" y="20" width="450" height="220" fill="none" stroke="#3b82f6" stroke-width="3" stroke-dasharray="8,4" rx="10" />
+                        <text x="150" y="45" class="svg-text svg-text-bold" fill="#2563eb" text-anchor="middle" font-size="16">Machine D</text>
+                        
+                        <!-- Paradox Question -->
+                        <text x="300" y="270" class="svg-text svg-text-bold" fill="#b91c1c" text-anchor="middle" font-size="16">Paradox: What happens if we input D into D?</text>
+                    </svg>
+                    <div class="diagram-caption">Figure 2: The construction of Machine D leading to the Halting Problem contradiction.</div>
+                </div>
+                <p>Because the existence of <span class="math-text">H</span> leads to an impossible paradox, <span class="math-text">H</span> cannot exist. Therefore, the Halting Problem is <strong>Undecidable</strong>.</p>
+            </div>
+        </section>
+
+        <!-- 4. RICE'S THEOREM -->
+        <section id="rices" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">4. Rice’s Theorem</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>Rice's theorem is a powerful generalization of the Halting Problem. It states a fundamental limit on what we can computationally verify about computer programs.</p>
+
+                <div class="highlight-box">
+                    <strong>Rice's Theorem:</strong> Every <em>non-trivial</em> property of the languages recognized by Turing Machines is <strong>undecidable</strong>.
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">Trivial vs. Non-Trivial Properties</h3>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li><strong>Trivial Property:</strong> A property that is either true for <em>all</em> RE languages, or false for <em>all</em> RE languages. 
+                        <br><span class="text-sm text-slate-500"><em>Example:</em> "Is the language recognized by a TM?" (Yes, by definition, this is trivially true for all TMs). Trivial properties are decidable.</span>
+                    </li>
+                    <li><strong>Non-Trivial Property:</strong> A property that is true for <em>some</em> RE languages, but false for <em>others</em>.
+                        <br><span class="text-sm text-slate-500"><em>Examples:</em> "Does the TM accept the empty string?", "Is the language finite?", "Does the TM accept more than 5 words?".</span>
+                    </li>
+                </ul>
+
+                <p><strong>Implication:</strong> You cannot write an algorithm that takes the source code of an arbitrary program and perfectly analyzes what that program actually <em>does</em> (its semantic behavior) beyond executing it.</p>
+            </div>
+        </section>
+
+        <!-- 5. POST CORRESPONDENCE PROBLEM -->
+        <section id="pcp" class="mb-12">
+            <h2 class="text-2xl font-bold text-blue-700 mb-4">5. Post Correspondence Problem (PCP)</h2>
+            <div class="space-y-4 text-slate-700 text-lg leading-relaxed">
+                <p>The PCP, introduced by Emil Post, is an undecidable decision problem that does not directly involve Turing Machines. It is often framed as a puzzle using "dominoes" or tiles.</p>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-4 border-b pb-1">The Problem Definition</h3>
+                <p>You are given a finite set of tiles. Each tile has a string printed on the top and a string printed on the bottom. You can use an infinite supply of each tile type.</p>
+                <p><strong>The Question:</strong> Is there a sequence of tiles (with repetitions allowed) such that if you read the top strings left-to-right, it perfectly equals the bottom strings read left-to-right?</p>
+
+                <!-- PCP Diagram -->
+                <div class="diagram-container">
+                    <svg width="700" height="260" viewBox="0 0 700 260" style="margin: auto;">
+                        <style>
+                            .tile { fill: #fdf8f5; stroke: #b45309; stroke-width: 2; rx: 5; ry: 5; }
+                            .tile-line { stroke: #b45309; stroke-width: 2; stroke-dasharray: 4,2; }
+                            .t-text { font-family: monospace; font-size: 18px; font-weight: bold; fill: #1e293b; text-anchor: middle; }
+                        </style>
+                        
+                        <!-- TILE DEFINITIONS -->
+                        <text x="350" y="30" class="svg-text svg-text-bold" text-anchor="middle" font-size="16">Available Tiles (Infinite Supply)</text>
+                        
+                        <!-- Tile 1 -->
+                        <rect x="200" y="50" width="60" height="70" class="tile" />
+                        <line x1="200" y1="85" x2="260" y2="85" class="tile-line" />
+                        <text x="230" y="75" class="t-text">1</text>
+                        <text x="230" y="110" class="t-text">111</text>
+                        <text x="230" y="140" class="svg-text" font-size="12" text-anchor="middle">Tile 1</text>
+
+                        <!-- Tile 2 -->
+                        <rect x="320" y="50" width="60" height="70" class="tile" />
+                        <line x1="320" y1="85" x2="380" y2="85" class="tile-line" />
+                        <text x="350" y="75" class="t-text">10111</text>
+                        <text x="350" y="110" class="t-text">10</text>
+                        <text x="350" y="140" class="svg-text" font-size="12" text-anchor="middle">Tile 2</text>
+
+                        <!-- Tile 3 -->
+                        <rect x="440" y="50" width="60" height="70" class="tile" />
+                        <line x1="440" y1="85" x2="500" y2="85" class="tile-line" />
+                        <text x="470" y="75" class="t-text">10</text>
+                        <text x="470" y="110" class="t-text">0</text>
+                        <text x="470" y="140" class="svg-text" font-size="12" text-anchor="middle">Tile 3</text>
+
+                        <!-- SOLUTION SEQUENCE -->
+                        <text x="350" y="180" class="svg-text svg-text-bold" text-anchor="middle" font-size="16">A Winning Sequence: {2, 1, 1, 3}</text>
+
+                        <!-- Sequence Tiles -->
+                        <rect x="230" y="200" width="60" height="40" fill="#dcfce3" stroke="#16a34a" stroke-width="2" rx="3" />
+                        <line x1="230" y1="220" x2="290" y2="220" stroke="#16a34a" stroke-dasharray="2,2" />
+                        <text x="260" y="215" class="t-text" fill="#14532d">10111</text>
+                        <text x="260" y="235" class="t-text" fill="#14532d">10</text>
+
+                        <rect x="295" y="200" width="60" height="40" fill="#dcfce3" stroke="#16a34a" stroke-width="2" rx="3" />
+                        <line x1="295" y1="220" x2="355" y2="220" stroke="#16a34a" stroke-dasharray="2,2" />
+                        <text x="325" y="215" class="t-text" fill="#14532d">1</text>
+                        <text x="325" y="235" class="t-text" fill="#14532d">111</text>
+
+                        <rect x="360" y="200" width="60" height="40" fill="#dcfce3" stroke="#16a34a" stroke-width="2" rx="3" />
+                        <line x1="360" y1="220" x2="420" y2="220" stroke="#16a34a" stroke-dasharray="2,2" />
+                        <text x="390" y="215" class="t-text" fill="#14532d">1</text>
+                        <text x="390" y="235" class="t-text" fill="#14532d">111</text>
+
+                        <rect x="425" y="200" width="60" height="40" fill="#dcfce3" stroke="#16a34a" stroke-width="2" rx="3" />
+                        <line x1="425" y1="220" x2="485" y2="220" stroke="#16a34a" stroke-dasharray="2,2" />
+                        <text x="455" y="215" class="t-text" fill="#14532d">10</text>
+                        <text x="455" y="235" class="t-text" fill="#14532d">0</text>
+
+                        <!-- Result text -->
+                        <text x="560" y="215" class="t-text" fill="#16a34a">= 101111110</text>
+                        <text x="560" y="235" class="t-text" fill="#16a34a">= 101111110</text>
+
+                    </svg>
+                    <div class="diagram-caption">Figure 3: PCP Example. Top string and Bottom string successfully match!</div>
+                </div>
+
+                <h3 class="text-xl font-semibold text-slate-800 mt-6 border-b pb-1">Significance of PCP</h3>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>Despite appearing as a simple string-matching game, PCP is rigorously proven to be <strong>Undecidable</strong>. There is no algorithm that can determine if an arbitrary set of dominoes has a winning sequence.</li>
+                    <li>Because it is easier to work with than Turing Machines, PCP is heavily used to prove the undecidability of other problems (via reduction), especially problems related to Context-Free Grammars (e.g., "Is this CFG ambiguous?").</li>
+                    <li><strong>Modified PCP (MPCP):</strong> A variation where the sequence <em>must</em> start with the very first tile (Tile 1). MPCP is also undecidable and is often used as an intermediate step to prove PCP is undecidable.</li>
+                </ul>
+
+            </div>
+        </section>
+
+    </main>
+
+</body>
+</html>
