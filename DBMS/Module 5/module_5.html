@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Module 5 - Transaction & Recovery (Exam Survival Guide)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        section { scroll-margin-top: 6rem; }
+        
+        .concept-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .definition-header {
+            color: #1e40af;
+            font-weight: 800;
+            font-size: 1.25rem;
+            border-bottom: 2px solid #bfdbfe;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Styling for the Exam Ready Collapsible */
+        details {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            overflow: hidden;
+        }
+        summary {
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            cursor: pointer;
+            background-color: #e2e8f0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        summary::before {
+            content: '🎓';
+            margin-right: 0.5rem;
+        }
+        .exam-content {
+            padding: 1rem;
+            border-top: 1px solid #cbd5e1;
+            background-color: #ffffff;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .math-def { font-family: 'Times New Roman', serif; font-weight: bold; color: #1e40af; }
+        .highlight { color: #b91c1c; font-weight: bold; }
+        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .data-table th, .data-table td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left; }
+        .data-table th { background-color: #f8fafc; font-weight: 700; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased">
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 bg-blue-900 text-white shadow-lg z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-between items-center py-3 text-sm font-bold">
+                <li><a href="#acid" class="hover:text-blue-300 transition-colors">ACID & States</a></li>
+                <li><a href="#serial" class="hover:text-blue-300 transition-colors">Serializability</a></li>
+                <li><a href="#locks" class="hover:text-blue-300 transition-colors">Locking (2PL)</a></li>
+                <li><a href="#ts" class="hover:text-blue-300 transition-colors">Timestamps</a></li>
+                <li><a href="#deadlock" class="hover:text-blue-300 transition-colors">Deadlocks</a></li>
+                <li><a href="#recovery" class="hover:text-blue-300 transition-colors">Recovery</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10 bg-white min-h-screen my-6 shadow-xl rounded-xl">
+        <h1 class="text-4xl font-black text-slate-900 mb-2">DBMS Module 5: Transaction & Recovery</h1>
+        <p class="text-blue-600 font-bold mb-10">Integrated Survival Guide: Simple Logic + Exam Language</p>
+
+        <!-- 1. ACID & STATES -->
+        <section id="acid" class="mb-16">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">1. Transaction Basics & ACID</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">What is a Transaction?</div>
+                <p>Simple version: A single logical task, like a bank transfer, even if it has many steps.</p>
+                <details>
+                    <summary>Exam Version (Proper Definition)</summary>
+                    <div class="exam-content">
+                        A <strong>Transaction</strong> is a unit of program execution that accesses and possibly updates various data items. It is considered the smallest logical unit of processing in a database.
+                    </div>
+                </details>
+            </div>
+
+            <div class="concept-card">
+                <div class="definition-header">The ACID Properties</div>
+                <p>Simple version: All or Nothing, No Rules Broken, No Peeking, Permanent.</p>
+                <details>
+                    <summary>Exam Version (Formal Definitions)</summary>
+                    <div class="exam-content">
+                        <ul class="space-y-2">
+                            <li><strong>Atomicity:</strong> Ensures that all operations of a transaction are completed successfully, or none are. If a failure occurs, the database is rolled back to its previous state.</li>
+                            <li><strong>Consistency:</strong> Ensures that a transaction transforms the database from one valid state to another, maintaining all predefined integrity constraints.</li>
+                            <li><strong>Isolation:</strong> Ensures that the execution of concurrent transactions does not interfere with each other; intermediate results remain invisible to other transactions.</li>
+                            <li><strong>Durability:</strong> Ensures that once a transaction is committed, its changes are permanent and survive any subsequent system failures.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- 2. SERIALIZABILITY & PRECEDENCE GRAPH -->
+        <section id="serial" class="mb-16">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">2. Serializability & Precedence Graphs</h2>
+            
+            <div class="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-200 text-sm">
+                <p><strong><span class="math-def">S</span> (Actual Schedule):</strong> The interleaved execution we are testing.</p>
+                <p><strong><span class="math-def">S'</span> (Serial Schedule):</strong> The reference where transactions run one-after-another.</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="definition-header">Conflict Serializability</div>
+                <p>Simple version: If you can rearrange a messy schedule into a serial one without breaking data logic, it's safe.</p>
+                <details>
+                    <summary>Exam Version (The Formal Logic)</summary>
+                    <div class="exam-content">
+                        A schedule <span class="math-def">S</span> is <strong>Conflict Serializable</strong> if it is conflict-equivalent to some serial schedule <span class="math-def">S'</span>. 
+                        Two operations are in <strong>Conflict</strong> if:
+                        <ul class="list-disc pl-5 mt-2">
+                            <li>They belong to different transactions.</li>
+                            <li>They access the same data item <span class="math-def">Q</span>.</li>
+                            <li>At least one of them is a <span class="highlight">Write(Q)</span>.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <div class="concept-card bg-blue-50 border-blue-200">
+                <div class="definition-header">Precedence Graph Example (Solving Numericals)</div>
+                <p class="text-sm mb-4">In exams, you'll get a table of operations. Here is how you prove it's serializable:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="bg-white p-3 border rounded text-xs font-mono">
+                        <strong>Schedule S:</strong><br>
+                        1. T1: Read(A)<br>
+                        2. T2: Read(A)<br>
+                        3. T1: Write(A)<br>
+                        4. T2: Write(A)
+                    </div>
+                    <div class="text-sm">
+                        <p class="font-bold">Step-by-Step Logic:</p>
+                        <ol class="list-decimal pl-5 space-y-1">
+                            <li>Check Step 1 & 4: T1 reads A, T2 later writes A. <span class="highlight">Conflict!</span> Draw arrow <strong>T1 &rarr; T2</strong>.</li>
+                            <li>Check Step 2 & 3: T2 reads A, T1 later writes A. <span class="highlight">Conflict!</span> Draw arrow <strong>T2 &rarr; T1</strong>.</li>
+                        </ol>
+                    </div>
+                </div>
+
+                <div class="mt-4 p-3 bg-red-100 border-l-4 border-red-500">
+                    <p><strong>Result:</strong> Since we have arrows going both ways (T1 &harr; T2), a <strong>Cycle</strong> exists. This schedule is <strong>NOT Conflict Serializable</strong>.</p>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <div class="definition-header">View Serializability</div>
+                <p>Simple version: Only cares if the final "view" of the data is the same as the serial version.</p>
+                <details>
+                    <summary>Exam Version (The 3 Conditions)</summary>
+                    <div class="exam-content">
+                        A schedule <span class="math-def">S</span> is <strong>View Serializable</strong> if it is view-equivalent to a serial schedule <span class="math-def">S'</span>. This requires:
+                        <ol class="list-decimal pl-5 mt-2">
+                            <li><strong>Initial Read:</strong> If T1 reads initial data in S, it must do so in S'.</li>
+                            <li><strong>Read-From:</strong> If T1 reads data written by T2 in S, it must do so in S'.</li>
+                            <li><strong>Final Write:</strong> Whoever updates a data item last in S must also be the last in S'.</li>
+                        </ol>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- 3. LOCKING (2PL) -->
+        <section id="locks" class="mb-16">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">3. Lock-Based Protocols (2PL)</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">Lock Modes</div>
+                <p>Shared (S) = Read only. Exclusive (X) = Read & Write.</p>
+                <details>
+                    <summary>Exam Version (Formal Definitions)</summary>
+                    <div class="exam-content">
+                        <ul class="space-y-2">
+                            <li><strong>Shared Mode (S):</strong> Allows a transaction to read a data item but not update it. Multiple transactions can hold S-locks on the same item.</li>
+                            <li><strong>Exclusive Mode (X):</strong> Allows a transaction to both read and update an item. It is exclusive; no other transaction can hold any lock on the same item.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+
+            <h3 class="text-xl font-bold mt-6 mb-4">The 3 Variants of 2PL</h3>
+            <div class="overflow-x-auto">
+                <table class="data-table text-sm">
+                    <tr>
+                        <th>Variant</th>
+                        <th>Exam-Ready Rule</th>
+                        <th>Standard Benefit</th>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Basic 2PL</td>
+                        <td>Transaction acquires all locks in Growing phase, releases in Shrinking phase.</td>
+                        <td>Ensures Conflict Serializability.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Strict 2PL</td>
+                        <td>Holds all <span class="highlight">Exclusive (X)</span> locks until Commit/Abort.</td>
+                        <td>Prevents <strong>Cascading Rollbacks</strong>.</td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold">Rigorous 2PL</td>
+                        <td>Holds <span class="highlight">ALL</span> locks (S and X) until Commit/Abort.</td>
+                        <td>Safest, ensures strict serializability.</td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- 5. DEADLOCKS -->
+        <section id="deadlock" class="mb-16">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">4. Deadlock Handling</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">What is a Deadlock?</div>
+                <p>Simple version: A "Mexican Standoff" where Task A waits for Task B, and Task B waits for Task A. No one can move.</p>
+                <details>
+                    <summary>Exam Version (Technical Definition)</summary>
+                    <div class="exam-content">
+                        A <strong>Deadlock</strong> is a state in which every transaction in a set of transactions is waiting for an event (usually a lock release) that can only be caused by another transaction in that same set. This is known as a <strong>Circular Wait</strong>.
+                    </div>
+                </details>
+            </div>
+
+            <h3 class="text-xl font-bold mt-8 mb-4">Handling Strategies</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="p-4 border-2 border-red-200 bg-red-50 rounded-lg">
+                    <p class="font-black text-red-700">1. Deadlock Detection</p>
+                    <p class="text-xs">The system maintains a <strong>Wait-for Graph</strong>. If a cycle is detected, the system picks a "victim" and rolls it back.</p>
+                </div>
+                <div class="p-4 border-2 border-green-200 bg-green-50 rounded-lg">
+                    <p class="font-black text-green-700">2. Deadlock Prevention</p>
+                    <p class="text-xs">Uses <strong>Wait-Die</strong> (older waits) or <strong>Wound-Wait</strong> (older kicks out younger) schemes based on timestamps.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. RECOVERY -->
+        <section id="recovery" class="mb-16">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">5. Log-Based Recovery</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">The Recovery Process</div>
+                <p>The system keeps a "Diary" (Log). When a crash occurs, it follows these two rules:</p>
+                <ul class="list-disc pl-8 space-y-2 text-sm">
+                    <li><strong>REDO:</strong> If a transaction <span class="highlight">Committed</span> before the crash, re-apply its changes from the log.</li>
+                    <li><strong>UNDO:</strong> If a transaction was still <span class="highlight">Active</span> during the crash, reverse its changes to keep DB clean.</li>
+                </ul>
+                <details>
+                    <summary>Exam Version (Deferred vs Immediate)</summary>
+                    <div class="exam-content">
+                        <table class="data-table text-xs">
+                            <tr>
+                                <th>Method</th>
+                                <th>Mechanism</th>
+                                <th>Recovery Action</th>
+                            </tr>
+                            <tr>
+                                <td><strong>Deferred Update</strong></td>
+                                <td>Postpones updates to the actual database until the transaction commits.</td>
+                                <td><strong>REDO</strong> only.</td>
+                            </tr>
+                            <tr>
+                                <td><strong>Immediate Update</strong></td>
+                                <td>Updates the database directly as operations occur (while transaction is active).</td>
+                                <td>Both <strong>UNDO and REDO</strong>.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </details>
+            </div>
+
+            <div class="bg-slate-100 p-4 rounded-lg border-l-4 border-slate-400">
+                <p><strong>Checkpoint:</strong> A specialized log record indicating that all previous updates were successfully written to the physical disk. It minimizes recovery time by limiting the log search to records after the checkpoint.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-slate-500 font-medium">
+        <p>Prepared for Vatsal's Study Hub. Focus on the "Precedence Graph" steps for scoring high.</p>
+    </footer>
+
+</body>
+</html>
