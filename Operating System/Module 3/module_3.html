@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Module 3 - Synchronization & Deadlocks (Exam Grade)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        section { scroll-margin-top: 6rem; }
+        
+        .concept-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 2.2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .definition-header {
+            color: #0369a1;
+            font-weight: 800;
+            font-size: 1.6rem;
+            border-bottom: 3px solid #bae6fd;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Styling for the Exam Ready Collapsible */
+        details {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+        summary {
+            padding: 1rem;
+            font-weight: 700;
+            color: #1e293b;
+            cursor: pointer;
+            background-color: #f1f5f9;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            border-bottom: 1px solid transparent;
+        }
+        details[open] summary { border-bottom: 1px solid #cbd5e1; }
+        summary::before {
+            content: '🎓';
+            margin-right: 0.75rem;
+        }
+        .exam-content {
+            padding: 1.5rem;
+            background-color: #ffffff;
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .highlight { color: #b91c1c; font-weight: bold; }
+        .math-def { font-family: 'Times New Roman', serif; font-weight: bold; color: #0369a1; }
+        .data-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.95rem;}
+        .data-table th, .data-table td { border: 1px solid #e2e8f0; padding: 0.8rem; text-align: center; }
+        .data-table th { background-color: #f8fafc; font-weight: 700; color: #334155; }
+        
+        .code-block {
+            background-color: #1e293b;
+            color: #e2e8f0;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            margin: 1.5rem 0;
+            overflow-x: auto;
+            line-height: 1.6;
+        }
+        p { margin-bottom: 1.5rem; line-height: 1.8; color: #334155; text-align: justify; }
+        h3 { font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
+        h4 { font-weight: 700; color: #0369a1; margin-top: 1.5rem; margin-bottom: 0.75rem; }
+        
+        .step-badge {
+            background-color: #0369a1;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 9999px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
+        .tutorial-box {
+            border: 2px solid #22c55e;
+            background-color: #f0fdf4;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            margin: 2.5rem 0;
+        }
+        .pro-con-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900 antialiased">
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 bg-slate-900 text-white shadow-lg z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-4">
+                <li><a href="#ipc" class="hover:text-blue-300 transition-colors">IPC & Methods</a></li>
+                <li><a href="#race" class="hover:text-blue-300 transition-colors">Race Condition</a></li>
+                <li><a href="#cs" class="hover:text-blue-300 transition-colors">Critical Section</a></li>
+                <li><a href="#semaphores" class="hover:text-blue-300 transition-colors">Semaphores</a></li>
+                <li><a href="#deadlock-chars" class="hover:text-blue-300 transition-colors">Deadlock Logic</a></li>
+                <li><a href="#bankers" class="hover:text-blue-300 transition-colors">Banker's Tutorial</a></li>
+                <li><a href="#recovery" class="hover:text-blue-300 transition-colors">Detection/Recovery</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10 bg-white min-h-screen my-6 shadow-xl rounded-xl">
+        <h1 class="text-4xl font-black text-slate-900 mb-2">OS Module 3: Synchronization & Deadlocks</h1>
+        <p class="text-blue-600 font-bold mb-10 border-b-2 border-slate-100 pb-4">Comprehensive Academic Guide: Theory, Mechanisms, and Solved Algorithms</p>
+
+        <!-- 1. INTER-PROCESS COMMUNICATION (IPC) -->
+        <section id="ipc" class="mb-20">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-8">1. Inter-process Communication (IPC)</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">Background: Independent vs. Cooperating Processes</div>
+                <p>In a modern operating system, processes are not isolated entities. While an <strong>Independent Process</strong> does not share any data and remains unaffected by others, <strong>Cooperating Processes</strong> are designed to interact. This interaction is fundamental for building complex systems where tasks are broken into sub-tasks (modularity), computation is accelerated by running parts in parallel (speedup), and information like shared files or databases needs to be accessible by multiple users. To manage this interaction, the OS provides Inter-process Communication (IPC) mechanisms.</p>
+                
+                <h3>Primary Methods of IPC</h3>
+                <p>The OS manages the physical distance between processes by providing two distinct architectural models. Each model addresses the core challenge of how to move data from the address space of one process to another safely and efficiently.</p>
+
+                <h4>A. Shared Memory Model</h4>
+                <p>In this model, the operating system allocates a specific segment of physical memory that is mapped into the address space of multiple participating processes. Once the segment is established, processes treat it as standard memory, reading and writing data directly without kernel intervention. This is widely considered the fastest IPC method because it avoids the overhead of repeated system calls and context switches.</p>
+                
+                <div class="pro-con-grid">
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <p class="font-bold text-green-800">Advantages:</p>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Maximum communication speed (RAM speed).</li>
+                            <li>Efficient for massive data transfers.</li>
+                            <li>Kernel is only involved in setup.</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <p class="font-bold text-red-800">Disadvantages:</p>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Programmer must handle synchronization.</li>
+                            <li>High risk of Race Conditions.</li>
+                            <li>Difficult to implement across networks.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h4>B. Message Passing Model</h4>
+                <p>This model establishes a communication facility where processes exchange information via discrete packets or "messages." The OS kernel acts as an intermediary, managing a message queue (mailbox). Processes use system calls like <code>send(message)</code> and <code>receive(message)</code> to interact. This method inherently handles synchronization because the kernel ensures that messages are delivered in order and aren't corrupted.</p>
+                
+                <div class="pro-con-grid">
+                    <div class="p-4 bg-green-50 rounded-lg">
+                        <p class="font-bold text-green-800">Advantages:</p>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Easier to program (sync is built-in).</li>
+                            <li>Ideal for distributed/network systems.</li>
+                            <li>Safer; no shared address space risk.</li>
+                        </ul>
+                    </div>
+                    <div class="p-4 bg-red-50 rounded-lg">
+                        <p class="font-bold text-red-800">Disadvantages:</p>
+                        <ul class="list-disc pl-5 text-sm">
+                            <li>Slower due to kernel context switching.</li>
+                            <li>Limited by system call overhead.</li>
+                            <li>Less efficient for very large data.</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <details>
+                    <summary>Exam Version (Classification of Message Passing)</summary>
+                    <div class="exam-content">
+                        <strong>Message Passing</strong> can be further classified by:
+                        <ul class="list-disc pl-5 mt-2 space-y-2">
+                            <li><strong>Direct Communication:</strong> Processes must explicitly name each other (e.g., <code>send(P, message)</code>).</li>
+                            <li><strong>Indirect Communication:</strong> Messages are sent to and received from shared "mailboxes" or "ports."</li>
+                            <li><strong>Synchronization:</strong> Can be <strong>Blocking</strong> (Synchronous—sender waits until message is received) or <strong>Non-blocking</strong> (Asynchronous—sender sends and continues immediately).</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- 2. RACE CONDITION & CS PROBLEM -->
+        <section id="race" class="mb-20">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-8">2. Synchronization: The Race Condition & CS Problem</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">The Race Condition</div>
+                <p>A <strong>Race Condition</strong> is a critical vulnerability that occurs when multiple processes access and manipulate the same shared data concurrently. The final outcome of the program depends on the specific, unpredictable order in which the CPU interleaves low-level machine instructions. This happens because high-level code is not "Atomic"—it can be interrupted halfway through execution.</p>
+                
+                <h4>Machine-Level Analysis</h4>
+                <p>Consider a shared variable <code>count = 5</code>. If two processes increment and decrement it simultaneously, the CPU breaks <code>count++</code> into three steps: 1. Load <code>count</code> into register, 2. Add 1, 3. Store back. If a context switch occurs after Step 2, the second process reads the "old" value (5). When the first process eventually resumes, it saves its calculated value (6), completely overwriting the decrement done by the other process. This results in <strong>Data Inconsistency</strong>.</p>
+            </div>
+
+            <div id="cs" class="concept-card">
+                <div class="definition-header">The Critical Section Problem</div>
+                <p>To solve the race condition, we identify the <strong>Critical Section (CS)</strong>. This is the segment of code where a process modifies shared resources. The core challenge is to ensure that while one process is in its CS, no other process is allowed to enter theirs. A valid solution to this problem is evaluated based on three mandatory mathematical requirements.</p>
+
+                <h3>The 3 Requirements for a Solution (8-10 Mark Question)</h3>
+                <ul class="list-disc pl-8 space-y-4">
+                    <li><strong>Mutual Exclusion:</strong> If process $P_i$ is executing in its critical section, then no other processes can be executing in their critical sections. This ensures exclusive access.</li>
+                    <li><strong>Progress:</strong> If no process is in its critical section and some processes wish to enter, the selection of the next process to enter cannot be postponed indefinitely. Only processes currently requesting entry can participate in the decision.</li>
+                    <li><strong>Bounded Waiting:</strong> There must be a limit (a bound) on the number of times other processes can "cut in line" after a process has made a request. This prevents <strong>Starvation</strong>.</li>
+                </ul>
+
+                <details>
+                    <summary>Exam Version (Structural Components of CS Code)</summary>
+                    <div class="exam-content">
+                        A process managing a critical section follows a standard 4-part structure:
+                        <ol class="list-decimal pl-5 mt-2">
+                            <li><strong>Entry Section:</strong> The code that requests permission to enter the CS (e.g., acquiring a lock).</li>
+                            <li><strong>Critical Section:</strong> The code where shared data is actually manipulated.</li>
+                            <li><strong>Exit Section:</strong> The code that releases permission, allowing others to enter.</li>
+                            <li><strong>Remainder Section:</strong> All non-shared, non-critical code.</li>
+                        </ol>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- 3. SOLUTIONS: PETERSON'S & HARDWARE -->
+        <section id="solutions" class="mb-20">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-8">3. Software and Hardware Solutions</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">Peterson's Solution (Software Logic)</div>
+                <p>Peterson's solution is a classic software-based algorithm for two processes ($P_0$ and $P_1$) to synchronize without special hardware. It uses two shared variables: a boolean array <code>flag[2]</code> (representing interest) and an integer <code>turn</code> (the tie-breaker). When $P_i$ wants to enter, it sets <code>flag[i] = true</code> and politely sets <code>turn = j</code>. It then waits in a busy-wait loop. It will only enter the CS if either the neighbor is not ready (<code>flag[j] == false</code>) or it is its own turn (<code>turn == i</code>). This solution is historically significant because it satisfies all three CS requirements through logic alone.</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="definition-header">Hardware Synchronization (Atomic Instructions)</div>
+                <p>Software solutions like Peterson's are difficult to adapt to modern multi-core systems. Modern hardware provides <strong>Atomic Instructions</strong>, which are specialized CPU commands guaranteed to execute as a single, uninterruptible pulse. These instructions allow us to build efficient locking mechanisms.</p>
+                
+                <ul class="space-y-4">
+                    <li>
+                        <strong>1. TestAndSet:</strong> This instruction reads the current value of a boolean variable and sets it to "true" in one atomic step. If it returns <code>false</code>, the process successfully "grabbed" the lock. If it returns <code>true</code>, the lock was already held, and the process must wait.
+                    </li>
+                    <li>
+                        <strong>2. CompareAndSwap (CAS):</strong> CAS is a more flexible instruction. It updates a memory location ONLY if the current value matches an "expected" value provided by the process. This prevents a process from accidentally updating data that changed behind its back during a context switch.
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. SEMAPHORES -->
+        <section id="semaphores" class="mb-20">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-8">4. Semaphores and Process Coordination</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">The Semaphore Mechanism</div>
+                <p>A <strong>Semaphore</strong> is a high-level synchronization primitive that represents an integer variable accessed only through two atomic operations: <code>wait()</code> (P) and <code>signal()</code> (V). Unlike boolean locks, semaphores can manage complex access patterns and resource pools.</p>
+                
+                <h4>Types of Semaphores</h4>
+                <ul class="list-disc pl-8 space-y-4">
+                    <li><strong>Binary Semaphore:</strong> The integer value is restricted to 0 or 1. It behaves exactly like a <strong>Mutex Lock</strong>, providing mutual exclusion for a single resource.</li>
+                    <li><strong>Counting Semaphore:</strong> The value can range over an unrestricted domain. It is used to manage a pool of identical resources (e.g., a buffer with 10 slots). The count represents the number of available instances.</li>
+                </ul>
+
+                <h4>Working: Busy Waiting vs. Blocking</h4>
+                <p>Primitive semaphores used <strong>Busy Waiting</strong> (Spinlocks), where a process would loop endlessly until the semaphore became positive. This consumes significant CPU cycles. Modern OS implementations use <strong>Blocking</strong>. If a process calls <code>wait()</code> and the resource is unavailable, the process is <strong>suspended</strong> (<code>block()</code>) and put in a wait queue. When another process calls <code>signal()</code>, the OS picks a process from the queue and <strong>wakes it up</strong> (<code>wakeup()</code>), moving it back to the ready queue.</p>
+            </div>
+        </section>
+
+        <!-- 5. DEADLOCK CHARACTERIZATION -->
+        <section id="deadlock-chars" class="mb-20">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-8">5. Deadlock Characterization</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">System Model and Concept</div>
+                <p>A <strong>Deadlock</strong> is a state of total stagnation where every process in a set is waiting for an event (usually a resource release) that can only be triggered by another process in that same set. It creates a circular dependency where no progress is possible. In a standard system model, a process utilizes a resource in three steps: <strong>Request</strong>, <strong>Use</strong>, and <strong>Release</strong>. Deadlocks occur when multiple processes successfully "Request" some resources but cannot "Use" them because they are waiting on others.</p>
+                
+                <h3>The 4 Necessary Conditions (8-Mark Answer)</h3>
+                <p>For a deadlock to occur, these four conditions must hold <strong>simultaneously</strong>. If you can break even one, deadlock is impossible.</p>
+                <ol class="list-decimal pl-8 space-y-4">
+                    <li><strong>Mutual Exclusion:</strong> Resources are non-sharable; only one process can use an instance at a time.</li>
+                    <li><strong>Hold and Wait:</strong> A process must be holding at least one resource while simultaneously waiting to acquire additional resources held by others.</li>
+                    <li><strong>No Preemption:</strong> Resources cannot be forcibly taken away from a process; they must be released voluntarily by the owner.</li>
+                    <li><strong>Circular Wait:</strong> A set $\{P_0, P_1, ..., P_n\}$ exists such that $P_0$ waits for $P_1$, $P_1$ waits for $P_2$, and $P_n$ waits for $P_0$.</li>
+                </ol>
+
+                <details>
+                    <summary>Exam Version (RAG vs. Wait-for Graph)</summary>
+                    <div class="exam-content">
+                        <ul class="list-disc pl-5 space-y-3">
+                            <li><strong>Resource-Allocation Graph (RAG):</strong> A directed graph representing processes (circles) and resource types (squares). Arrows from process to resource indicate <em>Request</em>; arrows from resource to process indicate <em>Assignment</em>.</li>
+                            <li><strong>Wait-for Graph (WFG):</strong> A simplified version used for single-instance resources. Resource nodes are removed, and arrows are drawn directly between processes ($P_i \to P_j$ if $P_i$ waits for $P_j$).</li>
+                            <li><strong>Rule:</strong> A <strong>Cycle</strong> in a WFG is a definitive proof of deadlock.</li>
+                        </ul>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <!-- 6. BANKER'S ALGORITHM TUTORIAL -->
+        <section id="bankers" class="mb-20">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-8">6. Banker's Algorithm: Step-by-Step Tutorial</h2>
+            
+            <div class="tutorial-box">
+                <h3 class="text-xl font-bold text-green-800 mb-2">Phase 1: The Initial Problem</h3>
+                <p>In the exam, you are typically given a "Snapshot" of the system. Let's look at a scenario with 4 resource types (A, B, C, D).</p>
+                
+                <table class="data-table">
+                    <tr><th>Process</th><th>Allocation (ABCD)</th><th>Max (ABCD)</th><th class="bg-yellow-50">Need (ABCD)</th></tr>
+                    <tr><td>P0</td><td>0 0 1 2</td><td>0 0 1 2</td><td><strong>? ? ? ?</strong></td></tr>
+                    <tr><td>P1</td><td>1 0 0 0</td><td>1 7 5 0</td><td><strong>? ? ? ?</strong></td></tr>
+                    <tr><td>P2</td><td>1 3 5 4</td><td>2 3 5 6</td><td><strong>? ? ? ?</strong></td></tr>
+                    <tr><td>P3</td><td>0 6 3 2</td><td>0 6 5 2</td><td><strong>? ? ? ?</strong></td></tr>
+                </table>
+                <p class="font-bold">Initial Available Resources: (1 5 2 0)</p>
+
+                <h3 class="text-xl font-bold text-green-800 mt-6 mb-2">Phase 2: Calculating Total Instances and Need</h3>
+                <p><span class="step-badge">Step 1</span> <strong>Calculate Total Instances:</strong> Sum the "Allocation" column for each resource and add the "Available" value.</p>
+                <p class="text-sm italic">Example for Resource A: (0 + 1 + 1 + 0) + 1 (Avail) = <strong>3 Total Instances</strong>.</p>
+                
+                <p class="mt-4"><span class="step-badge">Step 2</span> <strong>Fill the Need Matrix:</strong> Use the formula <code>Need = Max - Allocation</code>.</p>
+                <ul class="list-disc pl-8 text-sm">
+                    <li>P0 Need: (0-0, 0-0, 1-1, 2-2) = <strong>(0, 0, 0, 0)</strong></li>
+                    <li>P1 Need: (1-1, 7-0, 5-0, 0-0) = <strong>(0, 7, 5, 0)</strong></li>
+                    <li>P2 Need: (2-1, 3-3, 5-5, 6-4) = <strong>(1, 0, 0, 2)</strong></li>
+                    <li>P3 Need: (0-0, 6-6, 5-3, 2-2) = <strong>(0, 0, 2, 0)</strong></li>
+                </ul>
+
+                <h3 class="text-xl font-bold text-green-800 mt-6 mb-2">Phase 3: Finding the Safe Sequence</h3>
+                <p><span class="step-badge">Step 3</span> Starting with <strong>Available (1, 5, 2, 0)</strong>, check which process satisfies <code>Need <= Available</code>.</p>
+                
+                <div class="bg-white p-4 border rounded mt-2 text-sm space-y-4">
+                    <div>
+                        <p class="font-bold text-blue-800">Check P0:</p>
+                        <p>Need (0,0,0,0) &le; Available (1,5,2,0). <span class="text-green-700 font-bold">YES!</span></p>
+                        <p>Action: P0 runs, finishes, and returns its Allocation (0,0,1,2).</p>
+                        <p class="font-bold text-green-700">New Available = (1,5,2,0) + (0,0,1,2) = (1, 5, 3, 2)</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-blue-800">Check P1:</p>
+                        <p>Need (0,7,5,0) &le; Available (1,5,3,2). <span class="text-red-700 font-bold">NO!</span> (P1 must wait).</p>
+                    </div>
+                    <div>
+                        <p class="font-bold text-blue-800">Check P2:</p>
+                        <p>Need (1,0,0,2) &le; Available (1,5,3,2). <span class="text-green-700 font-bold">YES!</span></p>
+                        <p>Action: P2 finishes, returns (1,3,5,4).</p>
+                        <p class="font-bold text-green-700">New Available = (1,5,3,2) + (1,3,5,4) = (2, 8, 8, 6)</p>
+                    </div>
+                </div>
+
+                <p class="mt-4 font-bold text-green-800 underline">Conclusion: A safe sequence exists, e.g., &lt;P0, P2, P3, P1&gt;. The system is in a SAFE STATE.</p>
+            </div>
+        </section>
+
+        <!-- 7. DEADLOCK MANAGEMENT -->
+        <section id="recovery" class="mb-16">
+            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-8">7. Management: Prevention, Detection, Recovery</h2>
+            
+            <div class="concept-card">
+                <div class="definition-header">Deadlock Prevention Strategies</div>
+                <p>Prevention aims to break at least one of the 4 conditions. While effective at stopping deadlocks, it often leads to low resource utilization.</p>
+                <ul class="list-disc pl-8 space-y-2 text-sm">
+                    <li><strong>Eliminating Hold and Wait:</strong> Require processes to request all resources at once. If it can't get all, it gets none.</li>
+                    <li><strong>Eliminating No Preemption:</strong> If a process holding resources is denied a new request, its current resources are taken away and given to others.</li>
+                    <li><strong>Eliminating Circular Wait:</strong> Assign a numerical order to every resource type. Processes must request resources only in <strong>strictly increasing order</strong>.</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <div class="definition-header">Deadlock Recovery</div>
+                <p>When detection algorithms (like Wait-for Graphs) identify a cycle, the OS must recover. This is achieved via two main approaches.</p>
+                
+                <h4>A. Process Termination</h4>
+                <p>The OS can <strong>Abort All</strong> deadlocked processes, which is fast but wastes all work done. Alternatively, it can <strong>Abort One at a Time</strong>, checking for deadlock after each kill until the cycle is broken. This minimizes work loss but increases system overhead.</p>
+
+                <h4>B. Resource Preemption</h4>
+                <p>The OS forcibly takes a resource from a "Victim" process. This requires: 1. <strong>Victim Selection</strong> (choosing the process with minimum cost to kill), 2. <strong>Rollback</strong> (returning the victim to a safe state using checkpoints), and 3. <strong>Starvation Prevention</strong> (ensuring the same process isn't always chosen as the victim).</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-slate-500 font-medium">
+        <p>Prepared for Vatsal's Study Hub. Optimized for 10-mark University Theory and Numericals.</p>
+    </footer>
+
+</body>
+</html>
