@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FTS Module 3 - Telecommunication Networks</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        section { scroll-margin-top: 6rem; }
+        
+        .concept-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #1e40af;
+            font-weight: 900;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #bfdbfe;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .sub-topic-title {
+            color: #0369a1;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sub-topic-title::before { content: "🔹"; font-size: 1.1rem; }
+
+        p { margin-bottom: 1.25rem; line-height: 1.7; text-align: justify; }
+        
+        .highlight-box {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1.25rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.5rem 0;
+        }
+
+        .diagram-container {
+            background-color: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+
+        .diagram-caption {
+            font-size: 0.9rem;
+            color: #64748b;
+            font-weight: 600;
+            margin-top: 1rem;
+        }
+
+        .topology-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+        @media (min-width: 768px) { .topology-grid { grid-template-columns: 1fr 1fr; } }
+
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 13px; fill: #1e293b; font-weight: 600; text-anchor: middle; dominant-baseline: middle;}
+        .svg-sub { font-size: 11px; fill: #475569; text-anchor: middle; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-6">
+                <li><a href="#intro" class="hover:text-blue-300 transition-colors">1. Basic Terms</a></li>
+                <li><a href="#pstn" class="hover:text-blue-300 transition-colors">2. PSTN</a></li>
+                <li><a href="#cellular" class="hover:text-blue-300 transition-colors">3. Cellular & Satellite</a></li>
+                <li><a href="#topologies" class="hover:text-blue-300 transition-colors">4. Topologies</a></li>
+                <li><a href="#switching-routing" class="hover:text-blue-300 transition-colors">5. Switching & Routing</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
+        <h1 class="text-4xl font-black text-slate-900 mb-2">Telecommunication Networks</h1>
+        <p class="text-blue-600 font-bold mb-10 text-lg">Detailed Study Guide: Network Types, Topologies, and Working Mechanisms</p>
+
+        <!-- 1. BASIC TERMS -->
+        <section id="intro" class="mb-16">
+            <h2 class="section-title">1. Terms Related to Telecommunication Technology</h2>
+            <div class="concept-card">
+                <p>A telecommunication network is a collection of nodes and links that enables communication between devices. To make these networks functional, several specific pieces of hardware are utilized:</p>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li><strong>Modem:</strong> A device that allows computers to connect to the internet or communication networks. It <em>modulates</em> and <em>demodulates</em> signals to transmit and receive data.</li>
+                    <li><strong>Router:</strong> A device that connects computers and devices to the internet or other networks. It routes data packets between devices and networks and can also serve as a firewall.</li>
+                    <li><strong>Switch:</strong> A device that allows computers and devices to communicate with each other on the <em>same</em> network. It receives data packets and sends them intelligently to their intended destination.</li>
+                    <li><strong>Server:</strong> A computer that stores and manages data and applications, providing them to other computers over a network. Used to host websites and process data.</li>
+                    <li><strong>Cloud:</strong> A network of servers connected over the internet used to store, process, and manage data and applications remotely. It allows users to access data from anywhere.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 2. PSTN -->
+        <section id="pstn" class="mb-16">
+            <h2 class="section-title">2. The PSTN (Public Switched Telephone Network)</h2>
+            <div class="concept-card">
+                <p>The PSTN is primarily used for traditional voice communication, enabling landline calls for households and businesses. It supports services like fax transmissions and is often used for emergency services due to its reliability.</p>
+
+                <!-- PSTN Diagram -->
+                <div class="diagram-container">
+                    <svg width="600" height="250" viewBox="0 0 600 250" class="mx-auto">
+                        <!-- Phones -->
+                        <rect x="20" y="100" width="40" height="50" rx="5" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
+                        <text x="40" y="125" class="svg-text">Phone</text>
+                        
+                        <rect x="540" y="100" width="40" height="50" rx="5" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
+                        <text x="560" y="125" class="svg-text">Phone</text>
+
+                        <!-- Central Offices -->
+                        <rect x="150" y="80" width="90" height="90" rx="10" fill="#bae6fd" stroke="#0284c7" stroke-width="3"/>
+                        <text x="195" y="115" class="svg-text font-bold text-blue-900">Local</text>
+                        <text x="195" y="135" class="svg-text font-bold text-blue-900">Exchange</text>
+
+                        <rect x="360" y="80" width="90" height="90" rx="10" fill="#bae6fd" stroke="#0284c7" stroke-width="3"/>
+                        <text x="405" y="115" class="svg-text font-bold text-blue-900">Remote</text>
+                        <text x="405" y="135" class="svg-text font-bold text-blue-900">Exchange</text>
+
+                        <!-- Lines -->
+                        <line x1="60" y1="125" x2="150" y2="125" stroke="#334155" stroke-width="3" stroke-dasharray="4"/>
+                        <text x="105" y="110" class="svg-sub">Subscriber Line</text>
+
+                        <line x1="450" y1="125" x2="540" y2="125" stroke="#334155" stroke-width="3" stroke-dasharray="4"/>
+                        <text x="495" y="110" class="svg-sub">Subscriber Line</text>
+
+                        <line x1="240" y1="125" x2="360" y2="125" stroke="#b91c1c" stroke-width="5"/>
+                        <text x="300" y="110" class="svg-text font-bold text-red-700">Trunk Line</text>
+                        <text x="300" y="145" class="svg-sub">(High Capacity)</text>
+                    </svg>
+                    <div class="diagram-caption">Block Diagram: Architecture of the PSTN</div>
+                </div>
+
+                <h3 class="sub-topic-title">Core Components of PSTN</h3>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li><strong>Subscriber Lines:</strong> These connect individual telephones or devices to the PSTN. These copper or fiber-optic lines link users to central offices, allowing access to the larger network. They serve as the <em>first point of entry</em> into the PSTN.</li>
+                    <li><strong>Line Signaling:</strong> The process of transmitting information to manage the initiation, progress, and termination of a call. It handles tasks like detecting when a handset is lifted (off-hook) and recognizing dialed numbers.</li>
+                    <li><strong>Trunk Lines:</strong> High-capacity connections linking telephone exchanges. Unlike subscriber lines serving individuals, trunk lines handle <em>aggregated traffic</em> from multiple calls, allowing efficient long-distance transmission between different regions.</li>
+                </ul>
+
+                <h3 class="sub-topic-title">Working: What happens when a phone number is dialed?</h3>
+                <p>When a phone number is dialed, the system initiates a series of actions:</p>
+                <ol class="list-decimal pl-6 space-y-2">
+                    <li>The local exchange captures the dialed number and determines the route—whether it’s within the local area or requires connection to remote exchanges.</li>
+                    <li>The network uses <strong>switching systems</strong> to establish a dedicated, physical circuit for the call.</li>
+                    <li>Once connected, real-time communication begins, which remains uninterrupted until the call ends.</li>
+                    <li>When the call ends, the circuit is released.</li>
+                </ol>
+
+                <h3 class="sub-topic-title">Processing of Toll Calls</h3>
+                <p>Toll calls (long-distance calls requiring extra charges) are routed through regional and national exchanges. The system calculates tariffs based on the distance and duration of the call. The call is then connected using trunk lines and higher-tier exchanges, ensuring accurate billing and high call quality.</p>
+
+                <div class="highlight-box">
+                    <h4 class="font-bold text-xl text-green-900 mb-2">How does PSTN differ from VoIP?</h4>
+                    <p>PSTN and VoIP differ fundamentally in technology and infrastructure.</p>
+                    <ul class="list-disc pl-5 mt-2 space-y-2">
+                        <li><strong>Technology:</strong> PSTN relies on <strong>circuit-switched</strong> networks (creating a fixed pathway). VoIP (Voice over Internet Protocol) uses <strong>packet-switched</strong> networks (transmitting voice data over the internet).</li>
+                        <li><strong>Pros/Cons:</strong> PSTN is known for high reliability and call quality but has higher operational costs. VoIP is flexible, cost-effective, and uses existing internet connections, but depends entirely on reliable internet access.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. CELLULAR & SATELLITE -->
+        <section id="cellular" class="mb-16">
+            <h2 class="section-title">3. Cellular and Satellite Networks</h2>
+            
+            <!-- CELLULAR -->
+            <div class="concept-card">
+                <h3 class="text-2xl font-bold text-slate-800 mb-4">A. Cellular Networks: Components & Architecture</h3>
+                <p>A cellular network divides a geographic area into smaller blocks called "cells", allowing the reuse of radio frequencies to support a massive number of users.</p>
+
+                <!-- Cellular Architecture Diagram -->
+                <div class="diagram-container">
+                    <svg width="650" height="300" viewBox="0 0 650 300" class="mx-auto">
+                        <!-- Phones (ME) -->
+                        <rect x="50" y="80" width="30" height="40" rx="4" fill="#cbd5e1" stroke="#334155"/>
+                        <text x="65" y="100" class="svg-text" font-size="10">ME</text>
+                        
+                        <rect x="50" y="180" width="30" height="40" rx="4" fill="#cbd5e1" stroke="#334155"/>
+                        <text x="65" y="200" class="svg-text" font-size="10">ME</text>
+
+                        <!-- BTS -->
+                        <polygon points="150,110 170,50 190,110" fill="#fca5a5" stroke="#b91c1c" stroke-width="2"/>
+                        <text x="170" y="130" class="svg-text font-bold">BTS 1</text>
+                        
+                        <polygon points="150,250 170,190 190,250" fill="#fca5a5" stroke="#b91c1c" stroke-width="2"/>
+                        <text x="170" y="270" class="svg-text font-bold">BTS 2</text>
+
+                        <!-- Radio Links -->
+                        <path d="M 85 100 Q 120 70 155 80" stroke="#3b82f6" stroke-dasharray="4" fill="none" stroke-width="2"/>
+                        <path d="M 85 200 Q 120 170 155 210" stroke="#3b82f6" stroke-dasharray="4" fill="none" stroke-width="2"/>
+
+                        <!-- BSC -->
+                        <rect x="300" y="120" width="80" height="60" rx="8" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+                        <text x="340" y="150" class="svg-text font-bold">BSC</text>
+
+                        <line x1="190" y1="100" x2="300" y2="140" stroke="#334155" stroke-width="2"/>
+                        <line x1="190" y1="220" x2="300" y2="160" stroke="#334155" stroke-width="2"/>
+
+                        <!-- MSC / MTSO -->
+                        <rect x="450" y="110" width="100" height="80" rx="8" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                        <text x="500" y="140" class="svg-text font-bold">MSC / MTSO</text>
+                        <text x="500" y="160" class="svg-sub">(To PSTN/Internet)</text>
+
+                        <line x1="380" y1="150" x2="450" y2="150" stroke="#334155" stroke-width="4"/>
+                    </svg>
+                    <div class="diagram-caption">Cellular Network Architecture</div>
+                </div>
+
+                <h4 class="sub-topic-title">Cellular Network Components</h4>
+                <ul class="list-disc pl-6 space-y-4">
+                    <li><strong>Mobile Equipment (ME):</strong> Refers to the physical phone itself. Older phones operated on a single band, while newer phones are dual-band, triple-band, or quad-band (capable of operating on networks worldwide). Each phone is uniquely identified by the <strong>IMEI</strong> (International Mobile Equipment Identity) number, burned into the phone by the manufacturer (usually found under the battery).</li>
+                    
+                    <li><strong>What is a Cell:</strong> A base station (transmitter) having a number of RF channels. Each cell covers a limited number of subscribers within its boundaries. A Cell Radius is approx. 30 Km at startup, and 1 KM when mature.</li>
+                    
+                    <li><strong>Cell Size and Capacity:</strong> Cell size determines the number of cells available to cover an area and the total capacity available to all users (with frequency reuse). Capacity is limited by bandwidth.</li>
+                    
+                    <li><strong>Base Transceiver Station (BTS):</strong> The antenna installed on top of a tower. It is the phone's access point to the network. It handles speech encoding, encryption, multiplexing, and modulation of radio signals. One BTS usually covers a 120-degree sector (a tower with 3 BTSs covers 360 degrees). A BTS is assigned a <em>Cell Identity</em> to denote its Location Area.</li>
+                    
+                    <li><strong>Base Station Controller (BSC):</strong> Controls multiple BTSs. It handles the allocation of radio channels, frequency administration, and handovers between its BTSs. It functions as a "funneler", reducing the number of connections going to the MSC.</li>
+                    
+                    <li><strong>Mobile Switching Center (MSC) / MTSO:</strong> The heart of the network. It handles call routing, call setup, and basic switching. An MSC handles multiple BSCs, coordinates inter-MSC handoffs, and interfaces with other networks (like PSTN).</li>
+                </ul>
+
+                <h4 class="sub-topic-title">Working of a Cellular Network (9-Step Process)</h4>
+                <ol class="list-decimal pl-6 space-y-3 bg-slate-50 p-6 rounded-lg border border-slate-200 mt-4">
+                    <li>When we turn on the cell phone, the Control Channel seeks to get the <strong>SID</strong> (System Identification Number).</li>
+                    <li>The Control Channel is a special frequency used by the phone and base station to communicate with each other.</li>
+                    <li>If the cell phone finds it difficult to get a connection to the control channel, a "no service" message is shown.</li>
+                    <li>If the SID is accessed, it compares it to the SID programmed on the phone. If they match, the phone recognizes it is communicating with its home system.</li>
+                    <li>The handset transmits a registration request. The MTSO keeps track of the location of your phone in a database so it knows which cell you are in when a call arrives.</li>
+                    <li>To receive a call, the MTSO searches its database to find your cell. The MTSO then chooses a frequency pair to take the call.</li>
+                    <li>The MTSO communicates over the control channel with the cell phone to tell it what frequencies to use. Once switched on, the call is associated.</li>
+                    <li>When the mobile phone moves towards the edge of the cell, the base station experiences a drop in signal power, while the base station in the cell the phone is traveling <em>towards</em> sees the signal intensity rise.</li>
+                    <li>By means of the MTSO, the two base stations coordinate. The cell phone gets a signal on a control channel guiding it to change frequencies. This executes the <strong>Handoff</strong> to the new cell.</li>
+                </ol>
+            </div>
+
+            <!-- SATELLITE -->
+            <div class="concept-card">
+                <h3 class="text-2xl font-bold text-slate-800 mb-4">B. Satellite Communication</h3>
+                
+                <h4 class="sub-topic-title mt-0">The Need for Satellite Communication</h4>
+                <p>Earlier, two kinds of propagation were used for communication over distances:</p>
+                <ul class="list-disc pl-6 space-y-2 mb-4">
+                    <li><strong>Ground wave propagation:</strong> Suitable for frequencies up to 30MHz. Makes use of the troposphere.</li>
+                    <li><strong>Sky wave propagation:</strong> Suitable for 30-40 MHz. Makes use of the ionosphere properties.</li>
+                </ul>
+                <p><strong>The Limitation:</strong> The maximum hop or station distance is limited to <strong>1500 KM only</strong> in both ground and sky wave propagation due to the earth's curvature. Satellite communication overcomes this limitation, providing communication for long distances well beyond the line of sight.</p>
+
+                <!-- Satellite Diagram -->
+                <div class="diagram-container">
+                    <svg width="500" height="250" viewBox="0 0 500 250" class="mx-auto">
+                        <!-- Earth Curve -->
+                        <path d="M 50 250 Q 250 180 450 250" fill="none" stroke="#22c55e" stroke-width="4"/>
+                        <text x="250" y="240" class="svg-text text-green-800">Earth</text>
+
+                        <!-- Ground Stations -->
+                        <polygon points="100,215 120,180 140,215" fill="#94a3b8" />
+                        <text x="120" y="230" class="svg-sub">Earth Station 1</text>
+                        
+                        <polygon points="360,215 380,180 400,215" fill="#94a3b8" />
+                        <text x="380" y="230" class="svg-sub">Earth Station 2</text>
+
+                        <!-- Satellite -->
+                        <rect x="230" y="30" width="40" height="20" fill="#facc15" stroke="#ca8a04" stroke-width="2"/>
+                        <rect x="190" y="35" width="30" height="10" fill="#38bdf8" />
+                        <rect x="280" y="35" width="30" height="10" fill="#38bdf8" />
+                        <text x="250" y="20" class="svg-text">Satellite (Transponder)</text>
+
+                        <!-- Links -->
+                        <path d="M 120 170 L 230 45" stroke="#b91c1c" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)"/>
+                        <text x="150" y="100" class="svg-sub font-bold text-red-700">Uplink Freq</text>
+
+                        <path d="M 270 45 L 380 170" stroke="#047857" stroke-width="2" stroke-dasharray="4" marker-end="url(#arrow)"/>
+                        <text x="350" y="100" class="svg-sub font-bold text-green-700">Downlink Freq</text>
+                    </svg>
+                </div>
+
+                <h4 class="sub-topic-title">Working Mechanism</h4>
+                <p>A satellite is a body that moves around another body in a particular path. A communication satellite is essentially a <strong>microwave repeater station in space</strong>. It is helpful in telecommunications, radio, TV, and internet applications.</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li>A normal repeater increases the strength of a received signal and transmits it. However, a satellite works as a <strong>Transponder</strong>. This means it changes the frequency band of the transmitted signal from the received one to avoid interference.</li>
+                    <li><strong>Uplink Frequency:</strong> The frequency with which the signal is sent from Earth into space.</li>
+                    <li><strong>Downlink Frequency:</strong> The frequency with which the signal is sent by the transponder back down to Earth.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. TOPOLOGIES -->
+        <section id="topologies" class="mb-16">
+            <h2 class="section-title">4. Network Topologies</h2>
+            <p class="text-lg text-slate-700 mb-6">A Network Topology refers to the physical or logical layout of how nodes (devices) are connected to each other.</p>
+            
+            <div class="topology-grid mb-6">
+                <!-- Star -->
+                <div class="concept-card !m-0 p-5">
+                    <h3 class="text-xl font-bold text-blue-800 mb-2 mt-0">A. Star Topology</h3>
+                    <p class="text-sm mb-4">Every node connects to a central device (like a Hub or Switch) which acts as a server. Devices do not connect directly to one another.</p>
+                    
+                    <svg width="200" height="150" viewBox="0 0 200 150" class="mx-auto mb-4">
+                        <circle cx="100" cy="75" r="15" fill="#3b82f6" />
+                        <text x="100" y="75" class="svg-text" fill="white">Hub</text>
+                        <!-- Lines -->
+                        <line x1="100" y1="60" x2="100" y2="20" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="100" y1="90" x2="100" y2="130" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="85" y1="75" x2="40" y2="75" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="115" y1="75" x2="160" y2="75" stroke="#94a3b8" stroke-width="2" />
+                        <!-- Nodes -->
+                        <rect x="85" y="5" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="85" y="125" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="15" y="65" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="155" y="65" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                    </svg>
+
+                    <p class="font-bold text-sm text-green-700 mt-2">Advantages:</p>
+                    <ul class="list-disc pl-5 text-sm mb-2 text-slate-600">
+                        <li>Easy to install and manage.</li>
+                        <li>If one cable fails, only that node goes down (easy fault isolation).</li>
+                    </ul>
+                    <p class="font-bold text-sm text-red-700">Disadvantages:</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600">
+                        <li>Central hub is a single point of failure. Entire network collapses if it dies.</li>
+                    </ul>
+                </div>
+
+                <!-- Mesh -->
+                <div class="concept-card !m-0 p-5">
+                    <h3 class="text-xl font-bold text-blue-800 mb-2 mt-0">B. Mesh Topology</h3>
+                    <p class="text-sm mb-4">Every node has a dedicated point-to-point link to every other node. A fully connected mesh has <strong>n(n-1)/2</strong> physical channels.</p>
+
+                    <svg width="200" height="150" viewBox="0 0 200 150" class="mx-auto mb-4">
+                        <rect x="40" y="20" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="130" y="20" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="40" y="110" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="130" y="110" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <line x1="70" y1="30" x2="130" y2="30" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="70" y1="120" x2="130" y2="120" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="55" y1="40" x2="55" y2="110" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="145" y1="40" x2="145" y2="110" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="70" y1="40" x2="130" y2="110" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="130" y1="40" x2="70" y2="110" stroke="#94a3b8" stroke-width="2" />
+                    </svg>
+
+                    <p class="font-bold text-sm text-green-700 mt-2">Advantages:</p>
+                    <ul class="list-disc pl-5 text-sm mb-2 text-slate-600">
+                        <li>Ultimate reliability and fault tolerance. No traffic congestion.</li>
+                    </ul>
+                    <p class="font-bold text-sm text-red-700">Disadvantages:</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600">
+                        <li>Extremely expensive and complex to wire.</li>
+                    </ul>
+                </div>
+
+                <!-- Ring -->
+                <div class="concept-card !m-0 p-5">
+                    <h3 class="text-xl font-bold text-blue-800 mb-2 mt-0">C. Ring Topology</h3>
+                    <p class="text-sm mb-4">Nodes are connected in a closed-loop circle. Data travels in one direction. A "Token" is passed to prevent collisions.</p>
+
+                    <svg width="200" height="150" viewBox="0 0 200 150" class="mx-auto mb-4">
+                        <circle cx="100" cy="75" r="40" fill="none" stroke="#94a3b8" stroke-width="3" />
+                        <rect x="85" y="25" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="85" y="105" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="45" y="65" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="125" y="65" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <path d="M 130 50 L 138 45 L 134 55 Z" fill="#94a3b8" />
+                    </svg>
+
+                    <p class="font-bold text-sm text-green-700 mt-2">Advantages:</p>
+                    <ul class="list-disc pl-5 text-sm mb-2 text-slate-600">
+                        <li>Very organized; performs well under heavy traffic loads.</li>
+                    </ul>
+                    <p class="font-bold text-sm text-red-700">Disadvantages:</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600">
+                        <li>A single cable break breaks the entire ring.</li>
+                    </ul>
+                </div>
+
+                <!-- Bus -->
+                <div class="concept-card !m-0 p-5">
+                    <h3 class="text-xl font-bold text-blue-800 mb-2 mt-0">D. Bus Topology</h3>
+                    <p class="text-sm mb-4">Every computer and device is connected to a single main cable (the backbone). It transmits data from one end to another.</p>
+
+                    <svg width="200" height="150" viewBox="0 0 200 150" class="mx-auto mb-4">
+                        <line x1="20" y1="75" x2="180" y2="75" stroke="#3b82f6" stroke-width="4" />
+                        <line x1="50" y1="75" x2="50" y2="40" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="100" y1="75" x2="100" y2="110" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="150" y1="75" x2="150" y2="40" stroke="#94a3b8" stroke-width="2" />
+                        <rect x="35" y="20" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="85" y="110" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="135" y="20" width="30" height="20" rx="3" fill="#e2e8f0" stroke="#64748b" />
+                    </svg>
+
+                    <p class="font-bold text-sm text-green-700 mt-2">Advantages:</p>
+                    <ul class="list-disc pl-5 text-sm mb-2 text-slate-600">
+                        <li>Cost-effective and requires the least amount of cable.</li>
+                    </ul>
+                    <p class="font-bold text-sm text-red-700">Disadvantages:</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600">
+                        <li>If the main backbone cable fails, the whole network goes down.</li>
+                    </ul>
+                </div>
+
+                <!-- Tree -->
+                <div class="concept-card !m-0 p-5">
+                    <h3 class="text-xl font-bold text-blue-800 mb-2 mt-0">E. Tree Topology</h3>
+                    <p class="text-sm mb-4">It has a root node and all other nodes are connected to it, forming a hierarchy (combining Bus and Star). It should have at least 3 levels.</p>
+
+                    <svg width="200" height="150" viewBox="0 0 200 150" class="mx-auto mb-4">
+                        <line x1="100" y1="30" x2="50" y2="70" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="100" y1="30" x2="150" y2="70" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="50" y1="90" x2="25" y2="130" stroke="#94a3b8" stroke-width="2" />
+                        <line x1="50" y1="90" x2="75" y2="130" stroke="#94a3b8" stroke-width="2" />
+                        
+                        <circle cx="100" cy="20" r="12" fill="#3b82f6" />
+                        <circle cx="50" cy="80" r="12" fill="#e2e8f0" stroke="#64748b" stroke-width="2" />
+                        <circle cx="150" cy="80" r="12" fill="#e2e8f0" stroke="#64748b" stroke-width="2" />
+                        <rect x="10" y="130" width="30" height="15" rx="2" fill="#e2e8f0" stroke="#64748b" />
+                        <rect x="60" y="130" width="30" height="15" rx="2" fill="#e2e8f0" stroke="#64748b" />
+                    </svg>
+
+                    <p class="font-bold text-sm text-green-700 mt-2">Advantages:</p>
+                    <ul class="list-disc pl-5 text-sm mb-2 text-slate-600">
+                        <li>Highly scalable. Easier fault identification.</li>
+                    </ul>
+                    <p class="font-bold text-sm text-red-700">Disadvantages:</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600">
+                        <li>If the backbone or a parent node fails, the entire sub-network is crippled.</li>
+                    </ul>
+                </div>
+
+                <!-- Hybrid -->
+                <div class="concept-card !m-0 p-5">
+                    <h3 class="text-xl font-bold text-blue-800 mb-2 mt-0">F. Hybrid Topology</h3>
+                    <p class="text-sm mb-4">Uses a combination of two or more topologies resulting in a unique structure (e.g., star-ring or star-bus network).</p>
+
+                    <p class="font-bold text-sm text-green-700 mt-2">Advantages:</p>
+                    <ul class="list-disc pl-5 text-sm mb-2 text-slate-600">
+                        <li>Extremely flexible and very reliable.</li>
+                    </ul>
+                    <p class="font-bold text-sm text-red-700">Disadvantages:</p>
+                    <ul class="list-disc pl-5 text-sm text-slate-600">
+                        <li>Most expensive and complex to design/maintain.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. SWITCHING & ROUTING -->
+        <section id="switching-routing" class="mb-16">
+            <h2 class="section-title">5. Overview of Switching and Routing</h2>
+            
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">Types of Switching</h3>
+                <p>In large networks, there are multiple paths linking a sender and a receiver. Information must be "switched" as it travels through various communication channels.</p>
+                
+                <div class="space-y-6 mt-4">
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-800">1. Circuit-Switched Networks</h4>
+                        <p>Directly connects the sender and receiver with a dedicated physical path. It involves three phases: <strong>Setup</strong>, <strong>Data Transfer</strong>, and <strong>Teardown</strong>. While perfect for voice (like PSTN) due to zero routing delay once connected, it is highly inefficient for computer data because bandwidth is wasted when the line is idle.</p>
+                    </div>
+                    
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-800">2. Packet-Switched Networks</h4>
+                        <p>Data is broken into smaller packets. Paths are shared among many users, maximizing efficiency. Types:</p>
+                        <ul class="list-disc pl-6 space-y-2 mt-2">
+                            <li><strong>Datagram Networks:</strong> No setup phase. Each packet is independent, carries the full destination address, and can take different routes. They may arrive out of order (The Internet).</li>
+                            <li><strong>Virtual-Circuit Networks:</strong> Uses a setup phase to establish a logical path and assigns a Virtual-Circuit Identifier (VCI). All packets follow the exact same path using the VCI.</li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-800">3. Message-Switched Networks</h4>
+                        <p>An older technique using a "Store and Forward" mechanism. The entire message is sent to a node, stored completely, and then forwarded when the next link is free. Unsuitable for real-time traffic.</p>
+                    </div>
+                </div>
+
+                <h3 class="sub-topic-title border-t pt-6 mt-6">Overview of Routing</h3>
+                <p>While switching is the mechanism of moving data from an input to an output, <strong>Routing</strong> is the intelligence behind choosing <em>which</em> specific path or output port to use across a massive network.</p>
+                <ul class="list-disc pl-6 space-y-3 mt-4 text-slate-700">
+                    <li><strong>Path Determination:</strong> Routers use algorithms to evaluate paths based on metrics like distance (hop count), speed (bandwidth), and current congestion to find the fastest route.</li>
+                    <li><strong>Routing Tables:</strong> In a Datagram Network (Internet), every router contains a dynamic Routing Table. When a packet arrives, the router examines its Destination IP, compares it against the table, and forwards it.</li>
+                    <li><strong>Dynamic Updates:</strong> Because network conditions change constantly (cables break, traffic spikes), routers constantly communicate with each other using routing protocols (like OSPF or BGP) to update their tables dynamically.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Tailored for detailed, conceptual exam answers.</p>
+    </footer>
+
+</body>
+</html>

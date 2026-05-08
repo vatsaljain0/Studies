@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Module 4 - Memory Management (Detailed Guide)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        section { scroll-margin-top: 6rem; }
+        
+        .concept-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 2.2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #1e40af;
+            font-weight: 900;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #bfdbfe;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .sub-topic-title {
+            color: #0369a1;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sub-topic-title::before { content: "🔹"; font-size: 1.1rem; }
+
+        p { margin-bottom: 1.25rem; line-height: 1.8; text-align: justify; }
+        
+        .highlight-box {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.5rem 0;
+        }
+
+        /* Exam Details Styling */
+        details {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            margin-top: 1.5rem;
+            overflow: hidden;
+        }
+        summary {
+            padding: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+            cursor: pointer;
+            background-color: #e2e8f0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        summary::before { content: '🎓 Exam Numerical / Detailed View'; margin-right: 0.75rem; color: #1e40af; }
+        .exam-content { padding: 1.5rem; background-color: #ffffff; font-size: 0.95rem; line-height: 1.7; }
+
+        .diagram-container {
+            background-color: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+        .diagram-caption { font-size: 0.9rem; color: #64748b; font-weight: 600; margin-top: 1rem; }
+
+        .math-def { font-family: 'Consolas', monospace; font-weight: bold; color: #1d4ed8; background: #e0e7ff; padding: 2px 6px; border-radius: 4px;}
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; fill: #1e293b; font-weight: 600; text-anchor: middle; dominant-baseline: middle;}
+        
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; text-align: center; }
+        th, td { border: 1px solid #cbd5e1; padding: 0.75rem; }
+        th { background-color: #f1f5f9; font-weight: 700; color: #0f172a; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
+        <div class="max-w-6xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-4">
+                <li><a href="#swapping" class="hover:text-blue-300">Swapping & Allocation</a></li>
+                <li><a href="#paging" class="hover:text-blue-300">Paging & TLB</a></li>
+                <li><a href="#segmentation" class="hover:text-blue-300">Segmentation</a></li>
+                <li><a href="#virtual" class="hover:text-blue-300">Virtual Memory & CoW</a></li>
+                <li><a href="#replacement" class="hover:text-blue-300">Page Replacement & Thrashing</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
+        <h1 class="text-4xl font-black text-slate-900 mb-2">Memory Management</h1>
+        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Part 1 & 2: Basic Concepts, Virtual Memory, and Exam Numericals</p>
+
+        <section id="swapping" class="mb-16">
+            <h2 class="section-title">1. Basic Concepts: Swapping & Allocation</h2>
+            
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">A. Swapping</h3>
+                <p>Main memory (RAM) is limited. If a system wants to execute more processes than it has RAM for, it uses a technique called <strong>Swapping</strong>. The Operating System temporarily moves a process out of main memory and writes it to a secondary storage device (the hard disk or "Backing Store"). Later, when the CPU is ready to execute that process again, it swaps it back into RAM.</p>
+                <p><strong>Pros:</strong> Allows a higher degree of multiprogramming and frees up memory for urgent processes.<br>
+                <strong>Cons:</strong> Hard disks are drastically slower than RAM. Constant swapping can cause severe execution delays.</p>
+
+                <div class="diagram-container">
+                    <svg width="500" height="200" viewBox="0 0 500 200" class="mx-auto">
+                        <rect x="50" y="20" width="120" height="160" rx="4" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+                        <rect x="50" y="20" width="120" height="40" rx="4" fill="#cbd5e1" stroke="#334155" stroke-width="2"/>
+                        <text x="110" y="40" class="svg-text">Operating System</text>
+                        <rect x="60" y="70" width="100" height="40" rx="4" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+                        <text x="110" y="90" class="svg-text">Process P1</text>
+                        <text x="110" y="195" class="svg-text">Main Memory</text>
+
+                        <path d="M 350 40 C 350 25, 450 25, 450 40 L 450 160 C 450 175, 350 175, 350 160 Z" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+                        <path d="M 350 40 C 350 55, 450 55, 450 40" fill="none" stroke="#334155" stroke-width="2"/>
+                        <rect x="370" y="80" width="60" height="30" rx="2" fill="#fca5a5" stroke="#b91c1c" stroke-width="2"/>
+                        <text x="400" y="95" class="svg-text">Process P2</text>
+                        <text x="400" y="195" class="svg-text">Backing Store (Disk)</text>
+
+                        <path d="M 180 80 L 330 80" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="255" y="70" class="svg-text">Swap Out</text>
+                        
+                        <path d="M 330 120 L 180 120" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="255" y="110" class="svg-text">Swap In</text>
+
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#0f172a" />
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="diagram-caption">Swapping processes between Main Memory and Disk</div>
+                </div>
+
+                <h3 class="sub-topic-title">B. Memory Allocation Strategies</h3>
+                <p>When a process enters the system, the OS must allocate it a continuous block of memory. This is called <strong>Contiguous Memory Allocation</strong>. To find the right spot, the OS uses one of the following search algorithms:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>First Fit:</strong> Allocates the <em>first</em> hole that is big enough. It stops searching immediately. Fast, but can leave awkward gaps.</li>
+                    <li><strong>Next Fit:</strong> Operates like First Fit, but starts searching from the location of the <em>last</em> allocation rather than the beginning.</li>
+                    <li><strong>Best Fit:</strong> Searches the <em>entire list</em> and allocates the smallest hole that is big enough. It produces the smallest leftover partition.</li>
+                    <li><strong>Worst Fit:</strong> Searches the entire list and allocates the <em>largest</em> available hole. Strangely, this is often better than Best Fit because it leaves behind a large leftover gap that can be used by another process later, whereas Best Fit leaves tiny, useless gaps.</li>
+                </ul>
+
+                <details>
+                    <summary>Exam Numerical: First Fit vs. Best Fit Proof</summary>
+                    <div class="exam-content">
+                        <p class="font-bold text-red-700 mb-2">The Problem Scenario (From Slides):</p>
+                        <p>We have 3 available memory blocks: <span class="math-def">150K, 150K, 350K</span>.</p>
+                        <p>Processes request memory in this order: <span class="math-def">300K, 25K, 125K, 50K</span>.</p>
+
+                        <h4 class="font-bold mt-4 text-blue-800">Why Best Fit FAILS:</h4>
+                        <ol class="list-decimal pl-5 space-y-1">
+                            <li><strong>300K</strong> process requests memory. Best Fit puts it in the 350K block. (Remaining: 50K).</li>
+                            <li><strong>25K</strong> process requests memory. The smallest block that fits is the new 50K block. (Remaining: 25K).</li>
+                            <li><strong>125K</strong> process requests memory. It fits into a 150K block. (Remaining: 25K).</li>
+                            <li><strong>50K</strong> process requests memory. <span class="text-red-600 font-bold">FAILURE!</span> The remaining free blocks are 25K, 25K, and 150K. The 50K process cannot fit into the 25K gaps, even though total free memory is 200K. This is External Fragmentation.</li>
+                        </ol>
+
+                        <h4 class="font-bold mt-4 text-blue-800">Why First Fit SUCCEEDS:</h4>
+                        <ol class="list-decimal pl-5 space-y-1">
+                            <li><strong>300K</strong> goes to 350K block. (Remaining: 50K).</li>
+                            <li><strong>25K</strong> goes to the <em>first</em> 150K block. (Remaining: 125K).</li>
+                            <li><strong>125K</strong> goes exactly into the 125K block left over from step 2. (Remaining: 0K).</li>
+                            <li><strong>50K</strong> goes exactly into the 50K block left over from step 1. (Remaining: 0K). <span class="text-green-600 font-bold">ALL PROCESSES ALLOCATED!</span></li>
+                        </ol>
+                    </div>
+                </details>
+                
+                <div class="highlight-box mt-6">
+                    <p class="font-bold text-blue-900 mb-2">Understanding Fragmentation</p>
+                    <p><strong>Internal Fragmentation:</strong> Occurs when memory is divided into fixed-size blocks. If you assign a 25KB process to a rigid 50KB block, the 25KB inside that block is completely wasted. It is "internal" to the block.</p>
+                    <p><strong>External Fragmentation:</strong> Occurs in dynamic allocation. As processes load and exit, they leave behind scattered gaps of free memory. Even if the total free memory is 100KB, a new 80KB process cannot be loaded because the free space is not contiguous (it's broken into tiny pieces). <em>Solution: Compaction (shuffling memory to group free space) or Paging.</em></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="paging" class="mb-16">
+            <h2 class="section-title">2. Paging, Page Tables, and the TLB</h2>
+            
+            <div class="concept-card">
+                <p>To completely eliminate External Fragmentation, Operating Systems use a non-contiguous memory allocation technique called <strong>Paging</strong>.</p>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li><strong>The Concept:</strong> The physical memory (RAM) is divided into fixed-sized blocks called <strong>Frames</strong>. The logical memory (the user process) is divided into blocks of the exact same size called <strong>Pages</strong>.</li>
+                    <li>Because they are the exact same size, any Page can be loaded into any available Frame, no matter where it is located in RAM. No memory is wasted between blocks!</li>
+                </ul>
+
+                <h3 class="sub-topic-title">Address Translation Hardware</h3>
+                <p>When the CPU executes code, it generates a <strong>Logical Address</strong>. The physical RAM does not understand logical addresses. The Memory Management Unit (MMU) uses a <strong>Page Table</strong> to translate the logical address into a <strong>Physical Address</strong>.</p>
+                <p>A Logical Address consists of two parts: 1. <strong>Page Number (p)</strong> (used as an index to the Page Table), and 2. <strong>Page Offset (d)</strong> (the exact location inside the page/frame). The MMU looks up the Page Number to find the matching Frame Number, and attaches the identical Offset to generate the physical address.</p>
+
+                <details>
+                    <summary>Exam Numerical: Paging Address Calculation (Decimal)</summary>
+                    <div class="exam-content">
+                        <p class="mb-2"><strong>Problem:</strong> Given a logical address of <span class="math-def">21205</span> and a Page Size of <span class="math-def">1024 bytes (1 KB)</span>, find the Page Number and Offset.</p>
+                        <p><strong>Formulas:</strong></p>
+                        <ul class="list-disc pl-5 mb-4">
+                            <li>Page Number = Logical Address / Page Size</li>
+                            <li>Offset = Logical Address % Page Size (Remainder)</li>
+                        </ul>
+                        <p><strong>Step-by-Step Solution:</strong></p>
+                        <p>1. Page Number = 21205 / 1024 = <strong>20</strong> (Take the whole number)</p>
+                        <p>2. Offset = 21205 % 1024 = <strong>725</strong></p>
+                        <p class="mt-2 text-green-700 font-bold">Answer: Page Number is 20, Offset is 725.</p>
+                    </div>
+                </details>
+
+                <h3 class="sub-topic-title">Translation Lookaside Buffer (TLB)</h3>
+                <p>Every time the CPU wants to access memory, it has to check the Page Table. Since the Page Table is stored in RAM, this requires two trips to memory (one for the table, one for the actual data), cutting performance in half! To fix this, we use a <strong>TLB</strong>.</p>
+                <p>The TLB is a small, ultra-fast hardware cache placed inside the MMU. It stores the most recently used Page-to-Frame mappings. When a logical address is generated, the CPU checks the TLB first.</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>TLB Hit:</strong> The mapping is found in the TLB. Fast access!</li>
+                    <li><strong>TLB Miss:</strong> The mapping is not found. The CPU must access the Page Table in RAM, and then copies that mapping into the TLB for future use.</li>
+                </ul>
+
+                <details>
+                    <summary>Exam Numerical: Effective Memory Access Time (EMAT)</summary>
+                    <div class="exam-content">
+                        <p class="mb-2"><strong>Problem:</strong> Assume a TLB hit ratio of 80% (0.80). It takes 15ns to search the TLB, and 150ns to access main memory. Calculate the EMAT.</p>
+                        <p class="mb-2"><strong>Formula:</strong></p>
+                        <p class="math-def inline-block p-2 mb-4">EMAT = Hit Ratio * (TLB_time + Mem_time) + Miss Ratio * (TLB_time + Mem_time + Mem_time)</p>
+                        <p class="italic text-sm text-slate-500 mb-2">*Note on Miss: You search TLB (15ns), fail, search Page Table in RAM (150ns), then access the actual data in RAM (150ns).</p>
+                        
+                        <p><strong>Step-by-Step Solution:</strong></p>
+                        <p>1. Hit Case = 0.80 * (15 + 150) = 0.80 * 165 = <strong>132 ns</strong></p>
+                        <p>2. Miss Case = 0.20 * (15 + 150 + 150) = 0.20 * 315 = <strong>63 ns</strong></p>
+                        <p>3. EMAT = 132 + 63 = <strong class="text-green-700 text-lg">195 ns</strong></p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section id="segmentation" class="mb-16">
+            <h2 class="section-title">3. Segmentation</h2>
+            <div class="concept-card">
+                <p>While Paging divides memory into fixed, meaningless mathematical blocks, <strong>Segmentation</strong> divides memory logically. A programmer doesn't think of memory as "Page 1 and Page 2". They think of it as "The Main Program", "The Stack", "The Math Library", and "The Variables".</p>
+                <p>Segmentation supports this <strong>Logical View</strong>. Memory is divided into variable-sized segments based on the actual components of the program. Because segments are different sizes, it suffers from External Fragmentation.</p>
+                
+                <h3 class="font-bold text-lg text-slate-800 mt-4">The Segment Table</h3>
+                <p>Instead of a Page Table, the MMU uses a Segment Table. Because segments vary in size, the table must track two things for every segment:</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>Base:</strong> The exact starting physical address of the segment in RAM.</li>
+                    <li><strong>Limit:</strong> The length of the segment. If the CPU tries to access an offset that is larger than the Limit, the OS throws a "Segmentation Fault" error to prevent illegal memory access.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="virtual" class="mb-16">
+            <h2 class="section-title">4. Virtual Memory, Demand Paging & Copy-on-Write</h2>
+            
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">Basic Concepts of Virtual Memory</h3>
+                <p>Virtual Memory is a technique that creates the illusion of a massive, continuous memory space, even if your physical RAM is small. It does this by treating a portion of your hard disk as an extension of RAM. Instead of loading an entire 4GB video game into RAM at once, the OS only loads the specific pages the game is actively using right now. The rest stay on the disk.</p>
+
+                <h3 class="sub-topic-title">Demand Paging</h3>
+                <p>This is the mechanism that makes Virtual Memory work. The OS uses a "Lazy Swapper" (or Pager). It never swaps a page into memory unless that page is actually demanded by the CPU. When a process starts, its Page Table is created, but all entries are set to an <strong>Invalid Bit</strong> (meaning the page is on the disk, not in RAM). If the CPU asks for a page and sees the Invalid Bit, a <strong>Page Fault</strong> occurs. The OS pauses the process, fetches the page from the disk, puts it in a free RAM frame, updates the table to "Valid", and resumes the process.</p>
+
+                <h3 class="sub-topic-title">Copy-on-Write (CoW)</h3>
+                <p>Copy-on-Write is a brilliant optimization used during process creation (like the `fork()` system call). When Process A creates a child Process B, normally the OS would duplicate the entire memory of A into B. This is terribly slow and wastes RAM. With CoW, both Process A and Process B simply point to the <em>exact same</em> physical pages in RAM! They share the memory.</p>
+                <p>The pages are marked as "Copy-on-Write". They only share the memory as long as they are just reading it. The moment Process B attempts to modify (write to) a variable, the OS intercepts it, creates a duplicate copy of just that specific page for Process B, and allows the write. This saves massive amounts of time and memory.</p>
+
+                <details>
+                    <summary>Exam Numerical: Hexadecimal Page Table Translation</summary>
+                    <div class="exam-content">
+                        <p class="mb-2"><strong>Problem Setup:</strong> The system uses 16-bit virtual addresses. The Page Size is 4,096 bytes (4 KB). We must translate logical addresses to physical addresses.</p>
+                        <p class="italic text-sm text-slate-500 mb-4">*Math context: 4,096 bytes means we need 12 bits for the offset. In hexadecimal, every digit is 4 bits. So, the last 3 hex digits are the Offset, and the first hex digit is the Page Number.</p>
+                        
+                        <p class="font-bold text-blue-800">1. Address: <span class="math-def">0x621C</span></p>
+                        <p>Page Number = 6. Offset = 21C. <br>Assume the Page Table maps Page 6 to Frame 8. <br><strong>Physical Address = <span class="text-green-700">0x821C</span></strong></p>
+
+                        <p class="font-bold text-blue-800 mt-4">2. Address: <span class="math-def">0xF0A3</span></p>
+                        <p>Page Number = F (15). Offset = 0A3. <br>Assume the Page Table maps Page 15 to Frame 2. <br><strong>Physical Address = <span class="text-green-700">0x20A3</span></strong></p>
+                    </div>
+                </details>
+            </div>
+        </section>
+
+        <section id="replacement" class="mb-16">
+            <h2 class="section-title">5. Page Replacement Algorithms & Thrashing</h2>
+            
+            <div class="concept-card">
+                <p>What happens if a Page Fault occurs, but the physical RAM is completely full? The OS must perform <strong>Page Replacement</strong>. It must choose a "victim" frame, swap it out to the disk, and load the new requested page in its place. We use algorithms to decide which page to kill to minimize future page faults.</p>
+
+                <h3 class="sub-topic-title mt-4">A. FIFO (First-In-First-Out)</h3>
+                <p>The simplest algorithm. The OS simply replaces the oldest page in memory (the one that was brought in first). While simple to program, it performs poorly because an old page might still be heavily used.</p>
+                <div class="highlight-box mt-2">
+                    <p class="font-bold text-red-800 mb-1">Belady's Anomaly</p>
+                    <p>Normally, if you buy more RAM (add more frames), your number of page faults should go down. <strong>Belady's Anomaly</strong> is a strange phenomenon where increasing the number of page frames actually <em>increases</em> the number of page faults! This happens exclusively with the FIFO algorithm.</p>
+                </div>
+
+                <h3 class="sub-topic-title">B. Optimal (OPT / MIN)</h3>
+                <p>This algorithm replaces the page that will not be used for the <em>longest period of time in the future</em>. It guarantees the absolute lowest number of page faults. However, it is impossible to implement in real life because the OS cannot predict the future. It is only used as a benchmark to grade other algorithms.</p>
+
+                <h3 class="sub-topic-title">C. LRU (Least Recently Used)</h3>
+                <p>Because we can't look into the future (OPT), we look into the past! LRU replaces the page that has not been used for the longest period of time. This relies on the principle of locality (if a page hasn't been used recently, it probably won't be used soon). It is excellent, does not suffer from Belady's Anomaly, but requires hardware assistance (like counters or stack structures) to track the time of every memory access.</p>
+
+                <h3 class="sub-topic-title">D. LFU (Least Frequently Used)</h3>
+                <p>This algorithm replaces the page with the smallest reference count. The logic behind LFU is that an actively used page will have a large reference count, while a page that is rarely needed will have a small count. A problem arises when a page is used heavily during the initial phase of a process but then never used again; its high count prevents it from being replaced even when it is no longer useful.</p>
+
+                <h3 class="sub-topic-title">E. MFU (Most Frequently Used)</h3>
+                <p>This algorithm replaces the page with the largest reference count. The counter-intuitive logic here is that the page with the smallest count was probably just brought into memory and has yet to be fully used, whereas the page with the highest count has already served its primary purpose.</p>
+
+                <details>
+                    <summary>Exam Numerical: FIFO Page Fault Trace</summary>
+                    <div class="exam-content">
+                        <p class="mb-2"><strong>Problem:</strong> Calculate the total Page Faults using FIFO for the reference string: <span class="math-def">5, 0, 1, 7, 2, 0, 2, 8</span> using <strong>4 Frames</strong>.</p>
+                        
+                        <p><strong>Step-by-Step Trace:</strong></p>
+                        <table class="w-full text-sm">
+                            <tr>
+                                <th>Incoming</th>
+                                <th>Frame 1</th><th>Frame 2</th><th>Frame 3</th><th>Frame 4</th>
+                                <th>Status</th>
+                            </tr>
+                            <tr><td>5</td><td>5</td><td>-</td><td>-</td><td>-</td><td class="text-red-600 font-bold">Miss (1)</td></tr>
+                            <tr><td>0</td><td>5</td><td>0</td><td>-</td><td>-</td><td class="text-red-600 font-bold">Miss (2)</td></tr>
+                            <tr><td>1</td><td>5</td><td>0</td><td>1</td><td>-</td><td class="text-red-600 font-bold">Miss (3)</td></tr>
+                            <tr><td>7</td><td>5</td><td>0</td><td>1</td><td>7</td><td class="text-red-600 font-bold">Miss (4)</td></tr>
+                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td>7</td><td class="text-red-600 font-bold">Miss (5) *Replaces 5</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td>7</td><td class="text-green-600 font-bold">Hit!</td></tr>
+                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td>7</td><td class="text-green-600 font-bold">Hit!</td></tr>
+                            <tr><td>8</td><td>2</td><td>8</td><td>1</td><td>7</td><td class="text-red-600 font-bold">Miss (6) *Replaces 0</td></tr>
+                        </table>
+                        <p class="mt-4 text-lg font-bold text-blue-900">Total Page Faults: 6</p>
+                    </div>
+                </details>
+
+                <h3 class="sub-topic-title border-t pt-6">Thrashing</h3>
+                <p>If a system does not have enough physical frames to support the active processes, a process will constantly suffer page faults. The OS will spend all its time rapidly swapping pages in and out of the slow disk, instead of actually executing instructions. This severe performance collapse is called <strong>Thrashing</strong>.</p>
+                <p>Thrashing causes a massive drop in CPU utilization. The OS sees low CPU usage, thinks the system is idle, and tries to load <em>even more</em> processes into memory, making the problem exponentially worse!</p>
+
+                <div class="diagram-container">
+                    <svg width="400" height="250" viewBox="0 0 400 250" class="mx-auto">
+                        <line x1="50" y1="200" x2="350" y2="200" stroke="#334155" stroke-width="2"/>
+                        <line x1="50" y1="200" x2="50" y2="20" stroke="#334155" stroke-width="2"/>
+                        
+                        <text x="200" y="230" class="svg-text">Degree of Multiprogramming (Processes)</text>
+                        <text x="30" y="110" class="svg-text" transform="rotate(-90 30,110)">CPU Utilization</text>
+
+                        <path d="M 50 200 Q 150 50 250 40" fill="none" stroke="#22c55e" stroke-width="3"/>
+                        <path d="M 250 40 Q 280 40 320 200" fill="none" stroke="#ef4444" stroke-width="3"/>
+
+                        <line x1="280" y1="20" x2="280" y2="200" stroke="#64748b" stroke-dasharray="4" stroke-width="2"/>
+                        <text x="330" y="100" class="svg-text font-bold text-red-700">Thrashing</text>
+                    </svg>
+                    <div class="diagram-caption">As multiprogramming increases, CPU utilization drops sharply due to Thrashing.</div>
+                </div>
+
+                <p><strong>How to solve Thrashing?</strong> The OS uses the <strong>Working Set Model</strong>. It observes the "Locality" of a process (the group of pages it is actively using right now) and ensures the process is allocated enough frames to hold its entire working set. If total memory demand exceeds total available frames, the OS suspends an entire process to free up memory.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Optimized for detailed, numerical-heavy exam preparation.</p>
+    </footer>
+
+</body>
+</html>
