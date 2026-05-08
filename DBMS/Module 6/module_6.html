@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS Module 6 - Advanced Databases & Trends</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        section { scroll-margin-top: 6rem; }
+        
+        .section-title {
+            color: #1e40af;
+            font-weight: 900;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #bfdbfe;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Theory Box */
+        .theory-box {
+            background-color: #ffffff;
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        .theory-title { font-weight: 800; font-size: 1.2rem; color: #1e3a8a; margin-bottom: 0.75rem; }
+
+        /* Architectural/Concept Block */
+        .concept-block {
+            background-color: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.75rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .concept-header {
+            background-color: #f1f5f9;
+            padding: 1rem 1.5rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: #0f172a;
+            border-bottom: 1px solid #cbd5e1;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .concept-header::before { content: "🔹"; }
+
+        /* Breakdown Section */
+        .breakdown-section {
+            background-color: #fffbeb;
+            padding: 1.5rem;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        .breakdown-title { font-weight: 800; color: #b45309; text-transform: uppercase; font-size: 0.85rem; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+        
+        /* Code/Data Representation */
+        .data-representation {
+            background-color: #0f172a;
+            color: #e2e8f0;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            white-space: pre-wrap;
+        }
+        .keyword { color: #38bdf8; font-weight: bold; }
+        .string { color: #a3e635; }
+        .comment { color: #64748b; font-style: italic; }
+
+        /* Pros/Cons Table */
+        .comparison-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.95rem; text-align: left; }
+        .comparison-table th, .comparison-table td { border: 1px solid #cbd5e1; padding: 0.75rem; }
+        .comparison-table th { background-color: #f8fafc; font-weight: 700; color: #0f172a; }
+        .pro-td { background-color: #f0fdf4; border-left: 3px solid #22c55e !important; }
+        .con-td { background-color: #fef2f2; border-left: 3px solid #ef4444 !important; }
+        
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; fill: #1e293b; font-weight: 600; text-anchor: middle; dominant-baseline: middle;}
+        .svg-sub { font-size: 10px; fill: #64748b; text-anchor: middle;}
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-4">
+                <li><a href="#trends" class="hover:text-blue-300">1. Recent Trends</a></li>
+                <li><a href="#cloud" class="hover:text-blue-300">2. Cloud DBs</a></li>
+                <li><a href="#distributed" class="hover:text-blue-300">3. Distributed DBs</a></li>
+                <li><a href="#nosql" class="hover:text-blue-300">4. NoSQL</a></li>
+                <li><a href="#oodbms" class="hover:text-blue-300">5. Object-Oriented</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
+        <h1 class="text-4xl font-black text-slate-900 mb-2">Module 6: Advanced Databases</h1>
+        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Recent Trends, NoSQL, Cloud, Distributed, and OODBMS</p>
+
+        <!-- ========================================== -->
+        <!-- 1. RECENT TRENDS -->
+        <!-- ========================================== -->
+        <section id="trends" class="mb-16">
+            <h2 class="section-title">1. Recent Trends in the Industry</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">Evolution of Data Storage</h3>
+                <p class="text-slate-700 mb-2">The database industry has rapidly shifted away from massive, on-premise monolithic relational databases toward flexible, scalable, and intelligent architectures to handle Big Data and AI workloads.</p>
+                <ul class="list-disc pl-6 space-y-3 text-slate-700 mt-4">
+                    <li><strong>Vector Databases (For AI/LLMs):</strong> With the rise of AI (like ChatGPT), traditional text search is failing. Vector databases (like Pinecone or Milvus) store data as mathematical vectors, allowing AIs to search for "meaning" and context rather than exact keyword matches.</li>
+                    <li><strong>Serverless Databases:</strong> Developers no longer provision CPU or RAM. Databases automatically scale up from zero when queries hit, and scale back to zero when idle, charging only for the exact seconds of computation used (e.g., Amazon Aurora Serverless).</li>
+                    <li><strong>HTAP (Hybrid Transactional/Analytical Processing):</strong> Historically, companies had one database for daily transactions (OLTP) and a separate data warehouse for analytics (OLAP). HTAP databases combine both, allowing real-time analytics directly on live transactional data without slowing the system down.</li>
+                    <li><strong>Graph Databases for Relationships:</strong> Surging in popularity for social networks and fraud detection, focusing heavily on how individual data points map and connect to millions of other points.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 2. CLOUD DATABASES -->
+        <!-- ========================================== -->
+        <section id="cloud" class="mb-16">
+            <h2 class="section-title">2. Introduction to Cloud Database</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">What is a Cloud Database?</h3>
+                <p class="text-slate-700 mb-2">A cloud database is a database that is built, deployed, and delivered through a cloud platform (like AWS, Microsoft Azure, or Google Cloud) rather than running on physical servers located in a company's own building.</p>
+                <p class="text-slate-700"><strong>Two Primary Deployment Models:</strong></p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700 mt-2">
+                    <li><strong>IaaS (Infrastructure as a Service):</strong> You rent a virtual machine in the cloud and manually install your database software (like MySQL) on it. You manage backups, patches, and updates.</li>
+                    <li><strong>DBaaS (Database as a Service):</strong> A fully managed service. The cloud provider handles all hardware, installation, patching, backups, and scaling. You just connect to the database and write queries (e.g., Amazon RDS, Google Cloud Spanner).</li>
+                </ul>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-header">Cloud DB Analysis</div>
+                <div class="p-6">
+                    <table class="comparison-table">
+                        <tr>
+                            <th class="w-1/2 text-green-900 bg-green-100">Advantages (Pros)</th>
+                            <th class="w-1/2 text-red-900 bg-red-100">Disadvantages (Cons)</th>
+                        </tr>
+                        <tr>
+                            <td class="pro-td"><strong>Scalability:</strong> Instantly add storage or processing power with a click, without buying new hardware.</td>
+                            <td class="con-td"><strong>Vendor Lock-in:</strong> Once your data architecture relies heavily on AWS-specific tools, moving to Google Cloud becomes incredibly difficult.</td>
+                        </tr>
+                        <tr>
+                            <td class="pro-td"><strong>Cost Efficiency:</strong> Pay-as-you-go model. You don't pay for idle hardware.</td>
+                            <td class="con-td"><strong>Security & Privacy:</strong> Sensitive data is hosted on third-party servers, raising compliance issues for strict sectors (like healthcare).</td>
+                        </tr>
+                        <tr>
+                            <td class="pro-td"><strong>High Availability:</strong> Providers automatically replicate your data across multiple geographic regions to prevent loss during disasters.</td>
+                            <td class="con-td"><strong>Network Dependency:</strong> If your internet connection goes down, your access to the database is completely severed.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. DISTRIBUTED DATABASES -->
+        <!-- ========================================== -->
+        <section id="distributed" class="mb-16">
+            <h2 class="section-title">3. Introduction to Distributed Database</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">What is a Distributed Database (DDBMS)?</h3>
+                <p class="text-slate-700 mb-2">A Distributed Database is a single logical database that is physically spread across multiple computers (nodes) situated in different geographical locations, connected via a network. To the user, it looks and behaves exactly like a single, centralized database.</p>
+                <p class="text-slate-700 font-bold mt-4">Key Architecture Concepts:</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700 mt-1">
+                    <li><strong>Fragmentation:</strong> Breaking the database down into smaller pieces to store them at different sites.
+                        <ul class="list-circle pl-6 mt-1 text-sm">
+                            <li><em>Horizontal Fragmentation:</em> Dividing the table by rows (e.g., European customers stored in a London server, Asian customers in a Tokyo server).</li>
+                            <li><em>Vertical Fragmentation:</em> Dividing the table by columns (e.g., Employee salary data stored securely in HQ, while Employee names and emails are stored in public branch servers).</li>
+                        </ul>
+                    </li>
+                    <li><strong>Replication:</strong> Storing exact copies of the same data fragment at multiple sites to ensure that if one site crashes, the data is still accessible.</li>
+                </ul>
+            </div>
+
+            <div class="concept-block">
+                <div class="concept-header">Distributed Architecture Diagram</div>
+                <div class="p-6 bg-slate-50 text-center border-b border-slate-200">
+                    <svg width="500" height="250" viewBox="0 0 500 250" class="mx-auto">
+                        <!-- Network Cloud -->
+                        <path d="M 150 125 C 150 80, 350 80, 350 125 C 350 170, 150 170, 150 125 Z" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2" stroke-dasharray="4"/>
+                        <text x="250" y="125" class="svg-text text-blue-800">Communication Network</text>
+
+                        <!-- Nodes -->
+                        <!-- Node 1 -->
+                        <rect x="50" y="20" width="80" height="60" rx="8" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+                        <circle cx="90" cy="50" r="15" fill="#fca5a5"/>
+                        <text x="90" y="50" class="svg-text text-white">DB 1</text>
+                        <text x="90" y="95" class="svg-sub font-bold">Site A (Tokyo)</text>
+                        <line x1="130" y1="50" x2="200" y2="100" stroke="#475569" stroke-width="2"/>
+
+                        <!-- Node 2 -->
+                        <rect x="370" y="20" width="80" height="60" rx="8" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+                        <circle cx="410" cy="50" r="15" fill="#fca5a5"/>
+                        <text x="410" y="50" class="svg-text text-white">DB 2</text>
+                        <text x="410" y="95" class="svg-sub font-bold">Site B (London)</text>
+                        <line x1="370" y1="50" x2="300" y2="100" stroke="#475569" stroke-width="2"/>
+
+                        <!-- Node 3 -->
+                        <rect x="210" y="180" width="80" height="60" rx="8" fill="#ffffff" stroke="#475569" stroke-width="2"/>
+                        <circle cx="250" cy="210" r="15" fill="#fca5a5"/>
+                        <text x="250" y="210" class="svg-text text-white">DB 3</text>
+                        <text x="250" y="255" class="svg-sub font-bold">Site C (New York)</text>
+                        <line x1="250" y1="180" x2="250" y2="145" stroke="#475569" stroke-width="2"/>
+                    </svg>
+                    <p class="text-sm text-slate-500 mt-4 italic">A single logical database distributed across three global sites.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. NOSQL DATABASES -->
+        <!-- ========================================== -->
+        <section id="nosql" class="mb-16">
+            <h2 class="section-title">4. Introduction to NoSQL Database</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">What is NoSQL? (Not Only SQL)</h3>
+                <p class="text-slate-700 mb-2">Relational databases require strict, rigid schemas (tables, rows, columns). If you want to add a new column, you have to alter the entire table. <strong>NoSQL databases</strong> are non-relational. They were created to handle massive volumes of unstructured or semi-structured data without a fixed schema, making them incredibly flexible and capable of massive horizontal scaling.</p>
+                <p class="text-slate-700 mt-4 font-bold text-red-700">ACID vs. BASE:</p>
+                <p class="text-sm text-slate-700">While SQL uses strict ACID properties, NoSQL relies on <strong>BASE</strong> (Basically Available, Soft state, Eventual consistency). Data might not be 100% consistent across all nodes the exact millisecond it is written, but it will <em>eventually</em> sync up. This trade-off allows for extreme speed.</p>
+            </div>
+
+            <div class="concept-block">
+                <div class="command-header">The 4 Types of NoSQL Databases</div>
+                <div class="breakdown-section">
+                    <ul class="word-breakdown">
+                        <li><strong>1. Document Databases:</strong> Stores data in JSON-like documents. Each document can have a completely different structure. Great for content management and catalogs. <em>(Examples: MongoDB, Couchbase)</em></li>
+                        <li><strong>2. Key-Value Stores:</strong> The simplest form. Every item is stored as a Key pointing to a Value. Extremely fast, used heavily for caching and session management. <em>(Examples: Redis, DynamoDB)</em></li>
+                        <li><strong>3. Column-Family Stores:</strong> Stores data in columns instead of rows. Optimized for fast read/write of massive datasets over distributed systems. <em>(Examples: Apache Cassandra, HBase)</em></li>
+                        <li><strong>4. Graph Databases:</strong> Built to store relationships. Uses "Nodes" (entities) and "Edges" (relationships). Perfect for social networks, recommendation engines, and fraud detection. <em>(Examples: Neo4j)</em></li>
+                    </ul>
+                </div>
+
+                <div class="p-6">
+                    <div class="example-title">Architectural Example: Document DB (MongoDB)</div>
+                    <p class="text-sm text-slate-600 mb-2">Notice how there is no "table schema". We just store a JSON object directly.</p>
+                    <div class="data-representation">
+{
+  <span class="string">"_id"</span>: <span class="string">"user_101"</span>,
+  <span class="string">"name"</span>: <span class="string">"Vatsal"</span>,
+  <span class="string">"roles"</span>: [<span class="string">"admin"</span>, <span class="string">"student"</span>],
+  <span class="string">"address"</span>: {
+    <span class="string">"city"</span>: <span class="string">"Mumbai"</span>,
+    <span class="string">"zip"</span>: <span class="string">"400001"</span>
+  }
+}</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 5. OBJECT-ORIENTED DATABASES -->
+        <!-- ========================================== -->
+        <section id="oodbms" class="mb-16">
+            <h2 class="section-title">5. Object-Oriented Databases (OODBMS)</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">Solving the Impedance Mismatch</h3>
+                <p class="text-slate-700 mb-2">In modern software, developers write code using Object-Oriented Programming (OOP) languages like Java, C++, or Python. They build complex "Objects". However, Relational Databases only understand flat tables. The frustrating process of translating complex OOP objects into flat table rows is called the <strong>Impedance Mismatch</strong>.</p>
+                <p class="text-slate-700">An <strong>Object-Oriented Database (OODBMS)</strong> solves this by storing data exactly as objects, exactly how they exist in the programming language. It seamlessly supports OOP concepts inside the database.</p>
+            </div>
+
+            <div class="concept-block">
+                <div class="command-header">Core OOP Concepts within the Database</div>
+                <div class="breakdown-section">
+                    <ul class="word-breakdown">
+                        <li><strong>Object Identity (OID):</strong> Every object in the database is automatically assigned a unique, system-generated OID that never changes, regardless of its data values.</li>
+                        <li><strong>Encapsulation:</strong> The database doesn't just store the data (attributes); it also stores the <em>methods</em> (functions/code) that operate on that data.</li>
+                        <li><strong>Inheritance:</strong> A database class can inherit attributes and methods from a parent class (e.g., a "Manager" object inherits from a standard "Employee" object).</li>
+                        <li><strong>Complex Types:</strong> It can natively store multimedia, arrays, and highly nested data structures used in fields like CAD (Computer-Aided Design) or Telecommunications.</li>
+                    </ul>
+                </div>
+                
+                <div class="p-6">
+                    <table class="comparison-table">
+                        <tr>
+                            <th class="w-1/2 text-green-900 bg-green-100">Advantages (Pros)</th>
+                            <th class="w-1/2 text-red-900 bg-red-100">Disadvantages (Cons)</th>
+                        </tr>
+                        <tr>
+                            <td class="pro-td">No "Impedance Mismatch" means developers write code faster without needing complex ORMs (Object-Relational Mappers like Hibernate).</td>
+                            <td class="con-td">Lacks a universal, standard query language (SQL is the undisputed king of querying, while OQL never became universally adopted).</td>
+                        </tr>
+                        <tr>
+                            <td class="pro-td">Handles complex, highly nested data significantly faster than joining multiple SQL tables.</td>
+                            <td class="con-td">Steep learning curve. It is too complex for simple, traditional business data storage.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Tailored for Conceptual and Architectural Exam Preparation.</p>
+    </footer>
+
+</body>
+</html>
