@@ -3,305 +3,416 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DBMS Module 5 - Transaction & Recovery (Exam Survival Guide)</title>
+    <title>DBMS Module: Transactions & Concurrency Control</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
         section { scroll-margin-top: 6rem; }
         
-        .concept-card {
-            background-color: #ffffff;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.75rem;
-            margin: 1.5rem 0;
-            padding: 1.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-        }
-
-        .definition-header {
+        .section-title {
             color: #1e40af;
-            font-weight: 800;
-            font-size: 1.25rem;
-            border-bottom: 2px solid #bfdbfe;
-            margin-bottom: 1rem;
+            font-weight: 900;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #bfdbfe;
+            margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
         }
 
-        /* Styling for the Exam Ready Collapsible */
-        details {
-            background-color: #f8fafc;
+        .theory-box {
+            background-color: #ffffff;
+            border-left: 4px solid #3b82f6;
+            padding: 1.5rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        }
+        .theory-title { font-weight: 800; font-size: 1.2rem; color: #1e3a8a; margin-bottom: 0.75rem; }
+
+        .concept-block {
+            background-color: #ffffff;
             border: 1px solid #cbd5e1;
-            border-radius: 0.5rem;
-            margin-top: 1rem;
+            border-radius: 0.75rem;
+            margin-bottom: 2.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             overflow: hidden;
         }
-        summary {
-            padding: 0.75rem 1rem;
-            font-weight: 700;
-            color: #1e293b;
-            cursor: pointer;
-            background-color: #e2e8f0;
-            list-style: none;
+        
+        .concept-header {
+            background-color: #f1f5f9;
+            padding: 1rem 1.5rem;
+            font-weight: 800;
+            font-size: 1.25rem;
+            color: #0f172a;
+            border-bottom: 1px solid #cbd5e1;
             display: flex;
             align-items: center;
+            gap: 0.5rem;
         }
-        summary::before {
-            content: '🎓';
-            margin-right: 0.5rem;
-        }
-        .exam-content {
-            padding: 1rem;
-            border-top: 1px solid #cbd5e1;
-            background-color: #ffffff;
-            font-size: 0.95rem;
-            line-height: 1.6;
-        }
+        .concept-header::before { content: "🔹"; }
 
-        .math-def { font-family: 'Times New Roman', serif; font-weight: bold; color: #1e40af; }
-        .highlight { color: #b91c1c; font-weight: bold; }
-        .data-table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
-        .data-table th, .data-table td { border: 1px solid #e2e8f0; padding: 0.75rem; text-align: left; }
-        .data-table th { background-color: #f8fafc; font-weight: 700; }
+        .breakdown-section {
+            background-color: #fffbeb;
+            padding: 1.5rem;
+            border-bottom: 1px dashed #cbd5e1;
+        }
+        
+        .word-breakdown { list-style-type: none; padding: 0; margin: 0; font-size: 0.95rem; color: #451a03; line-height: 1.6;}
+        .word-breakdown li { margin-bottom: 0.5rem; }
+        .word-breakdown strong { color: #92400e; }
+
+        .diagram-container {
+            background-color: #f8fafc;
+            padding: 1.5rem;
+            text-align: center;
+            border-bottom: 1px solid #cbd5e1;
+        }
+        
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem; text-align: left; }
+        .comparison-table th, .comparison-table td { border: 1px solid #cbd5e1; padding: 0.75rem; }
+        .comparison-table th { background-color: #f1f5f9; font-weight: 700; color: #0f172a; }
+
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; fill: #1e293b; font-weight: 600; text-anchor: middle; dominant-baseline: middle;}
+        .svg-text-bold { font-family: 'Inter', sans-serif; font-size: 13px; fill: #0f172a; font-weight: 800; text-anchor: middle; dominant-baseline: middle;}
+        .highlight-red { color: #b91c1c; font-weight: bold; }
+        .highlight-green { color: #15803d; font-weight: bold; }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-800 antialiased">
+<body class="antialiased">
 
     <!-- Sticky Navigation -->
-    <nav class="sticky top-0 bg-blue-900 text-white shadow-lg z-50">
-        <div class="max-w-6xl mx-auto px-4">
-            <ul class="flex flex-wrap justify-between items-center py-3 text-sm font-bold">
-                <li><a href="#acid" class="hover:text-blue-300 transition-colors">ACID & States</a></li>
-                <li><a href="#serial" class="hover:text-blue-300 transition-colors">Serializability</a></li>
-                <li><a href="#locks" class="hover:text-blue-300 transition-colors">Locking (2PL)</a></li>
-                <li><a href="#ts" class="hover:text-blue-300 transition-colors">Timestamps</a></li>
-                <li><a href="#deadlock" class="hover:text-blue-300 transition-colors">Deadlocks</a></li>
-                <li><a href="#recovery" class="hover:text-blue-300 transition-colors">Recovery</a></li>
+    <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-3">
+                <li><a href="#transactions" class="hover:text-blue-300">1. Transactions & ACID</a></li>
+                <li><a href="#states" class="hover:text-blue-300">2. States & Concurrency</a></li>
+                <li><a href="#serializability" class="hover:text-blue-300">3. Serializability</a></li>
+                <li><a href="#locking" class="hover:text-blue-300">4. Locking & 2PL</a></li>
+                <li><a href="#deadlocks" class="hover:text-blue-300">5. Deadlocks</a></li>
+                <li><a href="#timestamps" class="hover:text-blue-300">6. Timestamps</a></li>
+                <li><a href="#recovery" class="hover:text-blue-300">7. Log Recovery</a></li>
             </ul>
         </div>
     </nav>
 
-    <main class="max-w-4xl mx-auto px-6 py-10 bg-white min-h-screen my-6 shadow-xl rounded-xl">
-        <h1 class="text-4xl font-black text-slate-900 mb-2">DBMS Module 5: Transaction & Recovery</h1>
-        <p class="text-blue-600 font-bold mb-10">Integrated Survival Guide: Simple Logic + Exam Language</p>
+    <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
+        <h1 class="text-4xl font-black text-slate-900 mb-2">Transactions & Concurrency Control</h1>
+        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Comprehensive Exam Guide: Protocols, Deadlocks, and Recovery</p>
 
-        <!-- 1. ACID & STATES -->
-        <section id="acid" class="mb-16">
-            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">1. Transaction Basics & ACID</h2>
+        <!-- ========================================== -->
+        <!-- 1. TRANSACTIONS & ACID -->
+        <!-- ========================================== -->
+        <section id="transactions" class="mb-16">
+            <h2 class="section-title">1. Transaction Concept & ACID Properties</h2>
             
-            <div class="concept-card">
-                <div class="definition-header">What is a Transaction?</div>
-                <p>Simple version: A single logical task, like a bank transfer, even if it has many steps.</p>
-                <details>
-                    <summary>Exam Version (Proper Definition)</summary>
-                    <div class="exam-content">
-                        A <strong>Transaction</strong> is a unit of program execution that accesses and possibly updates various data items. It is considered the smallest logical unit of processing in a database.
-                    </div>
-                </details>
-            </div>
-
-            <div class="concept-card">
-                <div class="definition-header">The ACID Properties</div>
-                <p>Simple version: All or Nothing, No Rules Broken, No Peeking, Permanent.</p>
-                <details>
-                    <summary>Exam Version (Formal Definitions)</summary>
-                    <div class="exam-content">
-                        <ul class="space-y-2">
-                            <li><strong>Atomicity:</strong> Ensures that all operations of a transaction are completed successfully, or none are. If a failure occurs, the database is rolled back to its previous state.</li>
-                            <li><strong>Consistency:</strong> Ensures that a transaction transforms the database from one valid state to another, maintaining all predefined integrity constraints.</li>
-                            <li><strong>Isolation:</strong> Ensures that the execution of concurrent transactions does not interfere with each other; intermediate results remain invisible to other transactions.</li>
-                            <li><strong>Durability:</strong> Ensures that once a transaction is committed, its changes are permanent and survive any subsequent system failures.</li>
-                        </ul>
-                    </div>
-                </details>
-            </div>
-        </section>
-
-        <!-- 2. SERIALIZABILITY & PRECEDENCE GRAPH -->
-        <section id="serial" class="mb-16">
-            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">2. Serializability & Precedence Graphs</h2>
-            
-            <div class="bg-blue-50 p-4 rounded-lg mb-6 border border-blue-200 text-sm">
-                <p><strong><span class="math-def">S</span> (Actual Schedule):</strong> The interleaved execution we are testing.</p>
-                <p><strong><span class="math-def">S'</span> (Serial Schedule):</strong> The reference where transactions run one-after-another.</p>
-            </div>
-
-            <div class="concept-card">
-                <div class="definition-header">Conflict Serializability</div>
-                <p>Simple version: If you can rearrange a messy schedule into a serial one without breaking data logic, it's safe.</p>
-                <details>
-                    <summary>Exam Version (The Formal Logic)</summary>
-                    <div class="exam-content">
-                        A schedule <span class="math-def">S</span> is <strong>Conflict Serializable</strong> if it is conflict-equivalent to some serial schedule <span class="math-def">S'</span>. 
-                        Two operations are in <strong>Conflict</strong> if:
-                        <ul class="list-disc pl-5 mt-2">
-                            <li>They belong to different transactions.</li>
-                            <li>They access the same data item <span class="math-def">Q</span>.</li>
-                            <li>At least one of them is a <span class="highlight">Write(Q)</span>.</li>
-                        </ul>
-                    </div>
-                </details>
-            </div>
-
-            <div class="concept-card bg-blue-50 border-blue-200">
-                <div class="definition-header">Precedence Graph Example (Solving Numericals)</div>
-                <p class="text-sm mb-4">In exams, you'll get a table of operations. Here is how you prove it's serializable:</p>
+            <div class="theory-box">
+                <h3 class="theory-title">What is a Transaction?</h3>
+                <p class="text-slate-700 mb-4">A transaction is a single, logical unit of work that accesses and possibly updates various data items in a database. A transaction must either execute <strong>completely</strong> or <strong>not at all</strong>.</p>
                 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div class="bg-white p-3 border rounded text-xs font-mono">
-                        <strong>Schedule S:</strong><br>
-                        1. T1: Read(A)<br>
-                        2. T2: Read(A)<br>
-                        3. T1: Write(A)<br>
-                        4. T2: Write(A)
-                    </div>
-                    <div class="text-sm">
-                        <p class="font-bold">Step-by-Step Logic:</p>
-                        <ol class="list-decimal pl-5 space-y-1">
-                            <li>Check Step 1 & 4: T1 reads A, T2 later writes A. <span class="highlight">Conflict!</span> Draw arrow <strong>T1 &rarr; T2</strong>.</li>
-                            <li>Check Step 2 & 3: T2 reads A, T1 later writes A. <span class="highlight">Conflict!</span> Draw arrow <strong>T2 &rarr; T1</strong>.</li>
-                        </ol>
-                    </div>
+                <div class="bg-blue-50 p-4 rounded-md border border-blue-200 mb-4">
+                    <p class="font-bold text-blue-900 mb-2">Classic Example: Fund Transfer</p>
+                    <p class="text-sm text-slate-700">Transferring $50 from Account A to Account B involves several steps:<br>
+                    1. Read(A) → 2. A = A - 50 → 3. Write(A) → 4. Read(B) → 5. B = B + 50 → 6. Write(B).<br>
+                    <em>If the system crashes after step 3, $50 is deducted from A but never added to B. The money vanishes! This is why transaction protocols are vital.</em></p>
                 </div>
 
-                <div class="mt-4 p-3 bg-red-100 border-l-4 border-red-500">
-                    <p><strong>Result:</strong> Since we have arrows going both ways (T1 &harr; T2), a <strong>Cycle</strong> exists. This schedule is <strong>NOT Conflict Serializable</strong>.</p>
-                </div>
-            </div>
-
-            <div class="concept-card">
-                <div class="definition-header">View Serializability</div>
-                <p>Simple version: Only cares if the final "view" of the data is the same as the serial version.</p>
-                <details>
-                    <summary>Exam Version (The 3 Conditions)</summary>
-                    <div class="exam-content">
-                        A schedule <span class="math-def">S</span> is <strong>View Serializable</strong> if it is view-equivalent to a serial schedule <span class="math-def">S'</span>. This requires:
-                        <ol class="list-decimal pl-5 mt-2">
-                            <li><strong>Initial Read:</strong> If T1 reads initial data in S, it must do so in S'.</li>
-                            <li><strong>Read-From:</strong> If T1 reads data written by T2 in S, it must do so in S'.</li>
-                            <li><strong>Final Write:</strong> Whoever updates a data item last in S must also be the last in S'.</li>
-                        </ol>
-                    </div>
-                </details>
-            </div>
-        </section>
-
-        <!-- 3. LOCKING (2PL) -->
-        <section id="locks" class="mb-16">
-            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">3. Lock-Based Protocols (2PL)</h2>
-            
-            <div class="concept-card">
-                <div class="definition-header">Lock Modes</div>
-                <p>Shared (S) = Read only. Exclusive (X) = Read & Write.</p>
-                <details>
-                    <summary>Exam Version (Formal Definitions)</summary>
-                    <div class="exam-content">
-                        <ul class="space-y-2">
-                            <li><strong>Shared Mode (S):</strong> Allows a transaction to read a data item but not update it. Multiple transactions can hold S-locks on the same item.</li>
-                            <li><strong>Exclusive Mode (X):</strong> Allows a transaction to both read and update an item. It is exclusive; no other transaction can hold any lock on the same item.</li>
-                        </ul>
-                    </div>
-                </details>
-            </div>
-
-            <h3 class="text-xl font-bold mt-6 mb-4">The 3 Variants of 2PL</h3>
-            <div class="overflow-x-auto">
-                <table class="data-table text-sm">
-                    <tr>
-                        <th>Variant</th>
-                        <th>Exam-Ready Rule</th>
-                        <th>Standard Benefit</th>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">Basic 2PL</td>
-                        <td>Transaction acquires all locks in Growing phase, releases in Shrinking phase.</td>
-                        <td>Ensures Conflict Serializability.</td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">Strict 2PL</td>
-                        <td>Holds all <span class="highlight">Exclusive (X)</span> locks until Commit/Abort.</td>
-                        <td>Prevents <strong>Cascading Rollbacks</strong>.</td>
-                    </tr>
-                    <tr>
-                        <td class="font-bold">Rigorous 2PL</td>
-                        <td>Holds <span class="highlight">ALL</span> locks (S and X) until Commit/Abort.</td>
-                        <td>Safest, ensures strict serializability.</td>
-                    </tr>
-                </table>
-            </div>
-        </section>
-
-        <!-- 5. DEADLOCKS -->
-        <section id="deadlock" class="mb-16">
-            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">4. Deadlock Handling</h2>
-            
-            <div class="concept-card">
-                <div class="definition-header">What is a Deadlock?</div>
-                <p>Simple version: A "Mexican Standoff" where Task A waits for Task B, and Task B waits for Task A. No one can move.</p>
-                <details>
-                    <summary>Exam Version (Technical Definition)</summary>
-                    <div class="exam-content">
-                        A <strong>Deadlock</strong> is a state in which every transaction in a set of transactions is waiting for an event (usually a lock release) that can only be caused by another transaction in that same set. This is known as a <strong>Circular Wait</strong>.
-                    </div>
-                </details>
-            </div>
-
-            <h3 class="text-xl font-bold mt-8 mb-4">Handling Strategies</h3>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div class="p-4 border-2 border-red-200 bg-red-50 rounded-lg">
-                    <p class="font-black text-red-700">1. Deadlock Detection</p>
-                    <p class="text-xs">The system maintains a <strong>Wait-for Graph</strong>. If a cycle is detected, the system picks a "victim" and rolls it back.</p>
-                </div>
-                <div class="p-4 border-2 border-green-200 bg-green-50 rounded-lg">
-                    <p class="font-black text-green-700">2. Deadlock Prevention</p>
-                    <p class="text-xs">Uses <strong>Wait-Die</strong> (older waits) or <strong>Wound-Wait</strong> (older kicks out younger) schemes based on timestamps.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- 6. RECOVERY -->
-        <section id="recovery" class="mb-16">
-            <h2 class="text-2xl font-black text-slate-800 border-l-8 border-blue-600 pl-4 mb-6">5. Log-Based Recovery</h2>
-            
-            <div class="concept-card">
-                <div class="definition-header">The Recovery Process</div>
-                <p>The system keeps a "Diary" (Log). When a crash occurs, it follows these two rules:</p>
-                <ul class="list-disc pl-8 space-y-2 text-sm">
-                    <li><strong>REDO:</strong> If a transaction <span class="highlight">Committed</span> before the crash, re-apply its changes from the log.</li>
-                    <li><strong>UNDO:</strong> If a transaction was still <span class="highlight">Active</span> during the crash, reverse its changes to keep DB clean.</li>
+                <h3 class="theory-title mt-6">The ACID Properties</h3>
+                <p class="text-slate-700 mb-2">To maintain data integrity during concurrent executions and system failures, the DBMS guarantees four properties:</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>Atomicity (All-or-Nothing):</strong> Ensures that either all operations of the transaction reflect properly in the database, or none do. There are no partial transactions.</li>
+                    <li><strong>Consistency:</strong> Execution of a transaction in isolation preserves the consistency of the database (e.g., the sum of Account A and B must be the same before and after the transfer).</li>
+                    <li><strong>Isolation:</strong> Even though multiple transactions execute concurrently, the system guarantees that each transaction is unaware of the others. A transaction's intermediate (unfinished) changes remain invisible to others.</li>
+                    <li><strong>Durability:</strong> Once a transaction successfully completes (commits), its changes are permanent and survive any future system crashes.</li>
                 </ul>
-                <details>
-                    <summary>Exam Version (Deferred vs Immediate)</summary>
-                    <div class="exam-content">
-                        <table class="data-table text-xs">
-                            <tr>
-                                <th>Method</th>
-                                <th>Mechanism</th>
-                                <th>Recovery Action</th>
-                            </tr>
-                            <tr>
-                                <td><strong>Deferred Update</strong></td>
-                                <td>Postpones updates to the actual database until the transaction commits.</td>
-                                <td><strong>REDO</strong> only.</td>
-                            </tr>
-                            <tr>
-                                <td><strong>Immediate Update</strong></td>
-                                <td>Updates the database directly as operations occur (while transaction is active).</td>
-                                <td>Both <strong>UNDO and REDO</strong>.</td>
-                            </tr>
-                        </table>
-                    </div>
-                </details>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 2. TRANSACTION STATES & CONCURRENCY -->
+        <!-- ========================================== -->
+        <section id="states" class="mb-16">
+            <h2 class="section-title">2. Transaction States & Concurrent Executions</h2>
+
+            <div class="concept-block">
+                <div class="concept-header">The Transaction State Machine</div>
+                <div class="diagram-container">
+                    <svg width="600" height="250" viewBox="0 0 600 250" class="mx-auto">
+                        <!-- Nodes -->
+                        <ellipse cx="100" cy="125" rx="40" ry="25" fill="#fef08a" stroke="#ca8a04" stroke-width="2"/>
+                        <text x="100" y="125" class="svg-text">Active</text>
+
+                        <ellipse cx="300" cy="50" rx="60" ry="25" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+                        <text x="300" y="50" class="svg-text">Partially</text>
+                        <text x="300" y="62" class="svg-text">Committed</text>
+
+                        <ellipse cx="300" cy="200" rx="40" ry="25" fill="#fca5a5" stroke="#b91c1c" stroke-width="2"/>
+                        <text x="300" y="200" class="svg-text">Failed</text>
+
+                        <ellipse cx="500" cy="50" rx="45" ry="25" fill="#bbf7d0" stroke="#16a34a" stroke-width="2"/>
+                        <text x="500" y="50" class="svg-text">Committed</text>
+
+                        <ellipse cx="500" cy="200" rx="45" ry="25" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+                        <text x="500" y="200" class="svg-text">Aborted</text>
+
+                        <!-- Arrows -->
+                        <path d="M 130 108 L 245 60" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="160" y="70" class="svg-sub" transform="rotate(-20 160,70)">Read/Write ends</text>
+
+                        <path d="M 130 142 L 265 190" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="170" y="180" class="svg-sub" transform="rotate(20 170,180)">Error occurs</text>
+
+                        <path d="M 300 75 L 300 175" stroke="#334155" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="345" y="125" class="svg-sub">Hardware failure</text>
+
+                        <path d="M 360 50 L 455 50" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="405" y="40" class="svg-sub text-green-700 font-bold">Commit</text>
+
+                        <path d="M 340 200 L 455 200" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="405" y="190" class="svg-sub text-red-700 font-bold">Rollback</text>
+
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#334155" />
+                            </marker>
+                        </defs>
+                    </svg>
+                </div>
+                <div class="breakdown-section">
+                    <ul class="word-breakdown">
+                        <li><strong>Active:</strong> The initial state. The transaction stays here while executing read/write operations.</li>
+                        <li><strong>Partially Committed:</strong> Reached after the final statement executes. The data is still in the memory buffer and hasn't been permanently saved to the disk yet.</li>
+                        <li><strong>Committed:</strong> Reached after successful completion and data is safely stored on the physical disk.</li>
+                        <li><strong>Failed:</strong> Occurs when the system discovers that normal execution can no longer proceed (e.g., due to software logic error or hardware crash).</li>
+                        <li><strong>Aborted:</strong> The transaction has been rolled back and the database is restored to its prior state. The OS can either restart the transaction or kill it.</li>
+                    </ul>
+                </div>
             </div>
 
-            <div class="bg-slate-100 p-4 rounded-lg border-l-4 border-slate-400">
-                <p><strong>Checkpoint:</strong> A specialized log record indicating that all previous updates were successfully written to the physical disk. It minimizes recovery time by limiting the log search to records after the checkpoint.</p>
+            <div class="theory-box">
+                <h3 class="theory-title">Concurrent Executions & Why We Do It</h3>
+                <p class="text-slate-700 mb-2">A system allows multiple transactions to execute simultaneously. We do this to improve <strong>Throughput</strong> (transactions completed per second) and reduce <strong>Response Time</strong> (users don't have to wait in a single-file line).</p>
+                <p class="text-slate-700 font-bold mt-4">The 3 Race Conditions (Why concurrency goes wrong):</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700 mt-1">
+                    <li><strong>Lost Update:</strong> ATM-1 reads balance ₹10,000. ATM-2 simultaneously reads ₹10,000. Both deduct ₹8,000 and write it back. One update overwrites the other, and the bank loses track of ₹8,000!</li>
+                    <li><strong>Dirty Read:</strong> T2 reads data that T1 has written, <em>before</em> T1 commits. If T1 crashes and rolls back, T2 has processed a calculation using "dirty" (invalid) data.</li>
+                    <li><strong>Unrepeatable Read:</strong> T1 reads a value X as 100. T2 updates X to 200 and commits. If T1 reads X again in the same transaction, it gets 200. The data magically changed mid-transaction!</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. SERIALIZABILITY -->
+        <!-- ========================================== -->
+        <section id="serializability" class="mb-16">
+            <h2 class="section-title">3. Serializability (Conflict & View)</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">Schedules and Serializability</h3>
+                <p class="text-slate-700 mb-2">A <strong>Schedule</strong> is a chronological sequence of instructions indicating the order in which transactions execute. A <strong>Serial Schedule</strong> executes transactions one-by-one without any overlap (perfectly safe, but horribly slow).</p>
+                <p class="text-slate-700"><strong>Serializability</strong> is the process of taking a fast, concurrent schedule and mathematically proving that it yields the <em>exact same outcome</em> as a safe, serial schedule.</p>
+            </div>
+
+            <div class="concept-block">
+                <div class="command-header">Conflict Serializability</div>
+                <div class="breakdown-section">
+                    <p class="text-slate-700 mb-2">Two operations from different transactions are said to <strong>Conflict</strong> if they access the <em>same data item</em> and at least one of them is a <strong>Write</strong> operation.</p>
+                    <ul class="word-breakdown">
+                        <li><code>Read(Q) & Read(Q)</code> ➔ No Conflict (Safe to swap order)</li>
+                        <li><code>Read(Q) & Write(Q)</code> ➔ <span class="highlight-red">Conflict!</span> (Order matters)</li>
+                        <li><code>Write(Q) & Write(Q)</code> ➔ <span class="highlight-red">Conflict!</span> (Order matters)</li>
+                    </ul>
+                    <p class="text-slate-700 mt-4">If a concurrent schedule can be transformed into a serial schedule by swapping non-conflicting operations, it is <strong>Conflict Serializable</strong>.</p>
+                </div>
+                <div class="p-6 bg-white">
+                    <p class="font-bold text-blue-900 mb-2">The Precedence Graph Algorithm (Exam Proof)</p>
+                    <p class="text-sm text-slate-700">To prove conflict serializability in an exam, draw a Precedence Graph. Create a node for every transaction. Draw an arrow from T1 to T2 if T1 executes a conflicting operation before T2. <br><strong>The Rule:</strong> If the graph contains a <strong>Cycle</strong> (a circle), the schedule is NOT serializable. If there is no cycle, it is serializable.</p>
+                </div>
+            </div>
+
+            <div class="concept-block">
+                <div class="command-header">View Serializability</div>
+                <div class="breakdown-section">
+                    <p class="text-slate-700">A schedule is View Serializable if it produces the exact same "view" (read values and final written values) as a serial schedule. <br><br>All conflict-serializable schedules are automatically view-serializable. However, some schedules are view-serializable but NOT conflict-serializable! This happens because of <strong>Blind Writes</strong> (when a transaction writes a value without ever reading it first, masking previous conflicts).</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. LOCKING & 2PL -->
+        <!-- ========================================== -->
+        <section id="locking" class="mb-16">
+            <h2 class="section-title">4. Concurrency Control: Lock-Based Protocols & 2PL</h2>
+
+            <div class="theory-box">
+                <h3 class="theory-title">Lock-Based Protocols</h3>
+                <p class="text-slate-700 mb-2">To prevent Race Conditions, a transaction must obtain a "lock" on a data item before accessing it.</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>Shared Lock (S-Lock):</strong> Allows the transaction to only <strong>Read</strong> the data. Multiple transactions can hold S-Locks on the same data simultaneously.</li>
+                    <li><strong>Exclusive Lock (X-Lock):</strong> Allows the transaction to both <strong>Read and Write</strong>. If T1 holds an X-Lock, NO other transaction can get any lock (S or X) on that item. They must wait.</li>
+                </ul>
+            </div>
+
+            <div class="concept-block">
+                <div class="command-header">Two-Phase Locking Protocol (2PL)</div>
+                <div class="diagram-container">
+                    <svg width="400" height="200" viewBox="0 0 400 200" class="mx-auto">
+                        <!-- Axes -->
+                        <line x1="50" y1="150" x2="350" y2="150" stroke="#334155" stroke-width="2"/>
+                        <line x1="50" y1="150" x2="50" y2="30" stroke="#334155" stroke-width="2"/>
+                        <text x="200" y="180" class="svg-text">Time</text>
+                        <text x="30" y="90" class="svg-text" transform="rotate(-90 30,90)">Number of Locks</text>
+
+                        <!-- Phases -->
+                        <path d="M 50 150 L 150 40" stroke="#16a34a" stroke-width="3" fill="none"/>
+                        <path d="M 150 40 L 320 150" stroke="#dc2626" stroke-width="3" fill="none"/>
+
+                        <!-- Lock Point -->
+                        <circle cx="150" cy="40" r="5" fill="#ca8a04"/>
+                        <text x="150" y="25" class="svg-text-bold">Lock Point</text>
+
+                        <text x="110" y="100" class="svg-text text-green-700">Growing Phase</text>
+                        <text x="230" y="100" class="svg-text text-red-700">Shrinking Phase</text>
+                    </svg>
+                </div>
+                <div class="breakdown-section">
+                    <p class="text-slate-700 mb-2">The 2PL protocol <strong>guarantees conflict serializability</strong> by demanding that locking happens in two strict phases:</p>
+                    <ul class="word-breakdown">
+                        <li><strong>1. Growing Phase:</strong> A transaction may acquire new locks, but it is strictly forbidden from releasing any locks.</li>
+                        <li><strong>Lock Point:</strong> The exact moment the transaction has acquired all the locks it will ever need.</li>
+                        <li><strong>2. Shrinking Phase:</strong> A transaction may release locks, but it is strictly forbidden from acquiring any new locks.</li>
+                    </ul>
+                    <p class="text-slate-700 mt-4 font-bold text-red-700">The Problem:</p>
+                    <p class="text-sm text-slate-700">While 2PL prevents bad schedules, it <strong>does not prevent Deadlocks</strong>. It also allows <em>Cascading Rollbacks</em> (if T1 fails, T2 which read T1's unlocked data must also be rolled back).</p>
+                </div>
+                <div class="p-6 bg-white">
+                    <p class="font-bold text-blue-900 mb-2">The 3 Variants of 2PL</p>
+                    <table class="comparison-table">
+                        <tr><th>Basic 2PL</th><th>Strict 2PL</th><th>Rigorous 2PL</th></tr>
+                        <tr>
+                            <td class="align-top">Transaction acquires locks in the <strong>Growing phase</strong> and releases them in the <strong>Shrinking phase</strong>. Ensures conflict serializability but allows cascading rollbacks.</td>
+                            <td class="align-top">Holds all <strong>Exclusive (X) locks</strong> until the transaction commits or aborts. (S-Locks can be released early). Prevents cascading rollbacks.</td>
+                            <td class="align-top">Holds <strong>ALL locks (both S and X)</strong> until the transaction commits or aborts. Safest variant, prevents cascading rollbacks, but reduces concurrency.</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 5. DEADLOCKS -->
+        <!-- ========================================== -->
+        <section id="deadlocks" class="mb-16">
+            <h2 class="section-title">5. Introduction to Deadlock Handling</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">What is a Deadlock?</h3>
+                <p class="text-slate-700">A deadlock occurs when a set of transactions are locked in a <strong>Circular Wait</strong>. For example: Transaction 1 holds a lock on Data A and is waiting for Data B. Transaction 2 holds a lock on Data B and is waiting for Data A. Neither can proceed. They are frozen forever.</p>
+            </div>
+
+            <div class="concept-block">
+                <div class="command-header">Deadlock Detection & Prevention</div>
+                
+                <div class="breakdown-section">
+                    <p class="font-bold text-blue-900 mb-2">1. Deadlock Detection (Wait-For Graph)</p>
+                    <p class="text-slate-700 text-sm mb-4">The OS builds a directed graph where nodes are transactions. An arrow from T1 to T2 means T1 is waiting for a lock held by T2. If the OS detects a <strong>cycle/loop</strong> in this graph, a deadlock has occurred.</p>
+                    
+                    <p class="font-bold text-blue-900 mb-2">2. Deadlock Prevention Algorithms</p>
+                    <ul class="word-breakdown">
+                        <li><strong>Timeout:</strong> A transaction waits for a lock. If the clock runs out, it assumes a deadlock occurred and just rolls itself back.</li>
+                        <li><strong>Wound-Wait (Preemptive):</strong> "Older wounds younger." If Old-T1 wants a lock held by Young-T2, T1 <em>wounds</em> (aborts) T2 to take the lock. If Young-T2 wants a lock from Old-T1, T2 waits.</li>
+                        <li><strong>Wait-Die (Non-Preemptive):</strong> "Younger dies." If Old-T1 wants a lock held by Young-T2, T1 waits. If Young-T2 wants a lock from Old-T1, T2 <em>dies</em> (aborts itself).</li>
+                    </ul>
+                </div>
+                
+                <div class="p-6 bg-white border-t border-slate-200">
+                    <p class="font-bold text-red-800 mb-2">3. Deadlock Recovery Steps</p>
+                    <ol class="list-decimal pl-5 space-y-1 text-sm text-slate-700">
+                        <li><strong>Select a Victim:</strong> Choose the transaction that will cost the least to kill (fewest updates made).</li>
+                        <li><strong>Abort / Rollback:</strong> Undo all the changes the victim made to the database.</li>
+                        <li><strong>Release:</strong> Release all locks held by the victim so others can proceed.</li>
+                        <li><strong>Retry:</strong> Let the surviving transactions finish, then restart the victim later.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 6. TIMESTAMPS -->
+        <!-- ========================================== -->
+        <section id="timestamps" class="mb-16">
+            <h2 class="section-title">6. Concurrency Control: Timestamp-Based Protocols</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">Lock-Free Concurrency</h3>
+                <p class="text-slate-700 mb-2">Instead of using locks (which cause deadlocks), we use time. The DBMS gives every transaction a unique Timestamp <code>TS(Ti)</code> when it begins. An older transaction has a smaller timestamp. We force transactions to execute as if they ran sequentially in timestamp order.</p>
+                <p class="text-slate-700">Every data item (Q) stores two markers:</p>
+                <ul class="list-disc pl-6 text-slate-700 text-sm">
+                    <li><strong>W-timestamp(Q):</strong> The largest timestamp of any transaction that successfully <em>wrote</em> to Q.</li>
+                    <li><strong>R-timestamp(Q):</strong> The largest timestamp of any transaction that successfully <em>read</em> Q.</li>
+                </ul>
+            </div>
+
+            <div class="concept-block">
+                <div class="command-header">Timestamp Ordering Rules</div>
+                <div class="breakdown-section">
+                    <p class="font-bold text-slate-800 mb-1">If Transaction Ti wants to READ(Q):</p>
+                    <ul class="word-breakdown mb-4">
+                        <li>If <code>TS(Ti) < W-timestamp(Q)</code>, this means a <em>younger</em> transaction already overwrote the data Ti was supposed to read! Ti is reading from the future. <strong>Ti is rolled back.</strong></li>
+                        <li>Otherwise, the read succeeds, and R-timestamp(Q) is updated.</li>
+                    </ul>
+
+                    <p class="font-bold text-slate-800 mb-1">If Transaction Ti wants to WRITE(Q):</p>
+                    <ul class="word-breakdown">
+                        <li>If <code>TS(Ti) < R-timestamp(Q)</code>, a younger transaction already read the old value. If Ti writes now, the younger one's read is invalid. <strong>Ti is rolled back.</strong></li>
+                        <li>If <code>TS(Ti) < W-timestamp(Q)</code>, a younger transaction already wrote over this data. <strong>Ti is rolled back.</strong></li>
+                        <li>Otherwise, the write succeeds, and W-timestamp(Q) is updated.</li>
+                    </ul>
+                </div>
+                <div class="p-6 bg-white border-t border-slate-200">
+                    <p class="font-bold text-blue-900 mb-2">Thomas' Write Rule (Optimization)</p>
+                    <p class="text-sm text-slate-700">A brilliant modification to the protocol. If <code>TS(Ti) < W-timestamp(Q)</code>, Ti is trying to write an obsolete (outdated) value. Instead of harshly rolling back Ti and killing it, Thomas' rule says: <strong>Just ignore the write operation and let Ti continue!</strong> This prevents unnecessary aborts and increases concurrency.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 7. RECOVERY SYSTEM -->
+        <!-- ========================================== -->
+        <section id="recovery" class="mb-16">
+            <h2 class="section-title">7. Recovery System: Log-Based Recovery</h2>
+            
+            <div class="theory-box">
+                <h3 class="theory-title">Write-Ahead Logging (WAL)</h3>
+                <p class="text-slate-700 mb-2">To ensure Atomicity and Durability, the DBMS keeps a diary of everything it does, called a <strong>System Log</strong>. The golden rule is Write-Ahead Logging (WAL): A log record detailing a change MUST be physically written to the hard disk <em>before</em> the actual database is updated.</p>
+                
+                <p class="text-slate-700 font-bold mt-4">Log Records contain:</p>
+                <ul class="list-disc pl-6 text-slate-700 text-sm">
+                    <li>Transaction ID (Which transaction did this?)</li>
+                    <li>Data Item (What was modified?)</li>
+                    <li>Old Value (What was the value before? Used for UNDO).</li>
+                    <li>New Value (What is the value now? Used for REDO).</li>
+                </ul>
+            </div>
+
+            <div class="concept-block">
+                <div class="command-header">Recovery Operations: UNDO and REDO</div>
+                <div class="breakdown-section">
+                    <p class="text-slate-700 mb-4">When a system crashes and reboots, the Recovery Manager reads the log from top to bottom and performs two actions to fix the database:</p>
+                    <ul class="word-breakdown">
+                        <li><strong>UNDO:</strong> Restores the old values. Applied to any transaction that has a <code>&lt;T_start&gt;</code> log entry but is missing a <code>&lt;T_commit&gt;</code> entry. Because it crashed midway, we must undo its partial changes to maintain Atomicity.</li>
+                        <li><strong>REDO:</strong> Re-applies the new values. Applied to any transaction that successfully recorded a <code>&lt;T_commit&gt;</code> entry before the crash. This guarantees Durability (even if the actual database memory buffer was destroyed, the log remembers what the new values were supposed to be).</li>
+                    </ul>
+                </div>
+                <div class="p-6 bg-white border-t border-slate-200">
+                    <p class="font-bold text-blue-900 mb-2">Checkpoints</p>
+                    <p class="text-sm text-slate-700">If the DB runs for a year and crashes, reading a 1-year-long log file during reboot would take days! A <strong>Checkpoint</strong> is a mechanism where the DBMS periodically pauses, forces all modified memory buffers to the physical disk, and writes a <code>&lt;checkpoint&gt;</code> marker in the log. During a crash, the recovery manager only needs to read the log backwards until it hits the last checkpoint, ignoring the months of data before it.</p>
+                </div>
             </div>
         </section>
 
     </main>
 
-    <footer class="text-center py-10 text-slate-500 font-medium">
-        <p>Prepared for Vatsal's Study Hub. Focus on the "Precedence Graph" steps for scoring high.</p>
+    <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Tailored for Conceptual and Architectural Exam Preparation.</p>
     </footer>
 
 </body>
