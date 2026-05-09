@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OS Module 5 - File Systems & Disk Scheduling</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        section { scroll-margin-top: 6rem; }
+        
+        .concept-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #1e40af;
+            font-weight: 900;
+            font-size: 1.8rem;
+            border-bottom: 3px solid #bfdbfe;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .sub-topic-title {
+            color: #0369a1;
+            font-weight: 800;
+            font-size: 1.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sub-topic-title::before { content: "🔹"; font-size: 1.1rem; }
+
+        .highlight-box {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
+            padding: 1.25rem;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.5rem 0;
+        }
+
+        .numerical-box {
+            background-color: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 1.5rem;
+            border-radius: 0.5rem;
+            margin: 1rem 0;
+            font-family: 'Consolas', monospace;
+            font-size: 0.95rem;
+        }
+        .num-title { font-weight: bold; color: #1d4ed8; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif;}
+
+        p { margin-bottom: 1rem; line-height: 1.7; text-align: justify; }
+        ul { margin-bottom: 1.25rem; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-3">
+                <li><a href="#basics" class="hover:text-blue-300">1. FS Basics</a></li>
+                <li><a href="#access" class="hover:text-blue-300">2. Access Methods</a></li>
+                <li><a href="#directory" class="hover:text-blue-300">3. Directory</a></li>
+                <li><a href="#implementation" class="hover:text-blue-300">4. Implementation</a></li>
+                <li><a href="#allocation" class="hover:text-blue-300">5. Allocation</a></li>
+                <li><a href="#storage" class="hover:text-blue-300">6. Mass Storage</a></li>
+                <li><a href="#hardware" class="hover:text-blue-300">7. I/O Hardware</a></li>
+                <li><a href="#disk-org" class="hover:text-blue-300">8. Disk Org</a></li>
+                <li><a href="#io-management" class="hover:text-blue-300">9. I/O Management</a></li>
+                <li><a href="#scheduling" class="hover:text-blue-300 text-yellow-300">10. Disk Scheduling</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
+        <h1 class="text-4xl font-black text-slate-900 mb-2">File Systems & Disk Scheduling</h1>
+        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Comprehensive Guide: Management, Allocation, and Numericals</p>
+
+        <!-- 1. FILE MANAGEMENT BASICS -->
+        <section id="basics" class="mb-16">
+            <h2 class="section-title">1. File Management: Basic Concepts</h2>
+            
+            <div class="concept-card">
+                <p><strong>File System:</strong> Acts as the logical method for organizing, storing, naming, and accessing data on storage devices. It maps file data into logical blocks, manages directories, handles metadata, and allocates storage space to ensure efficient storage retrieval, security, and maintenance.</p>
+
+                <h3 class="sub-topic-title">Key Concepts</h3>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>File:</strong> The basic unit of storage, typically containing a name, extension, and data. It acts as a container for data (text, binary, executable).</li>
+                    <li><strong>Directory (Folder):</strong> A structure that stores file metadata and logical organization.</li>
+                    <li><strong>Attributes:</strong> Information about files (type, size, location, permissions, creation time).</li>
+                    <li><strong>Hierarchy:</strong> Files organized into a tree structure starting with a root directory.</li>
+                </ul>
+
+                <h3 class="sub-topic-title">Core Functions & Operations</h3>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700 mb-4">
+                    <li><strong>File Mapping:</strong> Mapping logical files onto physical storage devices.</li>
+                    <li><strong>Access Control:</strong> Managing permissions to ensure data security.</li>
+                    <li><strong>Free Space Management:</strong> Tracking unused blocks to allocate for new files.</li>
+                </ul>
+                <p><strong>File Operations:</strong> Create/Delete, Open/Close, Read/Write, Reposition (Seek), and Truncating a file.</p>
+
+                <h3 class="sub-topic-title">Detailed File Attributes</h3>
+                <ul class="list-disc pl-6 space-y-1 text-slate-700">
+                    <li><strong>Name:</strong> Symbolic file name (only info kept in human-readable form).</li>
+                    <li><strong>Identifier:</strong> Unique tag (usually a number) identifying the file internally.</li>
+                    <li><strong>Type:</strong> Needed for systems supporting different file types.</li>
+                    <li><strong>Location:</strong> Pointer to a device and location of the file.</li>
+                    <li><strong>Size:</strong> Current size in bytes/words/blocks.</li>
+                    <li><strong>Protection:</strong> Access-control info (read/write/execute).</li>
+                    <li><strong>Timestamps:</strong> Creation, last modification, and last use times.</li>
+                    <li><strong>Extended Attributes:</strong> Character encoding, checksums.</li>
+                </ul>
+
+                <h3 class="sub-topic-title">Common File System Types</h3>
+                <div class="grid grid-cols-2 gap-4 text-sm text-slate-700 mb-4">
+                    <div><strong>FAT (FAT32):</strong> Older format (Windows).</div>
+                    <div><strong>NTFS:</strong> Modern Windows, supports recovery.</div>
+                    <div><strong>ext (ext3, ext4):</strong> Commonly used in Linux.</div>
+                    <div><strong>HFS/APFS:</strong> Apple macOS and iOS.</div>
+                    <div><strong>XFS:</strong> Used in Linux/Unix.</div>
+                </div>
+
+                <p class="font-bold mt-4">Common File Types:</p>
+                <p class="text-sm text-slate-700">executable (exe, com), object (obj, o), source code (c, java), batch (bat, sh), markup (xml, html), word processor (docx, rtf), library (lib, dll), print/view (pdf, jpg), archive (zip, rar), multimedia (mp3, mp4).</p>
+            </div>
+        </section>
+
+        <!-- 2. ACCESS METHODS -->
+        <section id="access" class="mb-16">
+            <h2 class="section-title">2. File Access Methods</h2>
+            <div class="concept-card">
+                <p>File access methods dictate how to read and write data stored in files on secondary devices.</p>
+
+                <h3 class="sub-topic-title mt-4">A. Sequential Access</h3>
+                <p class="text-sm text-slate-700 mb-2">Data is accessed in a linear or sequential order, one after the other. Read commands move the pointer ahead by one. Write commands allocate memory and move pointer to the end. Reasonable for tape drives.</p>
+                <ul class="list-disc pl-6 text-sm text-slate-700">
+                    <li><strong>Advantages:</strong> Simple to implement. Less prone to data corruption. Fast for lexicographic access.</li>
+                    <li><strong>Disadvantages:</strong> Slow for searching specific records. Middle inserts/updates are difficult. Wastes storage for varying length records.</li>
+                </ul>
+
+                <h3 class="sub-topic-title">B. Direct Access Method</h3>
+                <p class="text-sm text-slate-700 mb-2">Allows data to be read/written directly at any block/record using its address. Random access without scanning previous records.</p>
+                <ul class="list-disc pl-6 text-sm text-slate-700">
+                    <li><strong>Advantages:</strong> Decreased average access time. Immediate access.</li>
+                    <li><strong>Disadvantages:</strong> Complex implementation. Higher storage overhead for maintaining pointers/address tables.</li>
+                </ul>
+
+                <h3 class="sub-topic-title">C. Indexed Access Method</h3>
+                <p class="text-sm text-slate-700 mb-2">Involves accessing files through an index/directory containing file names and locations. The <strong>Index Sequential Method</strong> is built on top of Sequential access, constructing an index with pointers to blocks.</p>
+                <ul class="list-disc pl-6 text-sm text-slate-700">
+                    <li><strong>Advantages:</strong> Fast searching, flexible, reduced access time for large files.</li>
+                    <li><strong>Disadvantages:</strong> High complexity, extra storage required for indexes, slower updates (both data and index must be updated).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 3. DIRECTORY STRUCTURE -->
+        <section id="directory" class="mb-16">
+            <h2 class="section-title">3. Directory Structure</h2>
+            <div class="concept-card">
+                <p>A directory translates file names into their file control blocks. It must allow insertions, deletions, searches, and listing.</p>
+                <ul class="list-disc pl-6 space-y-4 text-slate-700">
+                    <li><strong>Single-Level:</strong> All files contained in one directory. <em>Pros:</em> Easy to implement. <em>Cons:</em> Name collisions (no two files can have the same name), slow searching as it grows.</li>
+                    <li><strong>Two-Level:</strong> Each user has a User File Directory (UFD). A Master File Directory (MFD) points to UFDs, preventing conflicts between different users.</li>
+                    <li><strong>Tree-Structured:</strong> Most common in PCs. Upside-down tree with a root. Users can create nested subdirectories but cannot access other users' trees easily.</li>
+                    <li><strong>Acyclic-Graph:</strong> Allows a file/subdirectory to be shared across multiple directories using <em>links</em>. Changes by one user are visible to all. Strictly avoids loops.</li>
+                    <li><strong>General Graph:</strong> Can have cycles (loops back to starting points). Makes navigating and managing complex.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 4. IMPLEMENTATION -->
+        <section id="implementation" class="mb-16">
+            <h2 class="section-title">4. File-System Implementation</h2>
+            <div class="concept-card">
+                <p>Refers to how the file system manages the storage and retrieval of data on physical devices.</p>
+
+                <h3 class="sub-topic-title">Layers in File System</h3>
+                <ol class="list-decimal pl-6 space-y-2 text-sm text-slate-700">
+                    <li><strong>Application Programs:</strong> Topmost layer for user interaction (CLI, browsers).</li>
+                    <li><strong>Logical File System:</strong> Manages metadata. Maintains File Control Blocks (FCB).</li>
+                    <li><strong>File Organization Module:</strong> Translates logical blocks to physical blocks. Tracks free space.</li>
+                    <li><strong>Basic File System:</strong> Issues general commands to device drivers. Manages buffers/caches.</li>
+                    <li><strong>I/O Control Level:</strong> Device drivers acting as hardware interface.</li>
+                    <li><strong>Devices Layer:</strong> Actual hardware performing read/write.</li>
+                </ol>
+
+                <h3 class="sub-topic-title">Implementation Issues</h3>
+                <ul class="list-disc pl-6 text-sm text-slate-700">
+                    <li>Management of disk space (garbage collection, fragmentation).</li>
+                    <li>Checking consistency and repairing errors (journaling, checksums).</li>
+                    <li>Locking files and managing concurrency (semaphores).</li>
+                    <li>Performance optimization (caching, prefetching).</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. ALLOCATION METHODS -->
+        <section id="allocation" class="mb-16">
+            <h2 class="section-title">5. Allocation Methods</h2>
+            <div class="concept-card">
+                <p>Methods defining how files are stored in disk blocks.</p>
+                
+                <h3 class="sub-topic-title mt-4">A. Contiguous Allocation</h3>
+                <p class="text-sm text-slate-700">Each file occupies a contiguous set of blocks. If it requires <em>n</em> blocks starting at <em>b</em>, it takes <em>b, b+1... b+n-1</em>.</p>
+                <p class="text-sm text-slate-700"><strong>Pros:</strong> Extremely fast (minimal seeks). Supports direct access (kth block is b+k). <br><strong>Cons:</strong> Suffers from external and internal fragmentation. Hard to increase file size later.</p>
+
+                <h3 class="sub-topic-title mt-4">B. Linked Allocation</h3>
+                <p class="text-sm text-slate-700">File is a linked list of scattered disk blocks. Directory points to start and end blocks. Each block points to the next.</p>
+                <p class="text-sm text-slate-700"><strong>Pros:</strong> Very flexible file size. No external fragmentation. <br><strong>Cons:</strong> Extremely slow for direct access (must traverse <em>k</em> blocks to find the kth block). Pointer overhead wastes space.</p>
+
+                <h3 class="sub-topic-title mt-4">C. Indexed Allocation</h3>
+                <p class="text-sm text-slate-700">A special <em>Index block</em> contains pointers to all blocks occupied by the file.</p>
+                <p class="text-sm text-slate-700"><strong>Pros:</strong> Fast direct access. No external fragmentation. <br><strong>Cons:</strong> High pointer overhead. Wastes an entire block just for pointers for very small files.</p>
+            </div>
+        </section>
+
+        <!-- 6. MASS STORAGE STRUCTURE -->
+        <section id="storage" class="mb-16">
+            <h2 class="section-title">6. Mass Storage Structure</h2>
+            <div class="concept-card">
+                <p class="mb-4 text-slate-700">The main mass-storage system of a computer is secondary storage (Hard Disk Drives and Non-Volatile Memory). Tertiary storage includes slower, larger capacity mediums like magnetic tapes and optical disks.</p>
+                
+                <h3 class="sub-topic-title">A. Hard Disk Drives (HDD) Physical Structure</h3>
+                <p class="text-slate-700 mb-2">HDDs are mechanical devices that store data magnetically. They consist of several moving parts:</p>
+                
+                <!-- HDD Diagram -->
+                <div class="diagram-container my-6">
+                    <svg width="600" height="300" viewBox="0 0 600 300" class="mx-auto block">
+                        <!-- Platter -->
+                        <circle cx="200" cy="150" r="120" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
+                        <!-- Tracks -->
+                        <circle cx="200" cy="150" r="90" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4"/>
+                        <circle cx="200" cy="150" r="60" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4"/>
+                        
+                        <!-- Sector Highlight -->
+                        <path d="M 200 150 L 285 65 A 120 120 0 0 1 315 115 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="2" opacity="0.6"/>
+                        
+                        <!-- Track Highlight (partial arc) -->
+                        <path d="M 110 150 A 90 90 0 0 1 200 60" fill="none" stroke="#3b82f6" stroke-width="4"/>
+                        
+                        <!-- Spindle -->
+                        <circle cx="200" cy="150" r="15" fill="#64748b" stroke="#334155" stroke-width="2"/>
+
+                        <!-- Actuator Arm -->
+                        <path d="M 450 250 L 420 220 L 220 100 L 210 110 L 400 240 Z" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
+                        <!-- Actuator Axis / Pivot -->
+                        <circle cx="430" cy="235" r="20" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
+                        <circle cx="430" cy="235" r="8" fill="#64748b" />
+                        
+                        <!-- Read/Write Head -->
+                        <polygon points="220,100 210,110 190,105 200,95" fill="#fca5a5" stroke="#b91c1c" stroke-width="2"/>
+
+                        <!-- Labels & Arrows -->
+                        <style>
+                            .lbl-txt { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; fill: #0f172a; }
+                            .lbl-line { stroke: #334155; stroke-width: 1.5; }
+                        </style>
+                        
+                        <line x1="200" y1="150" x2="100" y2="40" class="lbl-line" />
+                        <text x="90" y="30" class="lbl-txt" text-anchor="middle">Spindle</text>
+
+                        <line x1="120" y1="230" x2="70" y2="260" class="lbl-line" />
+                        <text x="60" y="275" class="lbl-txt" text-anchor="middle">Platter</text>
+
+                        <line x1="280" y1="90" x2="360" y2="40" class="lbl-line" />
+                        <text x="370" y="30" class="lbl-txt" text-anchor="middle">Sector</text>
+
+                        <line x1="120" y1="110" x2="60" y2="90" class="lbl-line" />
+                        <text x="40" y="85" class="lbl-txt" text-anchor="middle">Track</text>
+
+                        <line x1="200" y1="100" x2="350" y2="70" class="lbl-line" />
+                        <text x="360" y="65" class="lbl-txt" text-anchor="middle">Read/Write Head</text>
+
+                        <line x1="330" y1="165" x2="450" y2="140" class="lbl-line" />
+                        <text x="460" y="135" class="lbl-txt" text-anchor="middle">Actuator Arm</text>
+                    </svg>
+                    <div class="num-title text-center text-sm text-slate-500 mt-2">Figure: Physical components of a Hard Disk Drive (HDD)</div>
+                </div>
+
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>Platters:</strong> Flat, circular disks covered with magnetic material where data is physically written.</li>
+                    <li><strong>Read-Write Head:</strong> A mechanism that "flies" just above each platter surface to read or alter the magnetic polarity. They are attached to a single disk arm that moves all heads together as a unit.</li>
+                    <li><strong>Tracks:</strong> The surface of each platter is logically divided into concentric circular rings called tracks.</li>
+                    <li><strong>Sectors:</strong> Tracks are further subdivided into sectors. A sector is the fixed, smallest unit of data transfer (commonly 512 bytes).</li>
+                    <li><strong>Cylinder:</strong> The vertical collection of all matching tracks across all platters at a given arm position.</li>
+                    <li><strong>Spindle/Motor:</strong> Spins the platters at high speeds (RPMs like 5400, 7200, 10000, or 15000).</li>
+                </ul>
+
+                <div class="highlight-box mt-4">
+                    <h4 class="font-bold text-slate-800">HDD Performance Metrics</h4>
+                    <p class="text-sm text-slate-700"><strong>Positioning Time (Random-Access Time):</strong> The total time required to reach a specific block of data. It is the sum of two factors:</p>
+                    <ul class="list-disc pl-5 mt-2 text-sm text-slate-800">
+                        <li><strong>Seek Time:</strong> The time it takes to mechanically move the disk arm and read-write head to the desired cylinder/track.</li>
+                        <li><strong>Rotational Latency:</strong> The time spent waiting for the desired sector to rotate under the read-write head.</li>
+                    </ul>
+                </div>
+
+                <h3 class="sub-topic-title mt-6">B. Nonvolatile Memory Devices (NVM / SSD)</h3>
+                <p class="text-slate-700 mb-2">Unlike HDDs, NVMs (like Solid State Drives - SSDs, and USB flash drives) are entirely electrical, composed of a controller and flash NAND semiconductor chips.</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>No Moving Parts:</strong> Makes them drastically more reliable, durable, and shock-resistant.</li>
+                    <li><strong>Extreme Speed:</strong> They completely eliminate "Seek Time" and "Rotational Latency," making random data access near-instantaneous.</li>
+                    <li><strong>Connection:</strong> Modern NVMs connect directly to the system bus (e.g., PCIe interfaces) to maximize transfer rates.</li>
+                    <li><strong>Trade-offs:</strong> Historically more expensive per Gigabyte and generally have smaller total capacities compared to bulk HDDs, though the gap is closing.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 7. I/O HARDWARE -->
+        <section id="hardware" class="mb-16">
+            <h2 class="section-title">7. I/O Hardware & Data Transfer Methods</h2>
+            <div class="concept-card">
+                <p class="text-slate-700">I/O hardware consists of a system bus, a device controller, an I/O port, and its registers. To move data between the CPU/Memory and external devices, the operating system utilizes three primary transfer techniques.</p>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
+                    <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
+                        <h4 class="font-bold text-red-800 mb-2">1. Programmed I/O (PIO)</h4>
+                        <p class="text-sm text-slate-700">The CPU issues an I/O command and then repeatedly checks the device's status register to see if it is finished. This constant checking is called <strong>Polling</strong> or <strong>Busy Waiting</strong>.</p>
+                        <p class="text-sm text-red-700 mt-2 font-semibold">Disadvantage: Severely wastes CPU cycles, as the processor is stuck doing nothing but asking "Are you done yet?" instead of executing other programs.</p>
+                    </div>
+                    
+                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
+                        <h4 class="font-bold text-blue-800 mb-2">2. Interrupt-Driven I/O</h4>
+                        <p class="text-sm text-slate-700">The CPU issues an I/O command and immediately moves on to execute other processes. When the I/O device finishes its task, it sends a hardware <strong>Interrupt Signal</strong> to the CPU to grab its attention.</p>
+                        <p class="text-sm text-blue-700 mt-2 font-semibold">Advantage: Eliminates busy waiting. CPU time is utilized efficiently, making it ideal for slow character devices like keyboards.</p>
+                    </div>
+
+                    <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
+                        <h4 class="font-bold text-green-800 mb-2">3. Direct Memory Access (DMA)</h4>
+                        <p class="text-sm text-slate-700">Used for high-speed devices (like disks). The CPU offloads the work to a specialized <strong>DMA Controller (DMAC)</strong>. The DMAC transfers massive blocks of data directly to/from main memory, completely bypassing the CPU.</p>
+                        <p class="text-sm text-green-700 mt-2 font-semibold">Advantage: The CPU is only interrupted once at the very beginning (to set up the transfer) and once at the very end (when the entire block is successfully transferred).</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. DISK ORGANIZATION -->
+        <section id="disk-org" class="mb-16">
+            <h2 class="section-title">8. Disk Organization</h2>
+            <div class="concept-card">
+                <p class="text-slate-700">Before a raw physical disk can store files, the operating system must organize and structure it logically.</p>
+
+                <h3 class="sub-topic-title mt-4">Key Steps in Disk Organization & Management</h3>
+                <ul class="list-disc pl-6 space-y-3 text-slate-700">
+                    <li><strong>Logical Formatting (Clusters):</strong> The OS abstracts the physical hardware by grouping physical sectors into larger logical blocks (clusters) to improve read/write efficiency and manageability.</li>
+                    <li><strong>Partitioning:</strong> Dividing a single physical hard drive into multiple independent logical drives (e.g., C: drive, D: drive). This allows multiple file systems or different operating systems to coexist cleanly on the same disk.</li>
+                    <li><strong>High-Level Formatting:</strong> Preparing a partition by writing a specific File System structure (like NTFS, FAT32, or ext4) onto it, which dictates exactly how data directories will be indexed and stored.</li>
+                    <li><strong>The Boot Block:</strong> A special, reserved sector at the very beginning of the disk that stores the <strong>Bootstrap Loader</strong>—a tiny program responsible for starting the OS during computer power-up.</li>
+                    <li><strong>Bad Block Management:</strong> Disks inevitably develop physically defective sectors over time. The OS/Controller detects these "bad blocks" and logically maps them to hidden spare sectors so data is not corrupted.</li>
+                    <li><strong>RAID (Redundant Array of Independent Disks):</strong> A technology that combines multiple physical disks into a single logical unit to massively increase performance (via data striping) and reliability (via data mirroring/parity).</li>
+                    <li><strong>Common System Tools:</strong> Features like Windows Disk Management, Linux <code>fdisk</code>/<code>parted</code>, or macOS Disk Utility are used by administrators to perform these structural changes.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 9. I/O MANAGEMENT -->
+        <section id="io-management" class="mb-16">
+            <h2 class="section-title">9. I/O Management</h2>
+            <div class="concept-card">
+                <p class="text-slate-700">I/O Management is the OS subsystem responsible for coordinating the complex data flow between the CPU, main memory, and external peripheral devices.</p>
+
+                <h3 class="sub-topic-title mt-4">Core Components & Responsibilities</h3>
+                <ul class="list-disc pl-6 space-y-3 text-slate-700">
+                    <li><strong>Device Controllers vs. Device Drivers:</strong> 
+                        The <em>Device Controller</em> is the physical electronic hardware component managing the actual device mechanics. The <em>Device Driver</em> is the OS software component that translates generic OS commands into specific hardware-level instructions the controller understands.
+                    </li>
+                    <li><strong>Buffering & Caching:</strong>
+                        <ul class="list-circle pl-6 mt-1 text-sm">
+                            <li><em>Buffering:</em> Temporarily storing data in memory while it is being transferred to handle speed mismatches between extremely fast CPUs and relatively slow I/O devices.</li>
+                            <li><em>Caching:</em> Keeping copies of frequently accessed disk data in fast RAM to improve overall system read/write performance.</li>
+                        </ul>
+                    </li>
+                    <li><strong>I/O Scheduling:</strong> Ordering and prioritizing read/write requests to optimize performance (e.g., reordering disk requests via algorithms like SCAN or SSTF to minimize mechanical head movement).</li>
+                    <li><strong>Interrupt Handling:</strong> The complex OS routines that pause the CPU, save its current state, and efficiently process the completion signals triggered by external devices.</li>
+                </ul>
+
+                <h3 class="sub-topic-title mt-6">Types of I/O Devices Managed</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg">
+                        <p class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-2">1. Block Devices</p>
+                        <p class="text-sm text-slate-600">Store and transfer data in fixed-size blocks (e.g., 512 bytes or 4KB). They are capable of immediate random access.<br><br><em>Examples: Hard Drives, SSDs, Optical Drives.</em></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg">
+                        <p class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-2">2. Character Devices</p>
+                        <p class="text-sm text-slate-600">Send and receive a continuous stream of characters (bytes) sequentially, one by one. They are not addressable for random access.<br><br><em>Examples: Keyboards, Mice, Serial Ports.</em></p>
+                    </div>
+                    <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg">
+                        <p class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-2">3. Network Devices</p>
+                        <p class="text-sm text-slate-600">Specialized for remote communication over networks, transmitting data as discrete formatted packets.<br><br><em>Examples: Ethernet cards, Wi-Fi adapters.</em></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. DISK SCHEDULING ALGORITHMS (NUMERICALS) -->
+        <section id="scheduling" class="mb-16">
+            <h2 class="section-title text-yellow-600 border-b-yellow-200">10. Disk Scheduling Algorithms & Numericals</h2>
+            <div class="concept-card border-yellow-400">
+                <p class="mb-4"><strong>Goal:</strong> Minimize access time (seek time + rotational latency) by optimizing the order of read/write requests.</p>
+                <div class="bg-yellow-50 p-4 border border-yellow-200 rounded text-sm font-bold text-yellow-900 mb-6">
+                    MASTER PROBLEM DATA FOR ALL ALGORITHMS:<br>
+                    Request Queue = 98, 183, 37, 122, 14, 124, 65, 67.<br>
+                    Initial Head Position = 53.
+                </div>
+
+                <!-- FCFS -->
+                <h3 class="sub-topic-title">1. FCFS (First-Come, First-Served)</h3>
+                <p class="text-sm">Serves requests in the exact order they arrive. Intrinsically fair, but generally not the fastest.</p>
+                <div class="numerical-box">
+                    <div class="num-title">Path & Calculation:</div>
+                    53 &rarr; 98 &rarr; 183 &rarr; 37 &rarr; 122 &rarr; 14 &rarr; 124 &rarr; 65 &rarr; 67<br>
+                    Movements: |53-98|=45, |98-183|=85, |183-37|=146, |37-122|=85, |122-14|=108, |14-124|=110, |124-65|=59, |65-67|=2.<br>
+                    <strong>Total Head Movement: 640 cylinders.</strong>
+                </div>
+
+                <!-- SSTF -->
+                <h3 class="sub-topic-title">2. SSTF (Shortest Seek Time First)</h3>
+                <p class="text-sm">Selects the request closest to the current head position. Reduces total movement but can cause starvation for edge requests.</p>
+                <div class="numerical-box">
+                    <div class="num-title">Path & Calculation:</div>
+                    53 &rarr; 65 &rarr; 67 &rarr; 37 &rarr; 14 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183<br>
+                    Movements: |53-65|=12, |65-67|=2, |67-37|=30, |37-14|=23, |14-98|=84, |98-122|=24, |122-124|=2, |124-183|=59.<br>
+                    <strong>Total Head Movement: 236 cylinders.</strong>
+                </div>
+
+                <!-- SCAN -->
+                <h3 class="sub-topic-title">3. SCAN (Elevator Algorithm)</h3>
+                <p class="text-sm">Arm moves to one physical end of the disk, servicing along the way, reverses direction at the end, and continues. <em>(Assumption: Total cylinders 0-199. Moving towards higher end 199 first).</em></p>
+                <div class="numerical-box">
+                    <div class="num-title">Path & Calculation:</div>
+                    Sorted Queue: 14, 37, 65, 67, 98, 122, 124, 183.<br>
+                    Path: 53 &rarr; 65 &rarr; 67 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183 &rarr; <strong>199 (Disk End)</strong> &rarr; 37 &rarr; 14<br>
+                    Movements: (199 - 53) + (199 - 14) = 146 + 185<br>
+                    <strong>Total Head Movement: 331 cylinders.</strong>
+                </div>
+
+                <!-- C-SCAN -->
+                <h3 class="sub-topic-title">4. C-SCAN (Circular SCAN)</h3>
+                <p class="text-sm">Variant of SCAN for uniform wait time. Moves to one end, services requests, jumps <em>immediately</em> to the beginning (0) without servicing on the return trip, and sweeps again.</p>
+                <div class="numerical-box">
+                    <div class="num-title">Path & Calculation:</div>
+                    Path: 53 &rarr; 65 &rarr; 67 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183 &rarr; <strong>199 (End)</strong> &rarr; <strong>0 (Start)</strong> &rarr; 14 &rarr; 37<br>
+                    Movements: (199 - 53) + (199 - 0) + (37 - 0) = 146 + 199 + 37<br>
+                    <strong>Total Head Movement: 382 cylinders.</strong>
+                </div>
+
+                <!-- LOOK -->
+                <h3 class="sub-topic-title">5. LOOK</h3>
+                <p class="text-sm">Improved SCAN. Reverses direction immediately after the <em>last request</em> in a given direction, rather than going all the way to the physical edge of the disk.</p>
+                <div class="numerical-box">
+                    <div class="num-title">Path & Calculation:</div>
+                    Move Higher: 53 &rarr; 65 &rarr; 67 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183 (Last request, reverse!)<br>
+                    Move Lower: 183 &rarr; 37 &rarr; 14<br>
+                    Movements: 12 + 2 + 31 + 24 + 2 + 59 + 146 + 23<br>
+                    <strong>Total Head Movement: 299 cylinders.</strong>
+                </div>
+
+                <!-- C-LOOK -->
+                <h3 class="sub-topic-title">6. C-LOOK</h3>
+                <p class="text-sm">Improved C-SCAN. Jumps from the last request in one direction to the first request at the other end, bypassing the physical edges.</p>
+                <div class="numerical-box">
+                    <div class="num-title">Path & Calculation:</div>
+                    Order: 53 &rarr; 65 &rarr; 67 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183 (Jump!) &rarr; 14 &rarr; 37<br>
+                    Movements: |65-53|=12, |67-65|=2, |98-67|=31, |122-98|=24, |124-122|=2, |183-124|=59, |14-183|=169 (Wrap), |37-14|=23.<br>
+                    <strong>Total Head Movement: 326 cylinders.</strong>
+                </div>
+
+                <div class="highlight-box mt-8">
+                    <h4 class="font-bold text-slate-800 mb-2">Algorithm Comparisons (LOOK vs C-LOOK)</h4>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
+                        <li><strong>Direction:</strong> LOOK serves requests in both directions. C-LOOK serves in one direction only.</li>
+                        <li><strong>Performance:</strong> C-LOOK has the best overall performance among algorithms. LOOK lags behind C-LOOK.</li>
+                        <li><strong>Handling:</strong> C-LOOK handles requests more effectively than LOOK.</li>
+                        <li><strong>Variance:</strong> LOOK has higher throughput but C-LOOK provides perfectly uniform waiting and response times.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Numericals solved accurately for exam preparation.</p>
+    </footer>
+
+</body>
+</html>
