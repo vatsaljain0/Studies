@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Module 5 - Digital Communication Techniques (Detailed Exam Edition)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        section { scroll-margin-top: 6rem; }
+        
+        .concept-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #1e40af;
+            font-weight: 900;
+            font-size: 1.6rem;
+            border-bottom: 3px solid #bfdbfe;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .sub-topic-title {
+            color: #0369a1;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sub-topic-title::before { content: "🔹"; font-size: 1rem; }
+
+        .numerical-box {
+            background-color: #f8fafc;
+            border: 2px solid #cbd5e1;
+            padding: 1.25rem;
+            border-radius: 0.5rem;
+            margin: 1.5rem 0;
+            color: #0f172a;
+        }
+        .num-title { font-weight: 900; color: #1d4ed8; margin-bottom: 0.75rem; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.05em;}
+
+        .formula { background-color: #fef3c7; padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-family: 'Consolas', monospace; font-weight: bold; color: #b45309; font-size: 1.05rem;}
+        .memory-trick { background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 1rem; margin: 1.5rem 0; border-radius: 0 0.5rem 0.5rem 0;}
+
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem; text-align: left; }
+        .comparison-table th, .comparison-table td { border: 1px solid #cbd5e1; padding: 0.75rem; }
+        .comparison-table th { background-color: #f1f5f9; font-weight: 700; color: #0f172a; }
+
+        p { margin-bottom: 0.75rem; line-height: 1.7; }
+        ul { margin-bottom: 1rem; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Sticky Navigation -->
+    <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-4">
+                <li><a href="#basics" class="hover:text-blue-300">1. Comm Systems</a></li>
+                <li><a href="#modulation" class="hover:text-blue-300">2. AM, FM, PM</a></li>
+                <li><a href="#multiplexing" class="hover:text-blue-300">3. Multiplexing</a></li>
+                <li><a href="#errors" class="hover:text-blue-300">4. Error Correction</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
+        <h1 class="text-3xl md:text-4xl font-black text-slate-900 mb-2">Digital Communication Techniques</h1>
+        <p class="text-blue-600 font-bold mb-8 text-lg border-b-2 border-slate-200 pb-4">Detailed Exam Edition: Deep Concepts, Plain English & Formulas</p>
+
+        <!-- ========================================== -->
+        <!-- 1. COMMUNICATION SYSTEMS -->
+        <!-- ========================================== -->
+        <section id="basics" class="mb-12">
+            <h2 class="section-title">1. Fundamentals of Communication Systems</h2>
+            
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">The 5 Blocks of a Communication System</h3>
+                <p>For a long-answer question, draw 5 sequential boxes and explain the role and distortion of each block:</p>
+                <ol class="list-decimal pl-6 space-y-3 text-slate-700 font-medium">
+                    <li><strong>Information Source:</strong> Produces the raw message (like human voice, video, or computer data).</li>
+                    <li><strong>Transmitter:</strong> Processes the raw message. It performs <em>Encoding</em> (converting data to a standard format) and <em>Modulation</em> (attaching it to a carrier wave). This stage can introduce "Transmitter Distortion."</li>
+                    <li><strong>Channel:</strong> The physical transmission medium (copper wire, fiber optics, or open air). As the signal travels, external <strong>Noise Sources</strong> (like electrical interference or weather) attack and degrade the signal.</li>
+                    <li><strong>Receiver:</strong> Captures the signal from the channel. It performs <em>Decoding</em> and <em>Demodulation</em> to extract the original message. This stage can introduce "Receiver Distortion."</li>
+                    <li><strong>Destination:</strong> The final user or machine that receives and understands the message.</li>
+                </ol>
+                
+                <h3 class="sub-topic-title mt-6">Hardware Components of a Radio Transmitter</h3>
+                <p>If asked to explain a Radio Transmitter block diagram, detail these exact components:</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>Crystal Oscillator:</strong> The "heartbeat" of the transmitter. It generates a perfectly steady, pure, high-frequency base wave (the Carrier Wave).</li>
+                    <li><strong>RF Buffer Amplifier:</strong> Isolates the oscillator from the rest of the heavy circuitry. This prevents the high frequencies from drifting or becoming unstable.</li>
+                    <li><strong>Modulation Processing & Modulator:</strong> Takes your actual voice (the input signal) and mixes it into the carrier wave generated by the oscillator.</li>
+                    <li><strong>RF Output Power Amplifier:</strong> Takes the mixed signal and gives it a massive surge of electrical power so the antenna can physically radiate it miles into the air.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 2. MODULATION TECHNIQUES -->
+        <!-- ========================================== -->
+        <section id="modulation" class="mb-12">
+            <h2 class="section-title">2. In-Depth Modulation (AM, FM, PM)</h2>
+            
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">What is Modulation?</h3>
+                <p><strong>Detailed Definition:</strong> Modulation is the process of impressing a low-frequency information signal (the baseband message) onto a high-frequency signal (the carrier wave). A <strong>Modem</strong> (Modulator-Demodulator) performs this process in both directions.</p>
+                
+                <div class="memory-trick">
+                    <p class="font-bold text-green-900 mb-1">💡 Memory Trick: The Paper and the Rock</p>
+                    <p class="text-sm text-green-800">You can't throw a plain piece of paper (your low-frequency voice) across a football field; the wind stops it. But if you wrap the paper around a heavy rock (the high-frequency carrier wave), you can easily throw it! That wrapping process is Modulation.</p>
+                </div>
+
+                <p class="font-bold mt-4">Why is Modulation strictly necessary? (Write these 2 major points):</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>1. Size of the Antenna:</strong> Physics dictates that an antenna must be roughly 1/10th the size of the signal's wavelength. A raw 5kHz audio signal has a massive wavelength, requiring an antenna miles long! By modulating the audio onto a 100MHz high-frequency carrier, the wavelength shrinks, allowing us to use a tiny antenna (like on a mobile phone).</li>
+                    <li><strong>2. Wireless Communication:</strong> Low frequencies die out quickly in open space. High frequencies have the energy to propagate (travel) long distances wirelessly, saving the enormous cost of laying physical wires everywhere.</li>
+                </ul>
+            </div>
+
+            <!-- AMPLITUDE MODULATION -->
+            <div class="concept-card border-t-4 border-t-blue-500">
+                <h3 class="text-xl font-black text-blue-900 mb-2">A. Amplitude Modulation (AM)</h3>
+                <p class="mb-3"><strong>Core Concept:</strong> The height (amplitude) of the high-frequency carrier wave is continuously varied to match the instantaneous amplitude of the message signal. The frequency and phase of the carrier remain perfectly constant.</p>
+                
+                <ul class="list-disc pl-6 space-y-3 text-slate-700">
+                    <li><strong>The Sidebands:</strong> When you mix the signals, physics creates two extra "shadow" signals called the <em>Upper Sideband</em> and <em>Lower Sideband</em>. If the carrier is at frequency f<sub>c</sub> and the message is at f<sub>m</sub>, the sidebands sit at (f<sub>c</sub> + f<sub>m</sub>) and (f<sub>c</sub> - f<sub>m</sub>).</li>
+                    <li><strong>Bandwidth Requirement:</strong> Because of the two sidebands, an AM signal requires exactly twice the bandwidth of the original message. <span class="formula">Bandwidth = 2 &times; f<sub>m</sub></span></li>
+                    <li><strong>Modulation Index (m):</strong> Measures the depth of modulation. <br><span class="formula">m = (V<sub>max</sub> - V<sub>min</sub>) / (V<sub>max</sub> + V<sub>min</sub>)</span>. <br><em>Exam Note:</em> If 'm' exceeds 1.0, the signal becomes "overmodulated." The wave breaks, causing severe static distortion in the receiver.</li>
+                </ul>
+            </div>
+
+            <!-- FREQUENCY MODULATION -->
+            <div class="concept-card border-t-4 border-t-green-500">
+                <h3 class="text-xl font-black text-green-900 mb-2">B. Frequency Modulation (FM)</h3>
+                <p class="mb-3"><strong>Core Concept:</strong> The speed (frequency) of the carrier wave is shifted dynamically based on the amplitude of the message. When the message is loud, the carrier waves squish together (higher frequency). When quiet, they spread apart. The amplitude remains strictly constant, making FM immune to most static noise.</p>
+                
+                <ul class="list-disc pl-6 space-y-3 text-slate-700 mb-4">
+                    <li><strong>WBFM vs NBFM:</strong> 
+                        <br>&bull; <em>Wide-Band FM:</em> Allows massive frequency shifts (&plusmn;75 kHz deviation). Used for high-quality music radio. Requires 200 kHz of bandwidth.
+                        <br>&bull; <em>Narrow-Band FM:</em> Allows very tiny shifts (&plusmn;3 kHz deviation). Used for efficient two-way radios (walkie-talkies).
+                    </li>
+                    <li><strong>Maximum Deviation (&delta;<sub>f</sub>):</strong> The absolute limit of how far the frequency can bend. <br><span class="formula">&delta;<sub>f</sub> = k<sub>f</sub> &times; V<sub>m</sub></span> (where k<sub>f</sub> is a hardware constant in Hz/Volt).</li>
+                    <li><strong>Modulation Index (m<sub>f</sub>):</strong> <br><span class="formula">m<sub>f</sub> = &delta;<sub>f</sub> / f<sub>m</sub></span>. <em>(Notice that if the message frequency f<sub>m</sub> increases, the index goes down. They are inversely proportional).</em></li>
+                </ul>
+
+                <div class="numerical-box bg-green-50 border-green-200">
+                    <div class="num-title text-green-800">Exam Problem: FM Derivation & Power</div>
+                    <p class="mb-2 font-bold">Question: Find the Carrier Frequency, Modulating Frequency, Index, Max Deviation, and Power (in a 10 &Omega; resistor) for this FM voltage equation:<br>
+                    <span class="text-blue-700 text-lg block text-center mt-2 font-mono">v = 12 sin(6 &times; 10<sup>8</sup> t + 5 cos 1250 t)</span></p>
+                    
+                    <p class="font-bold border-b border-green-300 pb-1 mt-4 mb-2">Solution Steps (Write exactly like this):</p>
+                    <p class="mb-2">Compare it to the standard mathematical FM format: <br><strong>v = V<sub>c</sub> sin(&omega;<sub>c</sub> t + m<sub>f</sub> cos &omega;<sub>m</sub> t)</strong></p>
+                    <ul class="list-disc pl-6 space-y-1 mb-4">
+                        <li>Voltage Amplitude (V<sub>c</sub>) = 12</li>
+                        <li>Carrier Angular Velocity (&omega;<sub>c</sub>) = 6 &times; 10<sup>8</sup></li>
+                        <li>Modulation Index (m<sub>f</sub>) = 5</li>
+                        <li>Message Angular Velocity (&omega;<sub>m</sub>) = 1250</li>
+                    </ul>
+
+                    <p><strong>1. Carrier Frequency (f<sub>c</sub>):</strong> Convert rads to Hertz by dividing by 2&pi;. <br>f<sub>c</sub> = &omega;<sub>c</sub> / 2&pi; = (6 &times; 10<sup>8</sup>) / 2&pi; = <strong>95.5 MHz</strong></p>
+                    <p><strong>2. Modulating Frequency (f<sub>m</sub>):</strong> <br>f<sub>m</sub> = &omega;<sub>m</sub> / 2&pi; = 1250 / 2&pi; = <strong>199 Hz</strong></p>
+                    <p><strong>3. Modulation Index (m<sub>f</sub>):</strong> Extracted directly from equation = <strong>5</strong></p>
+                    <p><strong>4. Max Deviation (&delta;<sub>f</sub>):</strong> Using the formula &delta;<sub>f</sub> = m<sub>f</sub> &times; f<sub>m</sub>. <br>&delta;<sub>f</sub> = 5 &times; 199 = <strong>995 Hz</strong></p>
+                    <p><strong>5. Power Dissipation (P):</strong> Formula is P = (V<sub>c</sub> / &radic;2)<sup>2</sup> / R. <br>
+                    P = (12 / &radic;2)<sup>2</sup> / 10 = (144 / 2) / 10 = 72 / 10 = <strong>7.2 Watts</strong></p>
+                </div>
+            </div>
+
+            <!-- PHASE MODULATION -->
+            <div class="concept-card border-t-4 border-t-purple-500">
+                <h3 class="text-xl font-black text-purple-900 mb-2">C. Phase Modulation (PM)</h3>
+                <p class="mb-2"><strong>Core Concept:</strong> Instead of changing the speed, we change the <strong>starting angle (phase)</strong> of the carrier wave based on the message amplitude. The overall amplitude stays constant.</p>
+                <ul class="list-disc pl-6 space-y-3 text-slate-700">
+                    <li><strong>Max Deviation (&delta;<sub>p</sub>):</strong> <span class="formula">&delta;<sub>p</sub> = k<sub>p</sub> &times; V<sub>m</sub></span></li>
+                    <li><strong>Modulation Index (m<sub>p</sub>):</strong> In PM, the index is exactly equal to the max deviation! <span class="formula">m<sub>p</sub> = &delta;<sub>p</sub></span>. It is expressed in radians.</li>
+                    <li><strong>Crucial Difference from FM:</strong> In Phase Modulation, the modulation index depends ONLY on the voltage of the message (V<sub>m</sub>). It is completely <strong>independent</strong> of the message frequency (f<sub>m</sub>).</li>
+                </ul>
+            </div>
+
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">Exam Differences Tables</h3>
+                <table class="comparison-table mb-6">
+                    <tr><th class="w-1/2">Amplitude Modulation (AM)</th><th class="w-1/2">Frequency Modulation (FM)</th></tr>
+                    <tr><td>Frequency and phase remain constant. Only Amplitude changes.</td><td>Amplitude and phase remain constant. Only Frequency changes.</td></tr>
+                    <tr><td>Can travel very long distances, but has poor sound quality and is easily ruined by static.</td><td>Better sound quality and rejects static noise, but requires a wider bandwidth.</td></tr>
+                    <tr><td>Produces exactly two sidebands.</td><td>Produces an infinite number of sidebands.</td></tr>
+                    <tr><td>Circuit design is cheap and simple.</td><td>Circuit design is complex and expensive.</td></tr>
+                </table>
+
+                <table class="comparison-table">
+                    <tr><th class="w-1/2">Frequency Modulation (FM)</th><th class="w-1/2">Phase Modulation (PM)</th></tr>
+                    <tr><td>Frequency deviation is proportional to the message's amplitude.</td><td>Phase deviation is proportional to the message's amplitude, independent of its frequency.</td></tr>
+                    <tr><td>Modulation index is <strong>inversely proportional</strong> to the modulation frequency.</td><td>Modulation index is proportional to the modulating voltage <strong>only</strong>.</td></tr>
+                </table>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. MULTIPLEXING -->
+        <!-- ========================================== -->
+        <section id="multiplexing" class="mb-12">
+            <h2 class="section-title">3. Hardware & Hierarchies of Multiplexing</h2>
+            
+            <div class="concept-card">
+                <p class="mb-4"><strong>Definition:</strong> Multiplexing combines multiple independent analog or digital signals into one massive stream so they can be transmitted over a single shared physical cable. A <strong>MUX</strong> mixes the signals, and a <strong>DEMUX</strong> separates them at the destination.</p>
+                
+                <h3 class="sub-topic-title">A. Frequency Division Multiplexing (FDM)</h3>
+                <p class="mb-2"><strong>Concept:</strong> FDM combines continuous analog signals. It gives every user their own dedicated frequency "lane" (like stations on a radio dial). They transmit simultaneously without overlapping.</p>
+                <ul class="list-disc pl-6 space-y-3 text-slate-700">
+                    <li><strong>Basic Group Formation:</strong> The telecom industry bundles exactly <strong>12 telephone channels</strong> into one basic group. Each channel gets a 4 kHz slot. The whole group occupies the frequency range from <strong>60 to 108 kHz</strong>. To help machines monitor the line, a pilot signal is injected at <strong>104.08 kHz</strong>. <em>(Note: Submarine cables use a tighter 16-channel layout occupying 48 kHz).</em></li>
+                    <li><strong>Basic Supergroup:</strong> The next step up. It bundles <strong>5 Basic Groups (60 total channels)</strong> together. This massive group occupies the frequency range from <strong>312 to 552 kHz</strong> (a 240 kHz bandwidth). It injects a pilot signal at <strong>547.94 kHz</strong>.</li>
+                </ul>
+
+                <h3 class="sub-topic-title mt-8">B. Time Division Multiplexing (TDM) & Hardware</h3>
+                <p class="mb-2"><strong>Concept:</strong> Instead of separating users by frequency, TDM makes everyone use the exact same frequency, but they <strong>take turns really, really fast</strong>. Because digital pulses are narrow, the empty space between pulses is filled with data from other users.</p>
+                <ul class="list-disc pl-6 space-y-3 text-slate-700 mb-6">
+                    <li><strong>The 24-Channel Standard:</strong> A standard system handles 24 phone calls. It takes 8,000 snapshots (samples) of each call every second, at 8 bits per sample. This means the system must send a complete frame of data every <strong>125 microseconds</strong>. Total speed required: <strong>1.544 Mbit/s</strong>.</li>
+                    
+                    <li><strong>Transmitter Hardware (Delay Lines):</strong> High-speed TDM uses electronic switches and <strong>Delay Lines</strong> to mix the signals. Call #1 goes straight to the adder. Call #2 goes through a circuit that delays it by exactly <strong>5 microseconds</strong>. Call #3 is delayed by <strong>10 microseconds</strong>. This perfectly lines them up one-after-another into the 125 microsecond frame!</li>
+                    
+                    <li><strong>Receiver Hardware (AND Gates):</strong> The receiver uses 24 <strong>AND gates</strong> (digital logic doors). A clock generator (a monostable multivibrator) sends a 5-microsecond trigger pulse to open the doors. Delay lines are used again so that Door #2 only opens at the exact 5-microsecond mark when Call #2's data arrives.</li>
+                </ul>
+
+                <p class="font-bold text-slate-800">Digital Multiplex Hierarchies (Memorize Level 1 & 2 for Exams):</p>
+                <div class="overflow-x-auto mt-2">
+                    <table class="comparison-table text-sm">
+                        <tr>
+                            <th rowspan="2" class="text-center align-middle">Multiplex Order</th>
+                            <th colspan="2" class="text-center bg-blue-50">µ-Law System (US/Japan)</th>
+                            <th colspan="2" class="text-center bg-green-50">A-Law System (Europe)</th>
+                        </tr>
+                        <tr>
+                            <th class="text-center bg-blue-50">Bit Rate (Mbit/s)</th>
+                            <th class="text-center bg-blue-50">Total Channels</th>
+                            <th class="text-center bg-green-50">Bit Rate (Mbit/s)</th>
+                            <th class="text-center bg-green-50">Total Channels</th>
+                        </tr>
+                        <tr><td class="text-center font-bold">1st (Base level)</td><td class="text-center">1.544</td><td class="text-center">24</td><td class="text-center">2.048</td><td class="text-center">30</td></tr>
+                        <tr><td class="text-center font-bold">2nd</td><td class="text-center">6.312</td><td class="text-center">96</td><td class="text-center">8.448</td><td class="text-center">120</td></tr>
+                        <tr><td class="text-center font-bold">3rd</td><td class="text-center">44.736</td><td class="text-center">672</td><td class="text-center">34.368</td><td class="text-center">480</td></tr>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 4. ERROR DETECTION & CORRECTION -->
+        <!-- ========================================== -->
+        <section id="errors" class="mb-12">
+            <h2 class="section-title">4. Error Detection, Correction & Matrices</h2>
+            
+            <div class="concept-card">
+                <p class="mb-4">During transmission, noise and system impairments can corrupt the data stream (e.g., flipping a 1 to a 0). Procedures must be implemented to detect and fix these errors, though doing so increases transmission costs.</p>
+
+                <h3 class="sub-topic-title mt-0">A. Error Detection Methods</h3>
+                <ul class="list-disc pl-6 space-y-4 text-slate-700">
+                    <li><strong>Parity-Check Codes:</strong> The most popular form of redundancy. A parity bit (a 1 or 0) is added to the end of a character block to force the total sum of 1s to be either exclusively odd or exclusively even. If the receiver calculates the wrong parity, it requests a retransmission.</li>
+                    
+                    <li><strong>Constant-Ratio Codes:</strong> Provides inherent error detection. For example, the <em>2-out-of-5 code</em> enforces a strict pattern: every received block must contain exactly two 1s and three 0s. If the ratio alters, an error is flagged.
+                        <br><em>The Limitation:</em> An odd number of errors will be detected, but an even number of errors (one 1 flips to 0, and one 0 flips to 1 simultaneously) will maintain the ratio and sneak past undetected.
+                        <br><em>Combinatorics Formula:</em> Number of valid combinations = <span class="formula">T! / [ M! &times; (T - M)! ]</span> (Where T is Total bits, M is number of 1s, and ! is Factorial).
+                    </li>
+                    
+                    <li><strong>Redundant Codes (100% Replication):</strong> Transmitting the exact same information twice and comparing the two sets. Statistically, it is unlikely a random error will hit the exact same spot twice.
+                        <br><em>Formula:</em> <span class="formula">Efficiency = Information Bits / Total Bits</span>. In complete retransmission, efficiency is an abysmal 50%.
+                    </li>
+                </ul>
+
+                <h3 class="sub-topic-title mt-8">B. Error Correction Methods</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div class="bg-blue-50 border border-blue-200 p-5 rounded-lg">
+                        <h4 class="font-bold text-blue-900 mb-2">1. Retransmission (ARQ)</h4>
+                        <p class="text-sm text-slate-700">The most popular and expeditious method. Uses an Automatic Request for Repeat (ARQ) or ACK/NAK system.</p>
+                        <p class="text-sm text-slate-700 mt-2">If parity is correct upon receipt, a positive acknowledgment <strong>(ACK)</strong> is sent, and the next block begins. If a parity error is detected, a negative acknowledgment <strong>(NAK)</strong> is sent, and the transmitter repeats just that specific block.</p>
+                    </div>
+
+                    <div class="bg-green-50 border border-green-200 p-5 rounded-lg">
+                        <h4 class="font-bold text-green-900 mb-2">2. Forward Error-Correcting (FEC) Codes</h4>
+                        <p class="text-sm text-slate-700">For maximum transmission efficiency over difficult links, we want to correct errors without waiting for retransmissions. FEC codes include heavy mathematical redundancy in the transmission, allowing the receiver to independently find and fix the corrupted bits.</p>
+                    </div>
+                </div>
+
+                <div class="numerical-box bg-slate-50 border-slate-300 mt-6">
+                    <div class="num-title text-slate-800">FEC Exam Example: The 3-Level Matrix Sum</div>
+                    <p class="text-sm mb-4">A powerful FEC method is the matrix sum, where data is transmitted in a grid with checksums attached to the end of every row and column. (The sum of the rows must equal the sum of the columns).</p>
+                    
+                    <p class="font-bold text-slate-800">1. Normal Encoding & Sending:</p>
+                    <p class="text-sm mb-4">Suppose the message is "ADD". We convert to alphabet numbers: A=1, D=4, D=4. <br>Row 1 is: [1, 4, 4]. The checksum total is 9. The 9th letter is 'I'. We transmit the string "ADDI".</p>
+                    
+                    <p class="font-bold text-slate-800">2. Catching and Fixing an Error (Step-by-Step Logic):</p>
+                    <p class="text-sm mb-2">Imagine electrical noise hits the very first number during transmission, corrupting the '1' into an <strong>11</strong>. The receiver constructs the matrix:</p>
+                    <ul class="text-sm list-disc pl-5 mb-4 text-red-700 font-medium">
+                        <li>Row 1 Received as: <strong>[11, 4, 4]</strong>. 
+                            <br>Internal sum is 19. But the received Checksum 'I' dictates the sum must be 9! (Error flagged in Row 1).</li>
+                        <li>Column 1 Received as: <strong>[11, 2]</strong>. 
+                            <br>Internal sum is 13. But the received Column Checksum dictates it must be 3! (Error flagged in Column 1).</li>
+                    </ul>
+                    <p class="text-sm text-green-800 font-bold">The Correction: Since Row 1 and Column 1 both failed their checksums, the corrupted bit MUST be at their intersection (the 11). <br><br>
+                    Look at the mathematical variance: The row total is 19, but it should be 9 (Variance of +10). The column total is 13, but it should be 3 (Variance of +10). <br><br>
+                    We simply take the corrupted number (11), subtract the exact variance (10), resulting in 1. The data is mathematically restored to its correct original form without requiring any ARQ retransmission!</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Tailored for detailed exam answers, numericals, and engineering derivations.</p>
+    </footer>
+
+</body>
+</html>
