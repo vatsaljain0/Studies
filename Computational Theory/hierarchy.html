@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chomsky Hierarchy (Exam Edition)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
+        section { scroll-margin-top: 6rem; }
+        
+        .concept-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 1.75rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        .section-title {
+            color: #1e40af;
+            font-weight: 900;
+            font-size: 1.6rem;
+            border-bottom: 3px solid #bfdbfe;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+        }
+
+        .sub-topic-title {
+            color: #0369a1;
+            font-weight: 800;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .sub-topic-title::before { content: "🔹"; font-size: 1rem; }
+
+        .memory-trick { background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 1rem; margin: 1.5rem 0; border-radius: 0 0.5rem 0.5rem 0;}
+        .rule-box { background-color: #fef2f2; border-left: 4px solid #ef4444; padding: 1rem; margin: 1rem 0; border-radius: 0 0.5rem 0.5rem 0; font-family: 'Consolas', monospace; font-size: 1.05rem;}
+
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem; text-align: left; }
+        .comparison-table th, .comparison-table td { border: 1px solid #cbd5e1; padding: 0.75rem; }
+        .comparison-table th { background-color: #f1f5f9; font-weight: 700; color: #0f172a; }
+
+        p { margin-bottom: 0.75rem; line-height: 1.7; }
+        ul { margin-bottom: 1rem; }
+    </style>
+</head>
+<body class="antialiased">
+
+    <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-4">
+                <li><a href="#diagram" class="hover:text-blue-300">1. The Hierarchy Diagram</a></li>
+                <li><a href="#types" class="hover:text-blue-300">2. The 4 Grammar Types</a></li>
+                <li><a href="#summary" class="hover:text-blue-300">3. Master Summary Table</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
+        <h1 class="text-3xl md:text-4xl font-black text-slate-900 mb-2">The Chomsky Hierarchy</h1>
+        <p class="text-blue-600 font-bold mb-8 text-lg border-b-2 border-slate-200 pb-4">Exam Edition: Simple Explanations, Rules, and Machines</p>
+
+        <section id="diagram" class="mb-12">
+            <h2 class="section-title">1. The Big Picture (Concentric Circles)</h2>
+            
+            <div class="concept-card text-center">
+                <p class="text-slate-700 text-left mb-6">Proposed by Noam Chomsky, this hierarchy classifies formal languages into 4 levels. Every language on the inside is automatically a part of the languages on the outside. (e.g., Every Regular Language is also Context-Free).</p>
+                
+                <div class="flex justify-center my-6">
+                    <svg width="500" height="500" viewBox="0 0 500 500">
+                        <circle cx="250" cy="250" r="240" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+                        <text x="250" y="45" text-anchor="middle" font-weight="bold" fill="#334155" font-family="sans-serif">Type 0: Recursively Enumerable</text>
+                        <text x="250" y="65" text-anchor="middle" font-size="12" fill="#64748b" font-family="sans-serif">(Turing Machine)</text>
+
+                        <circle cx="250" cy="280" r="180" fill="#e0f2fe" stroke="#38bdf8" stroke-width="2"/>
+                        <text x="250" y="130" text-anchor="middle" font-weight="bold" fill="#0369a1" font-family="sans-serif">Type 1: Context-Sensitive</text>
+                        <text x="250" y="150" text-anchor="middle" font-size="12" fill="#0284c7" font-family="sans-serif">(Linear Bounded Automaton)</text>
+
+                        <circle cx="250" cy="320" r="120" fill="#dbeafe" stroke="#0ea5e9" stroke-width="2"/>
+                        <text x="250" y="235" text-anchor="middle" font-weight="bold" fill="#075985" font-family="sans-serif">Type 2: Context-Free</text>
+                        <text x="250" y="255" text-anchor="middle" font-size="12" fill="#0c4a6e" font-family="sans-serif">(Pushdown Automaton)</text>
+
+                        <circle cx="250" cy="370" r="60" fill="#bfdbfe" stroke="#0284c7" stroke-width="2"/>
+                        <text x="250" y="365" text-anchor="middle" font-weight="bold" fill="#1e3a8a" font-family="sans-serif">Type 3: Regular</text>
+                        <text x="250" y="385" text-anchor="middle" font-size="12" fill="#1e3a8a" font-family="sans-serif">(Finite Automaton)</text>
+                    </svg>
+                </div>
+
+                <div class="memory-trick text-left mt-6">
+                    <p class="font-bold text-green-900 mb-1">💡 Memory Trick: The Stricter You Are, The Smaller Your Circle</p>
+                    <p class="text-sm text-green-800">Type 3 (Regular) is in the very center because it has the strictest rules. Type 0 is on the outside because it is the "God mode" level with zero restrictions. <strong>As you go from 3 down to 0, the machines get more powerful, and the rules get looser.</strong></p>
+                </div>
+            </div>
+        </section>
+
+        <section id="types" class="mb-12">
+            <h2 class="section-title">2. The 4 Grammar Types (Simple English)</h2>
+
+            <div class="concept-card border-t-4 border-t-slate-500">
+                <h3 class="text-xl font-black text-slate-900 mb-2">Type 0: Unrestricted Grammar (The Boss)</h3>
+                <p>This is the highest level. It generates <strong>Recursively Enumerable</strong> languages. Because it is "unrestricted," there are practically no rules on what the productions can look like.</p>
+                
+                <div class="rule-box text-slate-800">
+                    Rule: &alpha; &rarr; &beta; <br>
+                    <span class="text-sm text-slate-600 font-sans">(&alpha; must contain at least one non-terminal/uppercase letter. &beta; can be literally anything).</span>
+                </div>
+                
+                <ul class="list-disc pl-6 space-y-1 text-slate-700">
+                    <li><strong>Accepted by:</strong> Turing Machine (TM).</li>
+                    <li><strong>Example:</strong> `aB c &rarr; d e F` (Totally fine! Multiple symbols on the left, anything on the right).</li>
+                </ul>
+            </div>
+
+            <div class="concept-card border-t-4 border-t-sky-400">
+                <h3 class="text-xl font-black text-sky-900 mb-2">Type 1: Context-Sensitive Grammar (The Weight-Watcher)</h3>
+                <p>Generates <strong>Context-Sensitive Languages</strong>. The only major rule here is that the right side of the arrow must never be shorter than the left side. It cannot shrink!</p>
+                
+                <div class="rule-box text-sky-900 bg-sky-50 border-sky-400">
+                    Rule: &alpha; &rarr; &beta; <br>
+                    <span class="text-sm text-sky-700 font-sans">(Condition: The length of |&alpha;| &le; the length of |&beta;|)</span>
+                </div>
+                
+                <ul class="list-disc pl-6 space-y-1 text-slate-700">
+                    <li><strong>Accepted by:</strong> Linear Bounded Automaton (LBA).</li>
+                    <li><strong>Important Note:</strong> Because it cannot shrink, &epsilon; (epsilon, which has length 0) is usually not allowed on the right side.</li>
+                    <li><strong>Example:</strong> `A B &rarr; a B c` (Valid: Left side has 2 symbols, right side has 3. Length increased!)</li>
+                </ul>
+            </div>
+
+            <div class="concept-card border-t-4 border-t-blue-500">
+                <h3 class="text-xl font-black text-blue-900 mb-2">Type 2: Context-Free Grammar (The Lone Wolf)</h3>
+                <p>Generates <strong>Context-Free Languages</strong>. This is what you use when simplifying grammars! The strict rule here is that the left side of the arrow MUST be exactly <strong>one single uppercase Variable</strong>. Nothing else.</p>
+                
+                <div class="rule-box text-blue-900 bg-blue-50 border-blue-500">
+                    Rule: A &rarr; &gamma; <br>
+                    <span class="text-sm text-blue-700 font-sans">('A' is exactly ONE non-terminal. '&gamma;' can be any combination of terminals and non-terminals).</span>
+                </div>
+                
+                <ul class="list-disc pl-6 space-y-1 text-slate-700">
+                    <li><strong>Accepted by:</strong> Pushdown Automaton (PDA).</li>
+                    <li><strong>Example:</strong> `S &rarr; a S b` (Valid: Left side is exactly one uppercase letter).</li>
+                    <li><strong>Invalid Example:</strong> `a S &rarr; a b` (Invalid for Type 2: Left side has a terminal 'a' next to the 'S').</li>
+                </ul>
+            </div>
+
+            <div class="concept-card border-t-4 border-t-indigo-600">
+                <h3 class="text-xl font-black text-indigo-900 mb-2">Type 3: Regular Grammar (The Strictest Parent)</h3>
+                <p>Generates <strong>Regular Languages</strong>. This is the most restrictive level. Like Type 2, the left side must be one uppercase variable. But now, the right side is strictly controlled: it can only have at most one terminal (lowercase), which can optionally be followed by exactly one variable (uppercase).</p>
+                
+                <div class="rule-box text-indigo-900 bg-indigo-50 border-indigo-600">
+                    Rule (Right Linear): A &rarr; aB &nbsp; OR &nbsp; A &rarr; a <br>
+                    <span class="text-sm text-indigo-700 font-sans">('A' and 'B' are single Non-Terminals. 'a' is a single Terminal).</span>
+                </div>
+                
+                <ul class="list-disc pl-6 space-y-1 text-slate-700">
+                    <li><strong>Accepted by:</strong> Finite Automata (DFA / NFA).</li>
+                    <li><strong>Example:</strong> `S &rarr; a B` or `S &rarr; a`.</li>
+                    <li><strong>Invalid Example:</strong> `S &rarr; a S b` (Invalid for Type 3: You cannot have terminals on both sides of a variable).</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="summary" class="mb-12">
+            <h2 class="section-title">3. Master Summary Table (Memorize for Exam)</h2>
+            
+            <div class="concept-card overflow-x-auto">
+                <table class="comparison-table">
+                    <tr>
+                        <th class="w-1/6">Grammar Type</th>
+                        <th class="w-1/4">Language Generated</th>
+                        <th class="w-1/4">Accepting Automaton (Machine)</th>
+                        <th class="w-1/3">Production Rules</th>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">Type 0</td>
+                        <td>Recursively Enumerable</td>
+                        <td>Turing Machine (TM)</td>
+                        <td class="font-mono text-sm">&alpha; &rarr; &beta; <br><span class="text-xs text-slate-500 font-sans">(No restrictions)</span></td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">Type 1</td>
+                        <td>Context-Sensitive</td>
+                        <td>Linear Bounded Automaton (LBA)</td>
+                        <td class="font-mono text-sm">&alpha; &rarr; &beta; <br><span class="text-xs text-slate-500 font-sans">(|&alpha;| &le; |&beta;|)</span></td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">Type 2</td>
+                        <td>Context-Free</td>
+                        <td>Pushdown Automaton (PDA)</td>
+                        <td class="font-mono text-sm">A &rarr; &gamma; <br><span class="text-xs text-slate-500 font-sans">(Left side is 1 variable)</span></td>
+                    </tr>
+                    <tr>
+                        <td class="font-bold text-slate-800">Type 3</td>
+                        <td>Regular</td>
+                        <td>Finite Automaton (DFA/NFA)</td>
+                        <td class="font-mono text-sm">A &rarr; aB | a <br><span class="text-xs text-slate-500 font-sans">(Strictly right/left linear)</span></td>
+                    </tr>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="text-center py-8 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Tailored for easy memorization for Theory of Computation Exams.</p>
+    </footer>
+
+</body>
+</html>
