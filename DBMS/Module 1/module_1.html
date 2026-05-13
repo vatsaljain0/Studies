@@ -198,6 +198,46 @@
                     <li><strong>Weak Entity Set:</strong> Does not have a primary key of its own. Its existence depends on a strong entity (identifying entity). Represented by a double rectangle.</li>
                 </ul>
 
+                <!-- DIFFERENCE TABLE: STRONG VS WEAK ENTITY SET -->
+                <div class="overflow-x-auto mt-6 mb-8">
+                    <table class="w-full text-left border-collapse border border-slate-300 shadow-sm">
+                        <thead>
+                            <tr class="bg-blue-50 text-blue-900">
+                                <th class="border border-slate-300 px-4 py-3 font-bold text-base w-1/4">Feature</th>
+                                <th class="border border-slate-300 px-4 py-3 font-bold text-base w-3/8">Strong Entity Set</th>
+                                <th class="border border-slate-300 px-4 py-3 font-bold text-base w-3/8">Weak Entity Set</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-base text-slate-700">
+                            <tr class="bg-white">
+                                <td class="border border-slate-300 px-4 py-3 font-semibold text-slate-800">Primary Key</td>
+                                <td class="border border-slate-300 px-4 py-3">Possesses its own primary key.</td>
+                                <td class="border border-slate-300 px-4 py-3">Does not have a primary key (uses a partial key or discriminator instead).</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="border border-slate-300 px-4 py-3 font-semibold text-slate-800">Existence</td>
+                                <td class="border border-slate-300 px-4 py-3">Independent of any other entity in the schema.</td>
+                                <td class="border border-slate-300 px-4 py-3">Existence is strictly dependent on a strong entity (identifying entity).</td>
+                            </tr>
+                            <tr class="bg-white">
+                                <td class="border border-slate-300 px-4 py-3 font-semibold text-slate-800">Representation</td>
+                                <td class="border border-slate-300 px-4 py-3">Represented by a <strong>single rectangle</strong> in ER diagrams.</td>
+                                <td class="border border-slate-300 px-4 py-3">Represented by a <strong>double rectangle</strong> in ER diagrams.</td>
+                            </tr>
+                            <tr class="bg-slate-50">
+                                <td class="border border-slate-300 px-4 py-3 font-semibold text-slate-800">Relationship Type</td>
+                                <td class="border border-slate-300 px-4 py-3">Uses a standard relationship (represented by a single diamond).</td>
+                                <td class="border border-slate-300 px-4 py-3">Uses an <strong>identifying relationship</strong> (represented by a double diamond).</td>
+                            </tr>
+                            <tr class="bg-white">
+                                <td class="border border-slate-300 px-4 py-3 font-semibold text-slate-800">Participation</td>
+                                <td class="border border-slate-300 px-4 py-3">Participation in its relationship can be partial or total.</td>
+                                <td class="border border-slate-300 px-4 py-3">MUST have <strong>total participation</strong> in the identifying relationship.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
                 <h3 class="text-xl font-semibold text-slate-800 mt-6 mb-2 border-b pb-1">Types of Attributes</h3>
                 <ul class="list-disc pl-6 space-y-2">
                     <li><strong>Simple Attribute:</strong> Cannot be further divided (e.g., Age).</li>

@@ -558,22 +558,42 @@ ORDER BY col DESC;</div>
         <!-- 11. VIEWS -->
         <!-- ========================================== -->
         <section id="views" class="mb-16">
-            <h2 class="section-title">11. SQL Views</h2>
+            <h2 class="section-title">11. SQL Views (5-6 Marks Short Note)</h2>
             <div class="theory-box">
-                <h3 class="theory-title">Defining Views</h3>
+                <h3 class="theory-title">What is a View?</h3>
+                <p class="text-slate-700 mb-2">A <strong>View</strong> is a virtual table whose contents are defined by a query. Unlike a regular table, a standard view does not store data physically on the disk; the database only stores the underlying <code>SELECT</code> statement and evaluates it dynamically every time the view is accessed.</p>
+                
+                <h4 class="font-bold text-slate-800 mt-4 mb-2">Advantages / Why use Views?</h4>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700 mb-4">
+                    <li><strong>Security:</strong> You can hide sensitive columns (like <code>salary</code>) or rows by providing users access only to the View, not the base tables.</li>
+                    <li><strong>Simplicity (Data Abstraction):</strong> Complex queries containing multiple <code>JOIN</code>s can be saved as a single View, making it easier for end-users to query.</li>
+                    <li><strong>Logical Data Independence:</strong> If the underlying table structure changes, the view can be modified to keep the user-facing schema identical.</li>
+                </ul>
+
+                <h4 class="font-bold text-slate-800 mt-4 mb-2">Types of Views</h4>
                 <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                    <li><strong>Defining Views:</strong> Created using <code>CREATE VIEW v AS &lt;query expression&gt;</code> to provide security and data abstraction. Views are virtual; they are not precomputed, their query expression is stored and evaluated only upon access.</li>
-                    <li><strong>Materialized Views:</strong> Some database systems allow views to be actually stored on disk and kept up-to-date automatically.</li>
-                    <li><strong>Updatable Views:</strong> Views allow inserts/updates/deletes <em>only</em> if strict conditions are met: single relation in the FROM clause, no aggregates, no GROUP BY or HAVING clauses.</li>
+                    <li><strong>Standard/Virtual Views:</strong> Evaluated on-the-fly. Do not consume disk space for data.</li>
+                    <li><strong>Materialized Views:</strong> The result of the query is actually physically stored on the disk. They are used in data warehousing to speed up extremely complex, slow queries. The database must periodically refresh this stored data to keep it consistent.</li>
+                    <li><strong>Updatable Views:</strong> You can perform <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code> directly on a view <em>only if</em> it meets strict rules: 
+                        <ul class="list-circle pl-6 mt-1 text-sm text-slate-600">
+                            <li>The view is based on a single table (no JOINs).</li>
+                            <li>No aggregate functions (<code>SUM</code>, <code>AVG</code>) or <code>DISTINCT</code> keyword.</li>
+                            <li>No <code>GROUP BY</code> or <code>HAVING</code> clauses.</li>
+                        </ul>
+                    </li>
                 </ul>
             </div>
+            
             <div class="command-block">
-                <div class="command-header">CREATE VIEW</div>
+                <div class="command-header">CREATE VIEW Example</div>
                 <div class="example-section">
                     <div class="sql-code"><span class="sql-comment">-- Hide salary data from public users</span>
 <span class="sql-keyword">CREATE VIEW</span> Public_Employee_Info <span class="sql-keyword">AS</span>
 <span class="sql-keyword">SELECT</span> emp_id, name, dept_id 
-<span class="sql-keyword">FROM</span> Employee;</div>
+<span class="sql-keyword">FROM</span> Employee;
+
+<span class="sql-comment">-- Using the view just like a real table</span>
+<span class="sql-keyword">SELECT</span> * <span class="sql-keyword">FROM</span> Public_Employee_Info;</div>
                 </div>
             </div>
         </section>
@@ -582,25 +602,35 @@ ORDER BY col DESC;</div>
         <!-- 12. TRIGGERS -->
         <!-- ========================================== -->
         <section id="triggers" class="mb-16">
-            <h2 class="section-title">12. Triggers</h2>
+            <h2 class="section-title">12. Triggers (5-6 Marks Short Note)</h2>
             <div class="theory-box">
-                <h3 class="theory-title">Trigger Definition & Usage</h3>
+                <h3 class="theory-title">What is a Trigger?</h3>
+                <p class="text-slate-700 mb-2">A <strong>Trigger</strong> is a special type of stored procedure that is automatically executed (or "fired") by the DBMS as a side effect of a specific database modification event (such as <code>INSERT</code>, <code>UPDATE</code>, or <code>DELETE</code>) on a particular table.</p>
+                
+                <h4 class="font-bold text-slate-800 mt-4 mb-2">ECA Architecture of a Trigger</h4>
+                <p class="text-slate-700 mb-2">Triggers strictly follow the <strong>ECA (Event-Condition-Action)</strong> rule:</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700 mb-4">
+                    <li><strong>Event:</strong> The database operation that causes the trigger to fire (e.g., <code>AFTER INSERT</code> or <code>BEFORE DELETE</code>).</li>
+                    <li><strong>Condition (Optional):</strong> A boolean rule evaluated when the event occurs (e.g., <code>WHEN new.salary > 100000</code>). The action only executes if this is true.</li>
+                    <li><strong>Action:</strong> The PL/SQL procedural code executed by the trigger to perform the intended task.</li>
+                </ul>
+
+                <h4 class="font-bold text-slate-800 mt-4 mb-2">Applications / Why use Triggers?</h4>
                 <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                    <li><strong>Definition:</strong> Stored procedures that the system executes automatically as a side effect of a database modification (insert, update, delete).</li>
-                    <li><strong>Usage:</strong> Used to maintain referential integrity, alert humans, or perform automatic tasks (like placing orders when inventory drops).</li>
-                    <li><strong>Management:</strong> You can disable them (<code>ALTER TRIGGER ... DISABLE</code>) or remove them (<code>DROP TRIGGER ...</code>).</li>
-                    <li><strong>When Not to Use:</strong> Unnecessary for maintaining materialized views (modern DBs do this automatically). Extremely dangerous during database replication or loading from backups, as the triggered action might be executed twice.</li>
+                    <li><strong>Enforcing Complex Business Rules:</strong> When a simple <code>CHECK</code> constraint isn't enough (e.g., checking values across multiple different tables before allowing an insert).</li>
+                    <li><strong>Auditing and Logging:</strong> Automatically creating a log record of <em>who</em> modified a row, <em>when</em> they did it, and what the <em>old</em> values were.</li>
+                    <li><strong>Automatic Derived Calculations:</strong> (e.g., Automatically subtracting stock quantity in the <code>Inventory</code> table whenever a new row is inserted into the <code>Orders</code> table).</li>
                 </ul>
             </div>
 
             <div class="command-block">
-                <div class="command-header">CREATE TRIGGER</div>
+                <div class="command-header">CREATE TRIGGER Example</div>
                 <div class="syntax-section">
                     <div class="syntax-title">Structure</div>
-                    <div class="generic-syntax">CREATE TRIGGER name AFTER [event] ON [table] REFERENCING ... FOR EACH ROW WHEN [condition] BEGIN ATOMIC ... END;</div>
+                    <div class="generic-syntax">CREATE TRIGGER name [BEFORE | AFTER] [INSERT | UPDATE | DELETE] ON [table] REFERENCING NEW ROW AS nrow FOR EACH ROW WHEN [condition] BEGIN ATOMIC ... END;</div>
                 </div>
                 <div class="example-section">
-                    <div class="example-title">Execution Example</div>
+                    <div class="example-title">Execution Example: Auto-Updating Inventory</div>
                     <div class="sql-code"><span class="sql-comment">-- Automatically update inventory when a new order is inserted</span>
 <span class="sql-keyword">CREATE TRIGGER</span> Update_Inventory
 <span class="sql-keyword">AFTER INSERT ON</span> Orders

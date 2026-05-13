@@ -70,11 +70,22 @@
         .comparison-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem; text-align: left; }
         .comparison-table th, .comparison-table td { border: 1px solid #cbd5e1; padding: 0.75rem; }
         .comparison-table th { background-color: #f1f5f9; font-weight: 700; color: #0f172a; }
+        .comparison-table-center th, .comparison-table-center td { text-align: center; }
 
-        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; fill: #1e293b; font-weight: 600; text-anchor: middle; dominant-baseline: middle;}
-        .svg-text-bold { font-family: 'Inter', sans-serif; font-size: 13px; fill: #0f172a; font-weight: 800; text-anchor: middle; dominant-baseline: middle;}
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 14px; fill: #1e293b; font-weight: 600; text-anchor: middle; dominant-baseline: middle;}
+        .svg-text-bold { font-family: 'Inter', sans-serif; font-size: 16px; fill: #0f172a; font-weight: 800; text-anchor: middle; dominant-baseline: middle;}
         .highlight-red { color: #b91c1c; font-weight: bold; }
         .highlight-green { color: #15803d; font-weight: bold; }
+        
+        .step-badge {
+            background-color: #1e40af;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 9999px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-right: 0.5rem;
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -85,7 +96,7 @@
             <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-3">
                 <li><a href="#transactions" class="hover:text-blue-300">1. Transactions & ACID</a></li>
                 <li><a href="#states" class="hover:text-blue-300">2. States & Concurrency</a></li>
-                <li><a href="#serializability" class="hover:text-blue-300">3. Serializability</a></li>
+                <li><a href="#serializability" class="hover:text-blue-300">3. Serializability & Graphs</a></li>
                 <li><a href="#locking" class="hover:text-blue-300">4. Locking & 2PL</a></li>
                 <li><a href="#deadlocks" class="hover:text-blue-300">5. Deadlocks</a></li>
                 <li><a href="#timestamps" class="hover:text-blue-300">6. Timestamps</a></li>
@@ -96,7 +107,7 @@
 
     <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
         <h1 class="text-4xl font-black text-slate-900 mb-2">Transactions & Concurrency Control</h1>
-        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Comprehensive Exam Guide: Protocols, Deadlocks, and Recovery</p>
+        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Comprehensive Exam Guide: Protocols, Deadlocks, and Graph Numericals</p>
 
         <!-- ========================================== -->
         <!-- 1. TRANSACTIONS & ACID -->
@@ -203,7 +214,7 @@
         <!-- 3. SERIALIZABILITY -->
         <!-- ========================================== -->
         <section id="serializability" class="mb-16">
-            <h2 class="section-title">3. Serializability (Conflict & View)</h2>
+            <h2 class="section-title">3. Serializability & Precedence Graphs</h2>
             
             <div class="theory-box">
                 <h3 class="theory-title">Schedules and Serializability</h3>
@@ -214,26 +225,132 @@
             <div class="concept-block">
                 <div class="command-header">Conflict Serializability</div>
                 <div class="breakdown-section">
-                    <p class="text-slate-700 mb-2">Two operations from different transactions are said to <strong>Conflict</strong> if they access the <em>same data item</em> and at least one of them is a <strong>Write</strong> operation.</p>
-                    <ul class="word-breakdown">
-                        <li><code>Read(Q) & Read(Q)</code> ➔ No Conflict (Safe to swap order)</li>
+                    <p class="text-slate-700 mb-2 font-bold underline">Formal Definition:</p>
+                    <p class="text-slate-700 mb-2">Instructions <span class="math-def">I<sub>i</sub></span> and <span class="math-def">I<sub>j</sub></span> of transactions <span class="math-def">T<sub>i</sub></span> and <span class="math-def">T<sub>j</sub></span> respectively, <strong>conflict</strong> if and only if there exists some data item Q accessed by both <span class="math-def">I<sub>i</sub></span> and <span class="math-def">I<sub>j</sub></span>, and <strong>at least one of these instructions wrote Q</strong>.</p>
+                    <ul class="word-breakdown mb-4">
+                        <li><code>Read(Q) & Read(Q)</code> ➔ No Conflict</li>
                         <li><code>Read(Q) & Write(Q)</code> ➔ <span class="highlight-red">Conflict!</span> (Order matters)</li>
+                        <li><code>Write(Q) & Read(Q)</code> ➔ <span class="highlight-red">Conflict!</span> (Order matters)</li>
                         <li><code>Write(Q) & Write(Q)</code> ➔ <span class="highlight-red">Conflict!</span> (Order matters)</li>
                     </ul>
-                    <p class="text-slate-700 mt-4">If a concurrent schedule can be transformed into a serial schedule by swapping non-conflicting operations, it is <strong>Conflict Serializable</strong>.</p>
-                </div>
-                <div class="p-6 bg-white">
-                    <p class="font-bold text-blue-900 mb-2">The Precedence Graph Algorithm (Exam Proof)</p>
-                    <p class="text-sm text-slate-700">To prove conflict serializability in an exam, draw a Precedence Graph. Create a node for every transaction. Draw an arrow from T1 to T2 if T1 executes a conflicting operation before T2. <br><strong>The Rule:</strong> If the graph contains a <strong>Cycle</strong> (a circle), the schedule is NOT serializable. If there is no cycle, it is serializable.</p>
+                    <p class="text-slate-700 mb-2">If a schedule S can be transformed into a schedule S' by a series of swaps of non-conflicting instructions, we say that S and S' are <strong>conflict equivalent</strong>. A schedule S is <strong>conflict serializable</strong> if it is conflict equivalent to a serial schedule.</p>
+                    <div class="bg-white p-3 border rounded text-sm font-mono text-slate-800">
+                        <strong>Example of Valid Swapping:</strong><br>
+                        T1: Read(A)<br>
+                        T2: Read(B)  <span class="text-green-600 font-bold ml-2">&lt;-- These do not conflict (different variables). We can swap them!</span><br>
+                        T1: Write(A)<br><br>
+                        <em>Swapping gives the serial schedule: T1: Read(A), T1: Write(A) followed by T2: Read(B).</em>
+                    </div>
                 </div>
             </div>
 
             <div class="concept-block">
                 <div class="command-header">View Serializability</div>
                 <div class="breakdown-section">
-                    <p class="text-slate-700">A schedule is View Serializable if it produces the exact same "view" (read values and final written values) as a serial schedule. <br><br>All conflict-serializable schedules are automatically view-serializable. However, some schedules are view-serializable but NOT conflict-serializable! This happens because of <strong>Blind Writes</strong> (when a transaction writes a value without ever reading it first, masking previous conflicts).</p>
+                    <p class="text-slate-700 mb-2 font-bold underline">Formal Definition:</p>
+                    <p class="text-slate-700 mb-4">Let S and S' be two schedules with the same set of transactions. S and S' are <strong>view equivalent</strong> if the following three conditions are met for each data item Q:</p>
+                    <ol class="list-decimal pl-6 space-y-2 text-slate-700 mb-4">
+                        <li><strong>Initial Read:</strong> If in schedule S, transaction <span class="math-def">T<sub>i</sub></span> reads the initial value of Q, then in schedule S' also transaction <span class="math-def">T<sub>i</sub></span> must read the initial value of Q.</li>
+                        <li><strong>Read-From:</strong> If in schedule S, transaction <span class="math-def">T<sub>i</sub></span> executes <code>read(Q)</code>, and that value was produced by transaction <span class="math-def">T<sub>j</sub></span> (if any), then in schedule S' also transaction <span class="math-def">T<sub>i</sub></span> must read the value of Q that was produced by the <em>same</em> <code>write(Q)</code> operation of transaction <span class="math-def">T<sub>j</sub></span>.</li>
+                        <li><strong>Final Write:</strong> The transaction (if any) that performs the final <code>write(Q)</code> operation in schedule S must also perform the final <code>write(Q)</code> operation in schedule S'.</li>
+                    </ol>
+                    <p class="text-slate-700 mb-4">A schedule S is <strong>view serializable</strong> if it is view equivalent to a serial schedule. Every conflict serializable schedule is also view serializable.</p>
+                    
+                    <div class="bg-yellow-50 p-3 border-l-4 border-yellow-400 text-sm text-slate-800">
+                        <p class="font-bold mb-2">Example: Blind Writes</p>
+                        <p>Some schedules are view-serializable but <em>NOT</em> conflict-serializable. This only happens because of <strong>Blind Writes</strong> (when a transaction writes a value without ever reading it first, masking previous conflicts).</p>
+                        <p class="font-mono mt-2">
+                        T1: Read(Q)<br>
+                        T2: Write(Q) &lt;-- Blind Write<br>
+                        T1: Write(Q)<br>
+                        T3: Write(Q) &lt;-- Blind Write (Final write)
+                        </p>
+                        <p class="mt-1"><em>Even though conflicts exist that prevent swapping, the final outcome strictly depends on T3's blind write, making it view equivalent to the serial schedule &lt;T1, T2, T3&gt;.</em></p>
+                    </div>
                 </div>
             </div>
+
+            <!-- EXAM PRECEDENCE GRAPH PROBLEM -->
+            <div class="concept-block border-2 border-blue-300">
+                <div class="command-header bg-blue-100 text-blue-900">Exam Problem: Precedence Graph & Serializability</div>
+                
+                <div class="p-6 bg-white">
+                    <p class="font-bold text-slate-800 mb-2">Given the following transaction schedule:</p>
+                    
+                    <table class="comparison-table comparison-table-center mb-6">
+                        <tr>
+                            <th class="w-1/3">Transaction 1 (T1)</th>
+                            <th class="w-1/3">Transaction 2 (T2)</th>
+                            <th class="w-1/3">Transaction 3 (T3)</th>
+                        </tr>
+                        <tr><td></td><td>Read(X)</td><td></td></tr>
+                        <tr><td>Read(Y)</td><td></td><td></td></tr>
+                        <tr><td></td><td>Write(X)</td><td></td></tr>
+                        <tr><td>Read(X)</td><td></td><td></td></tr>
+                        <tr><td>Write(Y)</td><td></td><td></td></tr>
+                        <tr><td></td><td></td><td>Read(Y)</td></tr>
+                        <tr><td></td><td></td><td>Write(X)</td></tr>
+                    </table>
+
+                    <div class="bg-slate-50 p-4 border rounded-lg mb-6">
+                        <p class="font-bold text-red-700 mb-2">Questions:</p>
+                        <ol class="list-decimal pl-5 font-semibold text-slate-800 space-y-1">
+                            <li>Is the given transaction conflict serializable or not?</li>
+                            <li>What is the equivalent serialized schedule for the given problem?</li>
+                        </ol>
+                    </div>
+
+                    <h3 class="font-black text-lg text-green-700 mb-3 border-b pb-1">Step-by-Step Solution:</h3>
+                    
+                    <p><span class="step-badge">Step 1</span> <strong>Identify all Conflicts:</strong><br>
+                    <span class="text-sm text-slate-600">We scan the table top-to-bottom looking for Read-Write, Write-Read, or Write-Write clashes on the SAME variable across DIFFERENT transactions.</span></p>
+                    <ul class="list-disc pl-8 space-y-1 text-sm text-slate-800 mb-4 mt-2 font-mono">
+                        <li>T2 Write(X) & T1 Read(X) <span class="text-blue-600 font-bold ml-2">➔ Conflict! Draw arrow T2 &rarr; T1</span></li>
+                        <li>T2 Write(X) & T3 Write(X) <span class="text-blue-600 font-bold ml-2">➔ Conflict! Draw arrow T2 &rarr; T3</span></li>
+                        <li>T1 Read(X) & T3 Write(X) <span class="text-blue-600 font-bold ml-2">➔ Conflict! Draw arrow T1 &rarr; T3</span></li>
+                        <li>T1 Write(Y) & T3 Read(Y) <span class="text-blue-600 font-bold ml-2">➔ Conflict! Draw arrow T1 &rarr; T3</span></li>
+                    </ul>
+
+                    <p><span class="step-badge">Step 2</span> <strong>Draw the Precedence Graph:</strong></p>
+                    <div class="diagram-container bg-white border-0 my-4">
+                        <svg width="400" height="150" viewBox="0 0 400 150" class="mx-auto">
+                            <!-- Nodes -->
+                            <circle cx="80" cy="100" r="25" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
+                            <text x="80" y="100" class="svg-text-bold">T2</text>
+
+                            <circle cx="200" cy="100" r="25" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
+                            <text x="200" y="100" class="svg-text-bold">T1</text>
+
+                            <circle cx="320" cy="100" r="25" fill="#e2e8f0" stroke="#0f172a" stroke-width="2"/>
+                            <text x="320" y="100" class="svg-text-bold">T3</text>
+
+                            <!-- Arrows -->
+                            <!-- T2 to T1 -->
+                            <path d="M 105 100 L 170 100" stroke="#1d4ed8" stroke-width="3" marker-end="url(#blue-arrow)"/>
+                            <!-- T1 to T3 -->
+                            <path d="M 225 100 L 290 100" stroke="#1d4ed8" stroke-width="3" marker-end="url(#blue-arrow)"/>
+                            <!-- T2 to T3 (curved over the top) -->
+                            <path d="M 95 80 Q 200 10 305 80" fill="transparent" stroke="#1d4ed8" stroke-width="3" marker-end="url(#blue-arrow)"/>
+
+                            <defs>
+                                <marker id="blue-arrow" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                                    <path d="M0,0 L0,8 L8,4 z" fill="#1d4ed8" />
+                                </marker>
+                            </defs>
+                        </svg>
+                    </div>
+
+                    <p><span class="step-badge">Step 3</span> <strong>Answer Q1 (Serializable?):</strong><br>
+                    <span class="text-sm text-slate-800">We check the graph for cycles (loops). All arrows flow strictly from left to right (T2 &rarr; T1 &rarr; T3), and T2 also connects directly to T3. There are <strong>no cycles</strong>. <br>Therefore, <strong>YES, the given transaction is conflict serializable.</strong></span></p>
+
+                    <p class="mt-4"><span class="step-badge">Step 4</span> <strong>Answer Q2 (Equivalent Schedule):</strong><br>
+                    <span class="text-sm text-slate-800">To find the equivalent serial schedule, we perform a <em>Topological Sort</em> on the graph (following the arrows from start to finish).<br>
+                    T2 has no incoming arrows, so it goes first. T2 points to T1, so T1 is next. Both T2 and T1 point to T3, so T3 is last. <br>
+                    <strong>Equivalent Serialized Schedule = T2 &rarr; T1 &rarr; T3.</strong></span></p>
+
+                </div>
+            </div>
+
         </section>
 
         <!-- ========================================== -->
