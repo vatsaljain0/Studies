@@ -88,6 +88,11 @@
         table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; text-align: center; }
         th, td { border: 1px solid #cbd5e1; padding: 0.75rem; }
         th { background-color: #f1f5f9; font-weight: 700; color: #0f172a; }
+        
+        .trace-table th { background-color: #e2e8f0; font-size: 0.85rem; }
+        .trace-table td { padding: 0.5rem; font-size: 0.85rem; }
+        .hit { color: #16a34a; font-weight: bold; }
+        .miss { color: #dc2626; font-weight: bold; }
     </style>
 </head>
 <body class="antialiased">
@@ -293,53 +298,173 @@
             <h2 class="section-title">5. Page Replacement Algorithms & Thrashing</h2>
             
             <div class="concept-card">
-                <p>What happens if a Page Fault occurs, but the physical RAM is completely full? The OS must perform <strong>Page Replacement</strong>. It must choose a "victim" frame, swap it out to the disk, and load the new requested page in its place. We use algorithms to decide which page to kill to minimize future page faults.</p>
+                <p class="mb-4">What happens if a Page Fault occurs, but the physical RAM is completely full? The OS must perform <strong>Page Replacement</strong>. It evaluates the frames in memory, chooses a "victim" frame, swaps it out to the disk, and loads the newly requested page in its place. The goal of every algorithm is to choose a victim that minimizes future page faults.</p>
 
-                <h3 class="sub-topic-title mt-4">A. FIFO (First-In-First-Out)</h3>
-                <p>The simplest algorithm. The OS simply replaces the oldest page in memory (the one that was brought in first). While simple to program, it performs poorly because an old page might still be heavily used.</p>
-                <div class="highlight-box mt-2">
-                    <p class="font-bold text-red-800 mb-1">Belady's Anomaly</p>
-                    <p>Normally, if you buy more RAM (add more frames), your number of page faults should go down. <strong>Belady's Anomaly</strong> is a strange phenomenon where increasing the number of page frames actually <em>increases</em> the number of page faults! This happens exclusively with the FIFO algorithm.</p>
+                <div class="bg-blue-50 p-4 border border-blue-200 rounded text-sm font-bold text-blue-900 mb-6 text-center shadow-sm">
+                    MASTER PROBLEM DATA FOR ALL ALGORITHM TRACES BELOW:<br>
+                    Reference String = <span class="math-def text-lg">7, 0, 1, 2, 0, 3, 0, 4, 2, 3</span><br>
+                    Available Frames = 3 (Initially Empty)
                 </div>
 
-                <h3 class="sub-topic-title">B. Optimal (OPT / MIN)</h3>
-                <p>This algorithm replaces the page that will not be used for the <em>longest period of time in the future</em>. It guarantees the absolute lowest number of page faults. However, it is impossible to implement in real life because the OS cannot predict the future. It is only used as a benchmark to grade other algorithms.</p>
+                <!-- ADDED/EXPANDED SECTION: Page Fault Counter & Victim Selection Mechanics -->
+                <div class="bg-slate-50 p-5 border border-slate-300 rounded-lg mb-6 shadow-sm">
+                    <h4 class="font-bold text-slate-800 text-lg mb-3 border-b pb-2">Mechanics: Page Fault Counter & Victim Selection</h4>
+                    <p class="text-sm text-slate-700 mb-3">Every time the CPU needs to read or write data, it requests a specific <strong>Page</strong>. The OS follows a strict sequence to handle this request and updates the Page Fault Counter accordingly:</p>
+                    
+                    <ol class="list-decimal pl-5 text-sm text-slate-700 space-y-3">
+                        <li><strong>The Request & Check:</strong> The OS checks if the requested page is already loaded into one of the available physical RAM frames.</li>
+                        <li><strong>Case A: Page Hit (No Action)</strong>
+                            <ul class="list-disc pl-5 mt-1 text-green-700 font-medium">
+                                <li>If the page is found in RAM, it's a <strong>Hit</strong>.</li>
+                                <li>The Page Fault Counter <strong>DOES NOT INCREASE</strong>.</li>
+                                <li>No victim is selected, and execution continues instantly.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Case B: Page Fault / Miss (Counter Increases)</strong>
+                            <ul class="list-disc pl-5 mt-1 text-red-700 font-medium">
+                                <li>If the page is missing from RAM, a <strong>Page Fault (Miss)</strong> occurs.</li>
+                                <li>The OS immediately pauses the process, and the <strong>Page Fault Counter increases by +1</strong>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Resolving the Fault (Frame Allocation & Victim Selection):</strong> The OS must now fetch the missing page from the hard disk into RAM.
+                            <ul class="list-circle pl-5 mt-1 text-slate-700 font-normal space-y-1">
+                                <li><em>Condition 1 (Empty Frames Available):</em> If there is an empty frame (usually at the start of execution), the page is simply placed in the empty frame. No victim is needed.</li>
+                                <li><em>Condition 2 (RAM is Full):</em> If all frames are occupied, the OS triggers the <strong>Victim Selection Logic</strong>. Based on the specific algorithm (FIFO, LRU, etc.), the OS chooses an existing page to be "evicted" (overwritten). The newly requested page replaces this victim.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p class="text-sm text-blue-800 font-bold mt-4 bg-blue-100 p-2 rounded border border-blue-200">Exam Rule: Total Page Faults = (Initial Empty Frame Fills) + (Number of Victim Replacements)</p>
+                </div>
 
-                <h3 class="sub-topic-title">C. LRU (Least Recently Used)</h3>
-                <p>Because we can't look into the future (OPT), we look into the past! LRU replaces the page that has not been used for the longest period of time. This relies on the principle of locality (if a page hasn't been used recently, it probably won't be used soon). It is excellent, does not suffer from Belady's Anomaly, but requires hardware assistance (like counters or stack structures) to track the time of every memory access.</p>
+                <div class="highlight-box bg-red-50 border-red-500 mt-2 mb-6">
+                    <p class="font-bold text-red-800 text-lg mb-1">⚠️ Belady's Anomaly</p>
+                    <p class="text-sm text-slate-800 mb-2">Normally, common sense dictates that adding more physical memory (Frames) should decrease the number of Page Faults. <strong>Belady's Anomaly</strong> is a counter-intuitive phenomenon where increasing the number of page frames actually <em>increases</em> the number of page faults!</p>
+                    <p class="text-sm text-slate-800 font-bold mt-2">Example Proof:</p>
+                    <p class="text-sm text-slate-700 mb-2">Given the reference string: <span class="math-def">1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5</span></p>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 mb-4">
+                        <li>Using FIFO with <strong>3 Frames</strong> yields exactly <strong>9 Page Faults</strong>.</li>
+                        <li>Using FIFO with <strong>4 Frames</strong> yields exactly <strong>10 Page Faults</strong>!</li>
+                    </ul>
+                    <p class="text-sm text-slate-800 font-bold border-t border-red-200 pt-2">How to solve Belady's Anomaly?</p>
+                    <p class="text-sm text-slate-700">Belady's Anomaly strictly affects the FIFO algorithm. To solve it, we use <strong>Stack Algorithms</strong> (like LRU or Optimal). Stack algorithms mathematically guarantee that the set of pages in memory for <em>N</em> frames is always a strict subset of the pages in memory for <em>N+1</em> frames. Thus, increasing frames can never increase faults.</p>
+                </div>
 
-                <h3 class="sub-topic-title">D. LFU (Least Frequently Used)</h3>
-                <p>This algorithm replaces the page with the smallest reference count. The logic behind LFU is that an actively used page will have a large reference count, while a page that is rarely needed will have a small count. A problem arises when a page is used heavily during the initial phase of a process but then never used again; its high count prevents it from being replaced even when it is no longer useful.</p>
-
-                <h3 class="sub-topic-title">E. MFU (Most Frequently Used)</h3>
-                <p>This algorithm replaces the page with the largest reference count. The counter-intuitive logic here is that the page with the smallest count was probably just brought into memory and has yet to be fully used, whereas the page with the highest count has already served its primary purpose.</p>
-
+                <!-- 1. FIFO -->
+                <h3 class="sub-topic-title mt-8">A. FIFO (First-In-First-Out)</h3>
+                <p>The simplest algorithm. The OS uses a queue to track pages. When replacement is needed, it simply evicts the oldest page (the one brought into memory first). It performs poorly because an old page might still be heavily used.</p>
                 <details>
-                    <summary>Exam Numerical: FIFO Page Fault Trace</summary>
+                    <summary>Trace: FIFO Algorithm</summary>
                     <div class="exam-content">
-                        <p class="mb-2"><strong>Problem:</strong> Calculate the total Page Faults using FIFO for the reference string: <span class="math-def">5, 0, 1, 7, 2, 0, 2, 8</span> using <strong>4 Frames</strong>.</p>
-                        
-                        <p><strong>Step-by-Step Trace:</strong></p>
-                        <table class="w-full text-sm">
-                            <tr>
-                                <th>Incoming</th>
-                                <th>Frame 1</th><th>Frame 2</th><th>Frame 3</th><th>Frame 4</th>
-                                <th>Status</th>
-                            </tr>
-                            <tr><td>5</td><td>5</td><td>-</td><td>-</td><td>-</td><td class="text-red-600 font-bold">Miss (1)</td></tr>
-                            <tr><td>0</td><td>5</td><td>0</td><td>-</td><td>-</td><td class="text-red-600 font-bold">Miss (2)</td></tr>
-                            <tr><td>1</td><td>5</td><td>0</td><td>1</td><td>-</td><td class="text-red-600 font-bold">Miss (3)</td></tr>
-                            <tr><td>7</td><td>5</td><td>0</td><td>1</td><td>7</td><td class="text-red-600 font-bold">Miss (4)</td></tr>
-                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td>7</td><td class="text-red-600 font-bold">Miss (5) *Replaces 5</td></tr>
-                            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td>7</td><td class="text-green-600 font-bold">Hit!</td></tr>
-                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td>7</td><td class="text-green-600 font-bold">Hit!</td></tr>
-                            <tr><td>8</td><td>2</td><td>8</td><td>1</td><td>7</td><td class="text-red-600 font-bold">Miss (6) *Replaces 0</td></tr>
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1</th><th>F2</th><th>F3</th><th>Status</th><th class="text-left">Victim Selection Logic</th></tr>
+                            <tr><td>7</td><td>7</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7</td><td>0</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">7 is the oldest page in memory. Replace 7.</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td class="hit">Hit</td><td class="text-left">0 is already in memory. No replacement.</td></tr>
+                            <tr><td>3</td><td>2</td><td>3</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">0 is now the oldest page. Replace 0.</td></tr>
+                            <tr><td>0</td><td>2</td><td>3</td><td>0</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">1 is now the oldest page. Replace 1.</td></tr>
+                            <tr><td>4</td><td>4</td><td>3</td><td>0</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">2 is now the oldest page. Replace 2.</td></tr>
+                            <tr><td>2</td><td>4</td><td>2</td><td>0</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">3 is now the oldest page. Replace 3.</td></tr>
+                            <tr><td>3</td><td>4</td><td>2</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">0 is now the oldest page. Replace 0.</td></tr>
                         </table>
-                        <p class="mt-4 text-lg font-bold text-blue-900">Total Page Faults: 6</p>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 8</p>
                     </div>
                 </details>
 
-                <h3 class="sub-topic-title border-t pt-6">Thrashing</h3>
+                <!-- 2. OPTIMAL -->
+                <h3 class="sub-topic-title">B. Optimal (OPT / MIN)</h3>
+                <p>Replaces the page that will not be used for the <em>longest period of time in the future</em>. It requires looking ahead into the reference string. It guarantees the absolute lowest number of page faults but is impossible to implement in real OSs because the future is unpredictable. It is used as a benchmark.</p>
+                <details>
+                    <summary>Trace: Optimal (OPT) Algorithm</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1</th><th>F2</th><th>F3</th><th>Status</th><th class="text-left">Victim Selection Logic (Look Forward)</th></tr>
+                            <tr><td>7</td><td>7</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7</td><td>0</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Look ahead: 0 is needed soon. 7 and 1 are never needed again. Replace 7 (tie-break).</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td class="hit">Hit</td><td class="text-left">0 is already in memory.</td></tr>
+                            <tr><td>3</td><td>2</td><td>0</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Look ahead: 0 is needed next, 2 is needed later. 1 is never needed again. Replace 1.</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>3</td><td class="hit">Hit</td><td class="text-left">0 is already in memory.</td></tr>
+                            <tr><td>4</td><td>2</td><td>4</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Look ahead: 2 and 3 are needed soon. 0 is never needed again. Replace 0.</td></tr>
+                            <tr><td>2</td><td>2</td><td>4</td><td>3</td><td class="hit">Hit</td><td class="text-left">2 is already in memory.</td></tr>
+                            <tr><td>3</td><td>2</td><td>4</td><td>3</td><td class="hit">Hit</td><td class="text-left">3 is already in memory.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 6</p>
+                    </div>
+                </details>
+
+                <!-- 3. LRU -->
+                <h3 class="sub-topic-title">C. LRU (Least Recently Used)</h3>
+                <p>Because we can't look into the future (OPT), we look into the past! LRU replaces the page that has not been used for the longest period of time. This relies on the "Principle of Locality". It performs excellently and avoids Belady's Anomaly, but requires hardware counters to track the time of every memory access.</p>
+                <details>
+                    <summary>Trace: LRU Algorithm</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1</th><th>F2</th><th>F3</th><th>Status</th><th class="text-left">Victim Selection Logic (Look Backward)</th></tr>
+                            <tr><td>7</td><td>7</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7</td><td>0</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 1(recent), 0(older), 7(oldest). Replace 7.</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td class="hit">Hit</td><td class="text-left">0 becomes the Most Recently Used.</td></tr>
+                            <tr><td>3</td><td>2</td><td>0</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 0(recent), 2(older), 1(oldest). Replace 1.</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>3</td><td class="hit">Hit</td><td class="text-left">0 becomes the Most Recently Used again.</td></tr>
+                            <tr><td>4</td><td>4</td><td>0</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 0(recent), 3(older), 2(oldest). Replace 2.</td></tr>
+                            <tr><td>2</td><td>4</td><td>0</td><td>2</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 4(recent), 0(older), 3(oldest). Replace 3.</td></tr>
+                            <tr><td>3</td><td>4</td><td>3</td><td>2</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 2(recent), 4(older), 0(oldest). Replace 0.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 8</p>
+                    </div>
+                </details>
+
+                <!-- 4. LFU -->
+                <h3 class="sub-topic-title">D. LFU (Least Frequently Used)</h3>
+                <p>This algorithm replaces the page with the smallest reference count. The logic is that an actively used page will have a large reference count, while a rarely needed page will have a small count. <br><em>Problem:</em> A page used heavily during the initial phase of a process gets a high count and is never evicted, even when it is no longer useful.</p>
+                <details>
+                    <summary>Trace: LFU Algorithm (Tie-breaker: FIFO)</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1 (Freq)</th><th>F2 (Freq)</th><th>F3 (Freq)</th><th>Status</th><th class="text-left">Victim Selection Logic (Lowest Frequency)</th></tr>
+                            <tr><td>7</td><td>7(1)</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7(1)</td><td>0(1)</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7(1)</td><td>0(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2(1)</td><td>0(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 7.</td></tr>
+                            <tr><td>0</td><td>2(1)</td><td>0(2)</td><td>1(1)</td><td class="hit">Hit</td><td class="text-left">Frequency of 0 increases to 2.</td></tr>
+                            <tr><td>3</td><td>2(1)</td><td>0(2)</td><td>3(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Lowest freq is 1 (for pages 2 & 1). Oldest is 1. Replace 1.</td></tr>
+                            <tr><td>0</td><td>2(1)</td><td>0(3)</td><td>3(1)</td><td class="hit">Hit</td><td class="text-left">Frequency of 0 increases to 3.</td></tr>
+                            <tr><td>4</td><td>4(1)</td><td>0(3)</td><td>3(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Lowest freq is 1 (for 2 & 3). Oldest is 2. Replace 2.</td></tr>
+                            <tr><td>2</td><td>4(1)</td><td>0(3)</td><td>2(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Lowest freq is 1 (for 4 & 3). Oldest is 3. Replace 3.</td></tr>
+                            <tr><td>3</td><td>3(1)</td><td>0(3)</td><td>2(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Lowest freq is 1 (for 4 & 2). Oldest is 4. Replace 4.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 8</p>
+                    </div>
+                </details>
+
+                <!-- 5. MFU -->
+                <h3 class="sub-topic-title">E. MFU (Most Frequently Used)</h3>
+                <p>This algorithm replaces the page with the largest reference count. The counter-intuitive logic here is that the page with the smallest count was probably just brought into memory and has yet to be fully used, whereas the page with the highest count has already served its primary purpose.</p>
+                <details>
+                    <summary>Trace: MFU Algorithm (Tie-breaker: FIFO)</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1 (Freq)</th><th>F2 (Freq)</th><th>F3 (Freq)</th><th>Status</th><th class="text-left">Victim Selection Logic (Highest Frequency)</th></tr>
+                            <tr><td>7</td><td>7(1)</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7(1)</td><td>0(1)</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7(1)</td><td>0(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2(1)</td><td>0(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 7.</td></tr>
+                            <tr><td>0</td><td>2(1)</td><td>0(2)</td><td>1(1)</td><td class="hit">Hit</td><td class="text-left">Frequency of 0 increases to 2.</td></tr>
+                            <tr><td>3</td><td>2(1)</td><td>3(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Highest freq is 0 (freq=2). Replace 0.</td></tr>
+                            <tr><td>0</td><td>2(1)</td><td>3(1)</td><td>0(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 1.</td></tr>
+                            <tr><td>4</td><td>4(1)</td><td>3(1)</td><td>0(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 2.</td></tr>
+                            <tr><td>2</td><td>4(1)</td><td>2(1)</td><td>0(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 3.</td></tr>
+                            <tr><td>3</td><td>4(1)</td><td>2(1)</td><td>3(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 0.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 9</p>
+                    </div>
+                </details>
+
+                <h3 class="sub-topic-title border-t pt-8 mt-8">Thrashing</h3>
                 <p>If a system does not have enough physical frames to support the active processes, a process will constantly suffer page faults. The OS will spend all its time rapidly swapping pages in and out of the slow disk, instead of actually executing instructions. This severe performance collapse is called <strong>Thrashing</strong>.</p>
                 <p>Thrashing causes a massive drop in CPU utilization. The OS sees low CPU usage, thinks the system is idle, and tries to load <em>even more</em> processes into memory, making the problem exponentially worse!</p>
 

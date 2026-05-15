@@ -74,6 +74,7 @@
             margin: 1.5rem 0;
             overflow-x: auto;
             line-height: 1.6;
+            white-space: pre-wrap;
         }
         p { margin-bottom: 1.5rem; line-height: 1.8; color: #334155; text-align: justify; }
         h3 { font-weight: 800; color: #0f172a; margin-top: 2rem; margin-bottom: 1rem; font-size: 1.3rem; }
@@ -112,6 +113,7 @@
                 <li><a href="#ipc" class="hover:text-blue-300 transition-colors">IPC & Methods</a></li>
                 <li><a href="#race" class="hover:text-blue-300 transition-colors">Race Condition</a></li>
                 <li><a href="#cs" class="hover:text-blue-300 transition-colors">Critical Section</a></li>
+                <li><a href="#solutions" class="hover:text-blue-300 transition-colors">Peterson's & Hardware</a></li>
                 <li><a href="#semaphores" class="hover:text-blue-300 transition-colors">Semaphores</a></li>
                 <li><a href="#deadlock-chars" class="hover:text-blue-300 transition-colors">Deadlock Logic</a></li>
                 <li><a href="#bankers" class="hover:text-blue-300 transition-colors">Banker's Tutorial</a></li>
@@ -211,7 +213,7 @@
 
                 <h3>The 3 Requirements for a Solution (8-10 Mark Question)</h3>
                 <ul class="list-disc pl-8 space-y-4">
-                    <li><strong>Mutual Exclusion:</strong> If process $P_i$ is executing in its critical section, then no other processes can be executing in their critical sections. This ensures exclusive access.</li>
+                    <li><strong>Mutual Exclusion:</strong> If process P<sub>i</sub> is executing in its critical section, then no other processes can be executing in their critical sections. This ensures exclusive access.</li>
                     <li><strong>Progress:</strong> If no process is in its critical section and some processes wish to enter, the selection of the next process to enter cannot be postponed indefinitely. Only processes currently requesting entry can participate in the decision.</li>
                     <li><strong>Bounded Waiting:</strong> There must be a limit (a bound) on the number of times other processes can "cut in line" after a process has made a request. This prevents <strong>Starvation</strong>.</li>
                 </ul>
@@ -237,21 +239,127 @@
             
             <div class="concept-card">
                 <div class="definition-header">Peterson's Solution (Software Logic)</div>
-                <p>Peterson's solution is a classic software-based algorithm for two processes ($P_0$ and $P_1$) to synchronize without special hardware. It uses two shared variables: a boolean array <code>flag[2]</code> (representing interest) and an integer <code>turn</code> (the tie-breaker). When $P_i$ wants to enter, it sets <code>flag[i] = true</code> and politely sets <code>turn = j</code>. It then waits in a busy-wait loop. It will only enter the CS if either the neighbor is not ready (<code>flag[j] == false</code>) or it is its own turn (<code>turn == i</code>). This solution is historically significant because it satisfies all three CS requirements through logic alone.</p>
+                <p>Peterson's solution is a classic, software-based algorithm designed to synchronize two processes (P<sub>0</sub> and P<sub>1</sub>) without requiring special hardware instructions. It strictly guarantees mutual exclusion, progress, and bounded waiting.</p>
+                
+                <div class="bg-blue-50 p-4 border border-blue-200 rounded-lg mb-6">
+                    <p class="font-bold text-blue-900 mb-1">💡 The Logic & Real-World Analogy:</p>
+                    <p class="text-sm text-blue-800 mb-2">Imagine two roommates sharing a single kitchen (the Critical Section). To avoid bumping into each other, they use two tools:</p>
+                    <ul class="list-disc pl-5 text-sm text-blue-800">
+                        <li>A <strong>Flag Array</strong> <code>flag[2]</code>: Raising their hand to say "I want to cook!" (Indicates intent to enter).</li>
+                        <li>A <strong>Turn Variable</strong> <code>turn</code>: A polite rule saying "After you". If both raise their hands at the exact same time, the polite "turn" variable acts as the ultimate tie-breaker.</li>
+                    </ul>
+                </div>
+
+                <h4 class="font-bold text-slate-800 mt-6 mb-2">Algorithm / Pseudocode (For Process P<sub>i</sub>, where P<sub>j</sub> is the other):</h4>
+                <div class="code-block">
+// 1. Shared Variables (Initialized before processes start)
+boolean flag[2] = {false, false}; // Neither process wants to enter initially
+int turn;                         // Indicates whose turn it is
+
+// 2. Process Pi Structure
+do {
+    flag[i] = true;              // Step A: Pi expresses intent to enter
+    turn = j;                    // Step B: Pi politely offers the turn to Pj
+    
+    // Step C: The Waiting Loop (Busy Wait)
+    // Pi waits ONLY IF Pj wants to enter AND it is actually Pj's turn
+    while (flag[j] == true && turn == j) {
+        // Spin/Wait (do nothing)
+    }
+    
+    /* --- CRITICAL SECTION --- */
+    // Pi safely modifies shared data here
+    
+    // Step D: Exit Section
+    flag[i] = false;             // Pi lowers its flag, allowing Pj to enter
+    
+    /* --- REMAINDER SECTION --- */
+    // Other non-critical code
+} while (true);
+                </div>
+
+                <h4 class="mt-6 text-lg font-bold text-slate-800">Why Peterson's Solution is Perfect (Exam Proofs):</h4>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>Mutual Exclusion:</strong> Both processes can only be in the CS simultaneously if <code>flag[0] == true</code> and <code>flag[1] == true</code>. However, the <code>turn</code> variable can hold only ONE value (either 0 or 1). Thus, the <code>while</code> loop condition will trap at least one process, preventing simultaneous entry.</li>
+                    <li><strong>Progress:</strong> A process outside the CS sets its flag to <code>false</code>. If P<sub>j</sub> is in the remainder section (<code>flag[j] = false</code>), the while loop for P<sub>i</sub> fails immediately, allowing P<sub>i</sub> to enter without unnecessary blocking.</li>
+                    <li><strong>Bounded Waiting:</strong> Once P<sub>i</sub> exits the CS, it executes <code>flag[i] = false</code>. Even if it immediately loops back and tries to re-enter (setting <code>flag[i] = true</code>), it must also execute <code>turn = j</code>. This forces P<sub>i</sub> to wait and guarantees P<sub>j</sub> gets the very next turn.</li>
+                </ul>
             </div>
 
             <div class="concept-card">
-                <div class="definition-header">Hardware Synchronization (Atomic Instructions)</div>
-                <p>Software solutions like Peterson's are difficult to adapt to modern multi-core systems. Modern hardware provides <strong>Atomic Instructions</strong>, which are specialized CPU commands guaranteed to execute as a single, uninterruptible pulse. These instructions allow us to build efficient locking mechanisms.</p>
+                <div class="definition-header">Hardware Synchronization Solutions</div>
+                <p>While software solutions like Peterson's are mathematically elegant, they are insufficient and <strong>can fail on modern computer architectures</strong>.</p>
                 
-                <ul class="space-y-4">
-                    <li>
-                        <strong>1. TestAndSet:</strong> This instruction reads the current value of a boolean variable and sets it to "true" in one atomic step. If it returns <code>false</code>, the process successfully "grabbed" the lock. If it returns <code>true</code>, the lock was already held, and the process must wait.
-                    </li>
-                    <li>
-                        <strong>2. CompareAndSwap (CAS):</strong> CAS is a more flexible instruction. It updates a memory location ONLY if the current value matches an "expected" value provided by the process. This prevents a process from accidentally updating data that changed behind its back during a context switch.
-                    </li>
-                </ul>
+                <div class="bg-red-50 p-4 border border-red-200 rounded-lg mb-6 text-sm">
+                    <p class="font-bold text-red-900 mb-1">Why do Software Solutions Fail?</p>
+                    <ul class="list-disc pl-5 space-y-1 text-red-800">
+                        <li><strong>Instruction Reordering:</strong> Modern CPUs and compilers reorder machine instructions to optimize execution speed. A CPU might execute <code>turn = j</code> before <code>flag[i] = true</code> if it detects no data dependency between them, completely shattering Peterson's logic!</li>
+                        <li><strong>Cache Coherency:</strong> In multi-core systems, each CPU core has its own cache memory. Updates to shared variables (like <code>flag</code>) might be delayed and not immediately visible to processes running on other cores.</li>
+                    </ul>
+                </div>
+                
+                <h4 class="font-bold text-slate-800 mb-2">1. The Primitive Hardware Solution: Disabling Interrupts</h4>
+                <p class="text-slate-700 mb-4">On traditional single-processor (uniprocessor) systems, race conditions could be solved by simply disabling all hardware interrupts before entering the CS, and enabling them after exiting. Without interrupts, context switching cannot occur.<br>
+                <strong>Why it's bad:</strong> Disabling interrupts is dangerous (a user program could freeze the system forever) and it is completely ineffective on multiprocessor systems, as disabling interrupts on one CPU does not stop a process running on another CPU.</p>
+
+                <h4 class="font-bold text-slate-800 border-b pb-1 mt-6">2. Modern Solution: Atomic Hardware Instructions</h4>
+                <p class="text-slate-700 mb-4">Modern processors provide special <strong>Atomic Instructions</strong>. "Atomic" means the instruction executes as one single, indivisible, uninterruptible hardware pulse. Even on multi-core systems, memory hardware guarantees that atomic instructions execute safely. Two common instructions are used to build locks:</p>
+                
+                <h5 class="text-md font-bold text-blue-800 mt-4">A. Test-and-Set (TAS) Instruction</h5>
+                <p class="text-sm text-slate-700 mb-2">This instruction atomically reads the current value of a boolean variable and sets it to <code>true</code>. If it returns <code>false</code>, the lock was free and you claimed it. If it returns <code>true</code>, the lock was already busy.</p>
+                <div class="code-block text-sm">
+// Hardware-level Atomic Definition
+boolean TestAndSet(boolean *target) {
+    boolean old_value = *target; // Read the original value
+    *target = true;              // Lock it (set to true)
+    return old_value;            // Return the original value
+}
+
+// Usage by a Process (Shared lock initialized to 'false'):
+do {
+    while (TestAndSet(&lock)) {
+        // Spin/Busy-wait as long as the lock is already true
+    }
+    
+    /* --- CRITICAL SECTION --- */
+    
+    lock = false;                // Release the lock
+    
+    /* --- REMAINDER SECTION --- */
+} while (true);
+                </div>
+
+                <h5 class="text-md font-bold text-blue-800 mt-6">B. Compare-and-Swap (CAS) Instruction</h5>
+                <p class="text-sm text-slate-700 mb-2">A highly efficient modern instruction. It compares a memory location to an "expected" value. If they match, it updates the memory location to a new value. If they don't match (meaning another process changed it behind our back), it does nothing.</p>
+                <div class="code-block text-sm">
+// Hardware-level Atomic Definition
+int CompareAndSwap(int *value, int expected, int new_value) {
+    int temp = *value;           // Store original value
+    if (*value == expected) {    // If it hasn't changed behind our backs...
+        *value = new_value;      // ...update it to the new value
+    }
+    return temp;                 // Return the original value
+}
+
+// Usage by a Process (Shared lock initialized to '0'):
+do {
+    // Spin as long as the lock is NOT 0 (0 means free, 1 means busy)
+    while (CompareAndSwap(&lock, 0, 1) != 0) {
+        // Wait
+    }
+    
+    /* --- CRITICAL SECTION --- */
+    
+    lock = 0;                    // Release the lock
+    
+    /* --- REMAINDER SECTION --- */
+} while (true);
+                </div>
+                
+                <div class="bg-yellow-50 p-4 border border-yellow-200 rounded-lg mt-6 text-sm">
+                    <p class="font-bold text-yellow-900 mb-1">⚠️ Exam Note on Hardware Instructions & Starvation</p>
+                    <p class="text-yellow-800">Basic <code>TestAndSet</code> and <code>CompareAndSwap</code> implementations easily guarantee <strong>Mutual Exclusion</strong> and <strong>Progress</strong>. However, they <strong>fail to guarantee Bounded Waiting</strong>. A waiting process could get incredibly unlucky in the spin-loop and never grab the lock (Starvation). To solve this, OS developers combine these hardware instructions with a <code>waiting[i]</code> queue array to ensure every process gets a fair turn in order.</p>
+                </div>
             </div>
         </section>
 
@@ -288,7 +396,7 @@
                     <li><strong>Mutual Exclusion:</strong> Resources are non-sharable; only one process can use an instance at a time.</li>
                     <li><strong>Hold and Wait:</strong> A process must be holding at least one resource while simultaneously waiting to acquire additional resources held by others.</li>
                     <li><strong>No Preemption:</strong> Resources cannot be forcibly taken away from a process; they must be released voluntarily by the owner.</li>
-                    <li><strong>Circular Wait:</strong> A set $\{P_0, P_1, ..., P_n\}$ exists such that $P_0$ waits for $P_1$, $P_1$ waits for $P_2$, and $P_n$ waits for $P_0$.</li>
+                    <li><strong>Circular Wait:</strong> A set {P<sub>0</sub>, P<sub>1</sub>, ..., P<sub>n</sub>} exists such that P<sub>0</sub> waits for P<sub>1</sub>, P<sub>1</sub> waits for P<sub>2</sub>, and P<sub>n</sub> waits for P<sub>0</sub>.</li>
                 </ol>
 
                 <details>
@@ -296,7 +404,7 @@
                     <div class="exam-content">
                         <ul class="list-disc pl-5 space-y-3">
                             <li><strong>Resource-Allocation Graph (RAG):</strong> A directed graph representing processes (circles) and resource types (squares). Arrows from process to resource indicate <em>Request</em>; arrows from resource to process indicate <em>Assignment</em>.</li>
-                            <li><strong>Wait-for Graph (WFG):</strong> A simplified version used for single-instance resources. Resource nodes are removed, and arrows are drawn directly between processes ($P_i \to P_j$ if $P_i$ waits for $P_j$).</li>
+                            <li><strong>Wait-for Graph (WFG):</strong> A simplified version used for single-instance resources. Resource nodes are removed, and arrows are drawn directly between processes (P<sub>i</sub> &rarr; P<sub>j</sub> if P<sub>i</sub> waits for P<sub>j</sub>).</li>
                             <li><strong>Rule:</strong> A <strong>Cycle</strong> in a WFG is a definitive proof of deadlock.</li>
                         </ul>
                     </div>
