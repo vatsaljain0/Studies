@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OS Module 5 - File Systems & Disk Scheduling</title>
+    <title>Module 5 - Digital Communication Techniques</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
@@ -14,14 +14,14 @@
             border: 1px solid #e2e8f0;
             border-radius: 0.75rem;
             margin: 1.5rem 0;
-            padding: 2rem;
+            padding: 1.75rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
         }
 
         .section-title {
             color: #1e40af;
             font-weight: 900;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             border-bottom: 3px solid #bfdbfe;
             margin-bottom: 1.5rem;
             padding-bottom: 0.5rem;
@@ -30,51 +30,39 @@
         .sub-topic-title {
             color: #0369a1;
             font-weight: 800;
-            font-size: 1.3rem;
-            margin-top: 2rem;
-            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
         
-        .sub-topic-title::before { content: "🔹"; font-size: 1.1rem; }
-
-        .highlight-box {
-            background-color: #f0fdf4;
-            border-left: 4px solid #22c55e;
-            padding: 1.25rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin: 1.5rem 0;
-        }
+        .sub-topic-title::before { content: "🔹"; font-size: 1rem; }
 
         .numerical-box {
             background-color: #f8fafc;
             border: 2px solid #cbd5e1;
-            padding: 1.5rem;
+            padding: 1.25rem;
             border-radius: 0.5rem;
-            margin: 1rem 0;
-            font-family: 'Consolas', monospace;
-            font-size: 0.95rem;
+            margin: 1.5rem 0;
+            color: #0f172a;
         }
-        .num-title { font-weight: bold; color: #1d4ed8; margin-bottom: 0.5rem; font-family: 'Inter', sans-serif;}
+        .num-title { font-weight: 900; color: #1d4ed8; margin-bottom: 0.75rem; font-family: 'Inter', sans-serif; text-transform: uppercase; letter-spacing: 0.05em;}
 
-        /* Directory Structure SVG Styles */
-        .dir-node { fill: #bae6fd; stroke: #0284c7; stroke-width: 2; rx: 4; }
-        .file-node { fill: #f1f5f9; stroke: #475569; stroke-width: 2; }
-        .dir-line { stroke: #64748b; stroke-width: 2; fill: none; }
-        .dir-text { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: 600; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+        .formula { background-color: #fef3c7; padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-family: 'Consolas', monospace; font-weight: bold; color: #b45309; font-size: 1.05rem;}
+        .memory-trick { background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 1rem; margin: 1.5rem 0; border-radius: 0 0.5rem 0.5rem 0;}
 
-        /* Disk Scheduling SVG Styles */
-        .g-line { stroke: #e2e8f0; stroke-width: 1; }
-        .a-line { stroke: #64748b; stroke-width: 2; }
-        .a-text { font-family: 'Inter', sans-serif; font-size: 10px; fill: #475569; text-anchor: middle; }
-        .p-line { stroke: #3b82f6; stroke-width: 2; fill: none; }
-        .p-line-jump { stroke: #ef4444; stroke-width: 2; stroke-dasharray: 4,4; fill: none; }
-        .node { fill: #1d4ed8; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.95rem; text-align: left; }
+        .comparison-table th, .comparison-table td { border: 1px solid #cbd5e1; padding: 0.75rem; }
+        .comparison-table th { background-color: #f1f5f9; font-weight: 700; color: #0f172a; }
 
-        p { margin-bottom: 1rem; line-height: 1.7; text-align: justify; }
-        ul { margin-bottom: 1.25rem; }
+        p { margin-bottom: 0.75rem; line-height: 1.7; }
+        ul { margin-bottom: 1rem; }
+        
+        /* SVG specifics */
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+        .svg-sub { font-size: 11px; fill: #475569; text-anchor: middle; }
     </style>
 </head>
 <body class="antialiased">
@@ -82,814 +70,431 @@
     <!-- Sticky Navigation -->
     <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
         <div class="max-w-7xl mx-auto px-4">
-            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-3">
-                <li><a href="#basics" class="hover:text-blue-300">1. FS Basics</a></li>
-                <li><a href="#access" class="hover:text-blue-300">2. Access Methods</a></li>
-                <li><a href="#directory" class="hover:text-blue-300">3. Directory</a></li>
-                <li><a href="#implementation" class="hover:text-blue-300">4. Implementation</a></li>
-                <li><a href="#allocation" class="hover:text-blue-300">5. Allocation</a></li>
-                <li><a href="#storage" class="hover:text-blue-300">6. Mass Storage</a></li>
-                <li><a href="#hardware" class="hover:text-blue-300">7. I/O Hardware</a></li>
-                <li><a href="#disk-org" class="hover:text-blue-300">8. Disk Org</a></li>
-                <li><a href="#io-management" class="hover:text-blue-300">9. I/O Management</a></li>
-                <li><a href="#scheduling" class="hover:text-blue-300 text-yellow-300">10. Disk Scheduling</a></li>
+            <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-4">
+                <li><a href="#basics" class="hover:text-blue-300">1. Comm Systems</a></li>
+                <li><a href="#modulation" class="hover:text-blue-300">2. AM, FM, PM</a></li>
+                <li><a href="#multiplexing" class="hover:text-blue-300">3. Multiplexing</a></li>
+                <li><a href="#errors" class="hover:text-blue-300">4. Error Correction</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
-        <h1 class="text-4xl font-black text-slate-900 mb-2">File Systems & Disk Scheduling</h1>
-        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Comprehensive Guide: Management, Allocation, and Numericals</p>
+        <h1 class="text-3xl md:text-4xl font-black text-slate-900 mb-2">Digital Communication Techniques</h1>
+        <p class="text-blue-600 font-bold mb-8 text-lg border-b-2 border-slate-200 pb-4">Detailed Exam Edition: Deep Concepts, Plain English, Formulas & Diagrams</p>
 
-        <!-- 1. FILE MANAGEMENT BASICS -->
-        <section id="basics" class="mb-16">
-            <h2 class="section-title">1. File Management: Basic Concepts</h2>
+        <!-- ========================================== -->
+        <!-- 1. COMMUNICATION SYSTEMS -->
+        <!-- ========================================== -->
+        <section id="basics" class="mb-12">
+            <h2 class="section-title">1. Fundamentals of Communication Systems</h2>
             
             <div class="concept-card">
-                <p><strong>File System:</strong> Acts as the logical method for organizing, storing, naming, and accessing data on storage devices. It maps file data into logical blocks, manages directories, handles metadata, and allocates storage space to ensure efficient storage retrieval, security, and maintenance.</p>
-
-                <h3 class="sub-topic-title">Key Concepts</h3>
-                <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                    <li><strong>File:</strong> The basic unit of storage, typically containing a name, extension, and data. It acts as a container for data (text, binary, executable).</li>
-                    <li><strong>Directory (Folder):</strong> A structure that stores file metadata and logical organization.</li>
-                    <li><strong>Attributes:</strong> Information about files (type, size, location, permissions, creation time).</li>
-                    <li><strong>Hierarchy:</strong> Files organized into a tree structure starting with a root directory.</li>
-                </ul>
-
-                <h3 class="sub-topic-title">Core Functions & Operations</h3>
-                <ul class="list-disc pl-6 space-y-2 text-slate-700 mb-4">
-                    <li><strong>File Mapping:</strong> Mapping logical files onto physical storage devices.</li>
-                    <li><strong>Access Control:</strong> Managing permissions to ensure data security.</li>
-                    <li><strong>Free Space Management:</strong> Tracking unused blocks to allocate for new files.</li>
-                </ul>
-                <p><strong>File Operations:</strong> Create/Delete, Open/Close, Read/Write, Reposition (Seek), and Truncating a file.</p>
-
-                <h3 class="sub-topic-title">Detailed File Attributes</h3>
-                <ul class="list-disc pl-6 space-y-1 text-slate-700">
-                    <li><strong>Name:</strong> Symbolic file name (only info kept in human-readable form).</li>
-                    <li><strong>Identifier:</strong> Unique tag (usually a number) identifying the file internally.</li>
-                    <li><strong>Type:</strong> Needed for systems supporting different file types.</li>
-                    <li><strong>Location:</strong> Pointer to a device and location of the file.</li>
-                    <li><strong>Size:</strong> Current size in bytes/words/blocks.</li>
-                    <li><strong>Protection:</strong> Access-control info (read/write/execute).</li>
-                    <li><strong>Timestamps:</strong> Creation, last modification, and last use times.</li>
-                    <li><strong>Extended Attributes:</strong> Character encoding, checksums.</li>
-                </ul>
-
-                <h3 class="sub-topic-title">Common File System Types</h3>
-                <div class="grid grid-cols-2 gap-4 text-sm text-slate-700 mb-4">
-                    <div><strong>FAT (FAT32):</strong> Older format (Windows).</div>
-                    <div><strong>NTFS:</strong> Modern Windows, supports recovery.</div>
-                    <div><strong>ext (ext3, ext4):</strong> Commonly used in Linux.</div>
-                    <div><strong>HFS/APFS:</strong> Apple macOS and iOS.</div>
-                    <div><strong>XFS:</strong> Used in Linux/Unix.</div>
-                </div>
-
-                <p class="font-bold mt-4">Common File Types:</p>
-                <p class="text-sm text-slate-700">executable (exe, com), object (obj, o), source code (c, java), batch (bat, sh), markup (xml, html), word processor (docx, rtf), library (lib, dll), print/view (pdf, jpg), archive (zip, rar), multimedia (mp3, mp4).</p>
-            </div>
-        </section>
-
-        <!-- 2. ACCESS METHODS -->
-        <section id="access" class="mb-16">
-            <h2 class="section-title">2. File Access Methods</h2>
-            <div class="concept-card">
-                <p>File access methods dictate how to read and write data stored in files on secondary devices.</p>
-
-                <h3 class="sub-topic-title mt-4">A. Sequential Access</h3>
-                <p class="text-sm text-slate-700 mb-2">Data is accessed in a linear or sequential order, one after the other. Read commands move the pointer ahead by one. Write commands allocate memory and move pointer to the end. Reasonable for tape drives.</p>
-                <ul class="list-disc pl-6 text-sm text-slate-700">
-                    <li><strong>Advantages:</strong> Simple to implement. Less prone to data corruption. Fast for lexicographic access.</li>
-                    <li><strong>Disadvantages:</strong> Slow for searching specific records. Middle inserts/updates are difficult. Wastes storage for varying length records.</li>
-                </ul>
-
-                <h3 class="sub-topic-title">B. Direct Access Method</h3>
-                <p class="text-sm text-slate-700 mb-2">Allows data to be read/written directly at any block/record using its address. Random access without scanning previous records.</p>
-                <ul class="list-disc pl-6 text-sm text-slate-700">
-                    <li><strong>Advantages:</strong> Decreased average access time. Immediate access.</li>
-                    <li><strong>Disadvantages:</strong> Complex implementation. Higher storage overhead for maintaining pointers/address tables.</li>
-                </ul>
-
-                <h3 class="sub-topic-title">C. Indexed Access Method</h3>
-                <p class="text-sm text-slate-700 mb-2">Involves accessing files through an index/directory containing file names and locations. The <strong>Index Sequential Method</strong> is built on top of Sequential access, constructing an index with pointers to blocks.</p>
-                <ul class="list-disc pl-6 text-sm text-slate-700">
-                    <li><strong>Advantages:</strong> Fast searching, flexible, reduced access time for large files.</li>
-                    <li><strong>Disadvantages:</strong> High complexity, extra storage required for indexes, slower updates (both data and index must be updated).</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- 3. DIRECTORY STRUCTURE -->
-        <section id="directory" class="mb-16">
-            <h2 class="section-title">3. Directory Structure</h2>
-            <div class="concept-card">
-                <p class="mb-6">A directory translates file names into their file control blocks. It must allow insertions, deletions, searches, and listing. The logical structure of a directory can take several forms:</p>
-                
-                <div class="space-y-10 text-slate-700">
-                    
-                    <!-- 1. Single-Level -->
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-5 shadow-sm">
-                        <h3 class="text-lg font-bold text-blue-800 mb-2">1. Single-Level Directory</h3>
-                        <p class="text-sm text-slate-700 mb-4">All files are contained in one single directory. <br><span class="font-semibold text-green-700">Pros:</span> Easy to implement and understand. <br><span class="font-semibold text-red-700">Cons:</span> Name collisions (no two files can have the same name), and slow searching as the number of files grows.</p>
-                        <div class="bg-white border border-slate-200 p-4 rounded overflow-x-auto text-center">
-                            <svg width="400" height="150" viewBox="0 0 400 150" class="mx-auto block">
-                                <!-- Lines -->
-                                <line x1="200" y1="50" x2="100" y2="100" class="dir-line" />
-                                <line x1="200" y1="50" x2="200" y2="100" class="dir-line" />
-                                <line x1="200" y1="50" x2="300" y2="100" class="dir-line" />
-                                <!-- Dir -->
-                                <rect x="160" y="20" width="80" height="30" class="dir-node" />
-                                <text x="200" y="35" class="dir-text">Directory</text>
-                                <!-- Files -->
-                                <circle cx="100" cy="100" r="16" class="file-node" />
-                                <text x="100" y="100" class="dir-text">F1</text>
-                                <circle cx="200" cy="100" r="16" class="file-node" />
-                                <text x="200" y="100" class="dir-text">F2</text>
-                                <circle cx="300" cy="100" r="16" class="file-node" />
-                                <text x="300" y="100" class="dir-text">F3</text>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- 2. Two-Level -->
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-5 shadow-sm">
-                        <h3 class="text-lg font-bold text-blue-800 mb-2">2. Two-Level Directory</h3>
-                        <p class="text-sm text-slate-700 mb-4">Each user has a User File Directory (UFD). A Master File Directory (MFD) points to UFDs, preventing conflicts between different users.</p>
-                        <div class="bg-white border border-slate-200 p-4 rounded overflow-x-auto text-center">
-                            <svg width="400" height="200" viewBox="0 0 400 200" class="mx-auto block">
-                                <!-- Lines from MFD -->
-                                <line x1="200" y1="50" x2="120" y2="100" class="dir-line" />
-                                <line x1="200" y1="50" x2="280" y2="100" class="dir-line" />
-                                <!-- Lines from UFD1 -->
-                                <line x1="120" y1="130" x2="80" y2="170" class="dir-line" />
-                                <line x1="120" y1="130" x2="160" y2="170" class="dir-line" />
-                                <!-- Lines from UFD2 -->
-                                <line x1="280" y1="130" x2="240" y2="170" class="dir-line" />
-                                <line x1="280" y1="130" x2="320" y2="170" class="dir-line" />
-                                
-                                <!-- MFD -->
-                                <rect x="160" y="20" width="80" height="30" class="dir-node" />
-                                <text x="200" y="35" class="dir-text">MFD</text>
-                                
-                                <!-- UFDs -->
-                                <rect x="80" y="100" width="80" height="30" class="dir-node" />
-                                <text x="120" y="115" class="dir-text">User 1</text>
-                                <rect x="240" y="100" width="80" height="30" class="dir-node" />
-                                <text x="280" y="115" class="dir-text">User 2</text>
-                                
-                                <!-- Files -->
-                                <circle cx="80" cy="170" r="16" class="file-node" /> <text x="80" y="170" class="dir-text">F1</text>
-                                <circle cx="160" cy="170" r="16" class="file-node" /> <text x="160" y="170" class="dir-text">F2</text>
-                                <circle cx="240" cy="170" r="16" class="file-node" /> <text x="240" y="170" class="dir-text">F3</text>
-                                <circle cx="320" cy="170" r="16" class="file-node" /> <text x="320" y="170" class="dir-text">F4</text>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- 3. Tree-Structured -->
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-5 shadow-sm">
-                        <h3 class="text-lg font-bold text-blue-800 mb-2">3. Tree-Structured Directories</h3>
-                        <p class="text-sm text-slate-700 mb-4">Most common in PCs. Resembles an upside-down tree with a root. Users can create nested subdirectories but cannot access other users' trees easily.</p>
-                        <div class="bg-white border border-slate-200 p-4 rounded overflow-x-auto text-center">
-                            <svg width="400" height="260" viewBox="0 0 400 260" class="mx-auto block">
-                                <!-- Lines from Root -->
-                                <line x1="200" y1="50" x2="120" y2="100" class="dir-line" />
-                                <line x1="200" y1="50" x2="280" y2="100" class="dir-line" />
-                                <!-- Lines from Dir1 -->
-                                <line x1="120" y1="130" x2="80" y2="180" class="dir-line" />
-                                <line x1="120" y1="130" x2="160" y2="180" class="dir-line" />
-                                <!-- Lines from Dir2 -->
-                                <line x1="280" y1="130" x2="240" y2="180" class="dir-line" />
-                                <line x1="280" y1="130" x2="320" y2="180" class="dir-line" />
-                                <!-- Lines from SubDir -->
-                                <line x1="160" y1="210" x2="160" y2="240" class="dir-line" />
-
-                                <!-- Root -->
-                                <rect x="160" y="20" width="80" height="30" class="dir-node" />
-                                <text x="200" y="35" class="dir-text">Root</text>
-                                
-                                <!-- Level 1 Dirs -->
-                                <rect x="80" y="100" width="80" height="30" class="dir-node" />
-                                <text x="120" y="115" class="dir-text">bin</text>
-                                <rect x="240" y="100" width="80" height="30" class="dir-node" />
-                                <text x="280" y="115" class="dir-text">home</text>
-                                
-                                <!-- Level 2 Mixed -->
-                                <circle cx="80" cy="180" r="16" class="file-node" /> <text x="80" y="180" class="dir-text">ls</text>
-                                <rect x="120" y="180" width="80" height="30" class="dir-node" /> <text x="160" y="195" class="dir-text">usr</text>
-                                <circle cx="240" cy="180" r="16" class="file-node" /> <text x="240" y="180" class="dir-text">F1</text>
-                                <circle cx="320" cy="180" r="16" class="file-node" /> <text x="320" y="180" class="dir-text">F2</text>
-                                
-                                <!-- Level 3 File -->
-                                <circle cx="160" cy="240" r="16" class="file-node" /> <text x="160" y="240" class="dir-text">F3</text>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- 4. Acyclic-Graph -->
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-5 shadow-sm">
-                        <h3 class="text-lg font-bold text-blue-800 mb-2">4. Acyclic-Graph Directories</h3>
-                        <p class="text-sm text-slate-700 mb-4">Allows a file or subdirectory to be shared across multiple directories using <em>links</em>. Changes by one user are visible to all. Strictly avoids loops (no cycles).</p>
-                        <div class="bg-white border border-slate-200 p-4 rounded overflow-x-auto text-center">
-                            <svg width="400" height="200" viewBox="0 0 400 200" class="mx-auto block">
-                                <defs>
-                                    <marker id="arrow1" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                                        <path d="M0,0 L0,8 L8,4 z" fill="#64748b" />
-                                    </marker>
-                                </defs>
-                                <!-- Lines from Root -->
-                                <line x1="200" y1="50" x2="120" y2="100" class="dir-line" marker-end="url(#arrow1)" />
-                                <line x1="200" y1="50" x2="280" y2="100" class="dir-line" marker-end="url(#arrow1)" />
-                                <!-- Lines from Dir1 -->
-                                <line x1="120" y1="130" x2="80" y2="160" class="dir-line" marker-end="url(#arrow1)" />
-                                <line x1="120" y1="130" x2="185" y2="160" class="dir-line" marker-end="url(#arrow1)" /> <!-- Points to shared file -->
-                                <!-- Lines from Dir2 -->
-                                <line x1="280" y1="130" x2="215" y2="160" class="dir-line" marker-end="url(#arrow1)" /> <!-- Points to shared file -->
-                                <line x1="280" y1="130" x2="320" y2="160" class="dir-line" marker-end="url(#arrow1)" />
-
-                                <!-- Root -->
-                                <rect x="160" y="20" width="80" height="30" class="dir-node" />
-                                <text x="200" y="35" class="dir-text">Root</text>
-                                
-                                <!-- Level 1 Dirs -->
-                                <rect x="80" y="100" width="80" height="30" class="dir-node" />
-                                <text x="120" y="115" class="dir-text">Dict</text>
-                                <rect x="240" y="100" width="80" height="30" class="dir-node" />
-                                <text x="280" y="115" class="dir-text">Spell</text>
-                                
-                                <!-- Level 2 Files -->
-                                <circle cx="80" cy="170" r="16" class="file-node" /> <text x="80" y="170" class="dir-text">F1</text>
-                                <!-- Shared File -->
-                                <circle cx="200" cy="170" r="16" class="file-node" stroke="#ca8a04" stroke-width="3" /> <text x="200" y="170" class="dir-text">Shared</text>
-                                <circle cx="320" cy="170" r="16" class="file-node" /> <text x="320" y="170" class="dir-text">F2</text>
-                            </svg>
-                        </div>
-                    </div>
-
-                    <!-- 5. General Graph -->
-                    <div class="bg-slate-50 border border-slate-200 rounded-lg p-5 shadow-sm">
-                        <h3 class="text-lg font-bold text-blue-800 mb-2">5. General Graph Directory</h3>
-                        <p class="text-sm text-slate-700 mb-4">Unlike the acyclic-graph directory, which avoids loops, the general-graph directory can have cycles, meaning a directory can contain paths that loop back to the starting point. Makes navigating and managing files more complex.</p>
-                        <div class="bg-white border border-slate-200 p-4 rounded overflow-x-auto text-center">
-                            <svg width="400" height="260" viewBox="0 0 400 260" class="mx-auto block">
-                                <defs>
-                                    <marker id="arrow2" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                                        <path d="M0,0 L0,8 L8,4 z" fill="#64748b" />
-                                    </marker>
-                                    <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
-                                        <path d="M0,0 L0,8 L8,4 z" fill="#ef4444" />
-                                    </marker>
-                                </defs>
-                                <!-- Lines from Root -->
-                                <line x1="200" y1="50" x2="120" y2="100" class="dir-line" marker-end="url(#arrow2)" />
-                                <line x1="200" y1="50" x2="280" y2="100" class="dir-line" marker-end="url(#arrow2)" />
-                                <!-- Lines from Dir1 -->
-                                <line x1="120" y1="130" x2="120" y2="180" class="dir-line" marker-end="url(#arrow2)" />
-                                <!-- Lines from Dir2 -->
-                                <line x1="280" y1="130" x2="280" y2="180" class="dir-line" marker-end="url(#arrow2)" />
-                                
-                                <!-- Cycle link from Dir3 back to Dir2 -->
-                                <path d="M 160 195 Q 280 230 280 140" fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,4" marker-end="url(#arrow-red)" />
-
-                                <!-- Root -->
-                                <rect x="160" y="20" width="80" height="30" class="dir-node" />
-                                <text x="200" y="35" class="dir-text">Root</text>
-                                
-                                <!-- Level 1 Dirs -->
-                                <rect x="80" y="100" width="80" height="30" class="dir-node" />
-                                <text x="120" y="115" class="dir-text">usr</text>
-                                <rect x="240" y="100" width="80" height="30" class="dir-node" />
-                                <text x="280" y="115" class="dir-text">lib</text>
-                                
-                                <!-- Level 2 Nodes -->
-                                <rect x="80" y="180" width="80" height="30" class="dir-node" />
-                                <text x="120" y="195" class="dir-text">local</text>
-                                
-                                <circle cx="280" cy="190" r="16" class="file-node" /> <text x="280" y="190" class="dir-text">F1</text>
-                                
-                                <!-- Text for cycle -->
-                                <text x="235" y="210" class="dir-text" fill="#ef4444" font-size="10">Cycle Link</text>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                </div>
-            </div>
-        </section>
-
-        <!-- 4. IMPLEMENTATION -->
-        <section id="implementation" class="mb-16">
-            <h2 class="section-title">4. File-System Implementation</h2>
-            <div class="concept-card">
-                <p>Refers to how the file system manages the storage and retrieval of data on physical devices.</p>
-
-                <h3 class="sub-topic-title">Layers in File System</h3>
-                <ol class="list-decimal pl-6 space-y-2 text-sm text-slate-700">
-                    <li><strong>Application Programs:</strong> Topmost layer for user interaction (CLI, browsers).</li>
-                    <li><strong>Logical File System:</strong> Manages metadata. Maintains File Control Blocks (FCB).</li>
-                    <li><strong>File Organization Module:</strong> Translates logical blocks to physical blocks. Tracks free space.</li>
-                    <li><strong>Basic File System:</strong> Issues general commands to device drivers. Manages buffers/caches.</li>
-                    <li><strong>I/O Control Level:</strong> Device drivers acting as hardware interface.</li>
-                    <li><strong>Devices Layer:</strong> Actual hardware performing read/write.</li>
+                <h3 class="sub-topic-title mt-0">The 5 Blocks of a Communication System</h3>
+                <p>For a long-answer question, draw 5 sequential boxes and explain the role and distortion of each block:</p>
+                <ol class="list-decimal pl-6 space-y-3 text-slate-700 font-medium">
+                    <li><strong>Information Source:</strong> Produces the raw message (like human voice, video, or computer data).</li>
+                    <li><strong>Transmitter:</strong> Processes the raw message. It performs <em>Encoding</em> (converting data to a standard format) and <em>Modulation</em> (attaching it to a carrier wave). This stage can introduce "Transmitter Distortion."</li>
+                    <li><strong>Channel:</strong> The physical transmission medium (copper wire, fiber optics, or open air). As the signal travels, external <strong>Noise Sources</strong> (like electrical interference or weather) attack and degrade the signal.</li>
+                    <li><strong>Receiver:</strong> Captures the signal from the channel. It performs <em>Decoding</em> and <em>Demodulation</em> to extract the original message. This stage can introduce "Receiver Distortion."</li>
+                    <li><strong>Destination:</strong> The final user or machine that receives and understands the message.</li>
                 </ol>
-
-                <h3 class="sub-topic-title">Implementation Issues</h3>
-                <ul class="list-disc pl-6 text-sm text-slate-700">
-                    <li>Management of disk space (garbage collection, fragmentation).</li>
-                    <li>Checking consistency and repairing errors (journaling, checksums).</li>
-                    <li>Locking files and managing concurrency (semaphores).</li>
-                    <li>Performance optimization (caching, prefetching).</li>
+                
+                <h3 class="sub-topic-title mt-6">Hardware Components of a Radio Transmitter</h3>
+                <p>If asked to explain a Radio Transmitter block diagram, detail these exact components:</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700">
+                    <li><strong>Crystal Oscillator:</strong> The "heartbeat" of the transmitter. It generates a perfectly steady, pure, high-frequency base wave (the Carrier Wave).</li>
+                    <li><strong>RF Buffer Amplifier:</strong> Isolates the oscillator from the rest of the heavy circuitry. This prevents the high frequencies from drifting or becoming unstable.</li>
+                    <li><strong>Modulation Processing & Modulator:</strong> Takes your actual voice (the input signal) and mixes it into the carrier wave generated by the oscillator.</li>
+                    <li><strong>RF Output Power Amplifier:</strong> Takes the mixed signal and gives it a massive surge of electrical power so the antenna can physically radiate it miles into the air.</li>
                 </ul>
             </div>
         </section>
 
-        <!-- 5. ALLOCATION METHODS -->
-        <section id="allocation" class="mb-16">
-            <h2 class="section-title">5. Allocation Methods</h2>
+        <!-- ========================================== -->
+        <!-- 2. IN-DEPTH MODULATION TECHNIQUES -->
+        <!-- ========================================== -->
+        <section id="modulation" class="mb-12">
+            <h2 class="section-title">2. Modulation Techniques (AM, FM, PM)</h2>
+            
             <div class="concept-card">
-                <p>Methods defining how files are stored in disk blocks.</p>
+                <h3 class="sub-topic-title mt-0">What is Modulation?</h3>
+                <p class="text-slate-700 mb-3"><strong>Simple Definition:</strong> Modulation is like attaching a light paper letter (your voice) to a heavy rock (the carrier wave) so you can throw it far. Your voice is too weak to travel miles through the air. So, we "mix" it with a very powerful, high-frequency radio wave that carries it to the destination.</p>
                 
-                <h3 class="sub-topic-title mt-4">A. Contiguous Allocation</h3>
-                <p class="text-sm text-slate-700">Each file occupies a contiguous set of blocks. If it requires <em>n</em> blocks starting at <em>b</em>, it takes <em>b, b+1... b+n-1</em>.</p>
-                <p class="text-sm text-slate-700"><strong>Pros:</strong> Extremely fast (minimal seeks). Supports direct access (kth block is b+k). <br><strong>Cons:</strong> Suffers from external and internal fragmentation. Hard to increase file size later.</p>
+                <p class="font-bold text-slate-800">Why do we need it?</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700 text-sm">
+                    <li><strong>Antenna Size:</strong> An antenna must be proportional to the signal's size. Low frequencies (like human voice) would need an antenna miles long! High-frequency carrier waves let us use tiny antennas (like on a phone).</li>
+                    <li><strong>Wireless Range:</strong> Low frequencies die out quickly. Modulated high frequencies travel massive distances.</li>
+                </ul>
+            </div>
 
-                <h3 class="sub-topic-title mt-4">B. Linked Allocation</h3>
-                <p class="text-sm text-slate-700">File is a linked list of scattered disk blocks. Directory points to start and end blocks. Each block points to the next.</p>
-                <p class="text-sm text-slate-700"><strong>Pros:</strong> Very flexible file size. No external fragmentation. <br><strong>Cons:</strong> Extremely slow for direct access (must traverse <em>k</em> blocks to find the kth block). Pointer overhead wastes space.</p>
+            <!-- AMPLITUDE MODULATION -->
+            <div class="concept-card border-t-4 border-t-blue-500">
+                <h3 class="text-xl font-black text-blue-900 mb-4">A. Amplitude Modulation (AM)</h3>
+                
+                <p class="font-bold text-slate-800 text-lg">1. Definition:</p>
+                <p class="text-slate-700 mb-3">AM is a technique where we change the <strong>height (amplitude)</strong> of the powerful carrier wave to match the exact shape of your voice signal.</p>
 
-                <h3 class="sub-topic-title mt-4">C. Indexed Allocation</h3>
-                <p class="text-sm text-slate-700">A special <em>Index block</em> contains pointers to all blocks occupied by the file.</p>
-                <p class="text-sm text-slate-700"><strong>Pros:</strong> Fast direct access. No external fragmentation. <br><strong>Cons:</strong> High pointer overhead. Wastes an entire block just for pointers for very small files.</p>
+                <p class="font-bold text-slate-800 text-lg">2. How it works:</p>
+                <p class="text-slate-700 mb-3">When your voice gets louder, the carrier wave grows taller. When your voice gets softer, the carrier wave shrinks. The receiver simply traces the outline (height) of the wave to get your voice back.</p>
+
+                <p class="font-bold text-slate-800 text-lg">3. Diagram:</p>
+                <div class="my-4 p-4 bg-slate-50 border border-slate-200 rounded text-center">
+                    <p class="text-sm font-bold text-slate-500 mb-2">AM Wave: Notice the height changing, but the waves come at the same speed.</p>
+                    <svg width="400" height="120" viewBox="0 0 400 120" class="mx-auto block">
+                        <!-- AM Outline (Envelope) -->
+                        <path d="M 20 40 Q 110 -20, 200 40 T 380 40" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                        <path d="M 20 80 Q 110 140, 200 80 T 380 80" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                        <!-- The Carrier Wave bouncing between the envelopes -->
+                        <path d="M 20 60 L 25 45 L 30 60 L 35 75 L 40 60 L 45 40 L 50 60 L 55 80 L 60 60 L 65 30 L 70 60 L 75 90 L 80 60 L 85 20 L 90 60 L 95 100 L 100 60 L 105 10 L 110 60 L 115 110 L 120 60 L 125 15 L 130 60 L 135 105 L 140 60 L 145 25 L 150 60 L 155 95 L 160 60 L 165 35 L 170 60 L 175 85 L 180 60 L 185 45 L 190 60 L 195 75 L 200 60 L 205 50 L 210 60 L 215 70 L 220 60 L 225 55 L 230 60 L 235 65 L 240 60 L 245 50 L 250 60 L 255 70 L 260 60 L 265 40 L 270 60 L 275 80 L 280 60 L 285 30 L 290 60 L 295 90 L 300 60 L 305 20 L 310 60 L 315 100 L 320 60 L 325 30 L 330 60 L 335 90 L 340 60 L 345 40 L 350 60 L 355 80 L 360 60 L 365 45 L 370 60 L 375 75 L 380 60" fill="none" stroke="#2563eb" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">4. Dependence:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>What Changes:</strong> The Amplitude (Height).</li>
+                    <li><strong>What Stays Constant:</strong> Frequency (Speed) and Phase (Starting Angle).</li>
+                    <li><strong>Depends on:</strong> The height changes based strictly on the loudness (voltage) of your voice signal.</li>
+                </ul>
+
+                <p class="font-bold text-slate-800 text-lg">5. Uses & Disadvantages:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>Uses:</strong> AM Radio stations. Travels incredibly far distances because it can bounce off the Earth's atmosphere.</li>
+                    <li><strong>Disadvantages:</strong> Awful sound quality. Lightning and machines naturally change the height of waves in the air. Since AM relies on height to store data, this static noise ruins the sound.</li>
+                </ul>
+
+                <p class="font-bold text-slate-800 text-lg">6. Numerical (How to solve easily):</p>
+                <div class="bg-blue-50 p-4 border border-blue-200 rounded mb-3 text-sm text-slate-700">
+                    <p class="mb-2"><strong>Modulation Index (m):</strong> A score from 0 to 1 that tells you how deep the modulation is. If it goes over 1, the wave breaks and sound is distorted.<br>
+                    <strong>Formula:</strong> <code>m = (Max Voltage - Min Voltage) / (Max Voltage + Min Voltage)</code></p>
+                    <p><strong>Example:</strong> Max voltage is 10V, Min is 2V.<br>
+                    m = (10 - 2) / (10 + 2) = 8 / 12 = <strong>0.66</strong> (Good! Less than 1).</p>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">7. Any Other Concept:</p>
+                <p class="text-slate-700 text-sm"><strong>Bandwidth:</strong> AM creates two extra waves on the sides (Sidebands). So the total size needed is always exactly <strong>2 × Message Frequency</strong>.</p>
+            </div>
+
+            <!-- FREQUENCY MODULATION -->
+            <div class="concept-card border-t-4 border-t-green-500">
+                <h3 class="text-xl font-black text-green-900 mb-4">B. Frequency Modulation (FM)</h3>
+                
+                <p class="font-bold text-slate-800 text-lg">1. Definition:</p>
+                <p class="text-slate-700 mb-3">FM is a technique where we change the <strong>speed (frequency)</strong> of the carrier wave to match the voice signal. The height stays perfectly flat.</p>
+
+                <p class="font-bold text-slate-800 text-lg">2. How it works:</p>
+                <p class="text-slate-700 mb-3">When your voice gets louder, the carrier waves squish tightly together (speed up). When your voice gets softer, the waves stretch far apart (slow down). The receiver reads how fast the waves hit it to get your voice back.</p>
+
+                <p class="font-bold text-slate-800 text-lg">3. Diagram:</p>
+                <div class="my-4 p-4 bg-slate-50 border border-slate-200 rounded text-center">
+                    <p class="text-sm font-bold text-slate-500 mb-2">FM Wave: Notice the height is flat, but the waves squish and stretch.</p>
+                    <svg width="400" height="80" viewBox="0 0 400 80" class="mx-auto block">
+                        <!-- FM Modulated Wave -->
+                        <path d="M 20 40 L 25 20 L 30 40 L 35 60 L 40 40 L 50 20 L 60 40 L 70 60 L 80 40 L 95 20 L 110 40 L 125 60 L 140 40 L 160 20 L 180 40 L 195 60 L 210 40 L 220 20 L 230 40 L 240 60 L 250 40 L 255 20 L 260 40 L 265 60 L 270 40 L 275 20 L 280 40 L 285 60 L 290 40 L 300 20 L 310 40 L 320 60 L 330 40 L 345 20 L 360 40 L 375 60 L 390 40" fill="none" stroke="#16a34a" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">4. Dependence:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>What Changes:</strong> The Frequency (Speed).</li>
+                    <li><strong>What Stays Constant:</strong> Amplitude (Height) and Phase.</li>
+                    <li><strong>Depends on:</strong> How much the frequency squishes depends strictly on the loudness (amplitude) of the voice signal.</li>
+                </ul>
+
+                <p class="font-bold text-slate-800 text-lg">5. Uses & Disadvantages:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>Uses:</strong> FM Radio and TV audio. Excellent sound quality because it ignores static noise (since static only affects height, and FM doesn't care about height).</li>
+                    <li><strong>Disadvantages:</strong> Circuit is expensive and complex to build. Cannot travel as far as AM (blocked by buildings easily).</li>
+                </ul>
+
+                <p class="font-bold text-slate-800 text-lg">6. Numerical (How to solve easily):</p>
+                <div class="bg-green-50 p-4 border border-green-200 rounded mb-3 text-sm text-slate-700">
+                    <p class="mb-2"><strong>The Problem:</strong> Given an FM equation like <code>v = 12 sin(600 t + 5 cos 125 t)</code>. Find the values.</p>
+                    <p class="mb-2 font-bold text-green-900">The Trick: Just match it to the Master Formula:</p>
+                    <p class="mb-2 font-mono bg-white p-2 rounded border border-green-300">v = [Voltage] sin( [Carrier Speed] t + [Index] cos [Message Speed] t )</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Voltage:</strong> The first number = 12 Volts.</li>
+                        <li><strong>Carrier Frequency (Fc):</strong> Take the Carrier Speed and divide by 6.28 (2&pi;). So, 600 / 6.28 = 95.5 Hz.</li>
+                        <li><strong>Message Frequency (Fm):</strong> Take the Message Speed and divide by 6.28 (2&pi;). So, 125 / 6.28 = 19.9 Hz.</li>
+                        <li><strong>Modulation Index (m):</strong> The number right before 'cos' = 5.</li>
+                        <li><strong>Max Deviation:</strong> Simply multiply Index &times; Message Freq (5 &times; 19.9 = 99.5 Hz).</li>
+                    </ul>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">7. Any Other Concept:</p>
+                <p class="text-slate-700 text-sm"><strong>Wideband vs Narrowband:</strong> Wideband FM (WBFM) allows huge frequency squishing for super-high-quality music, but takes up a lot of space. Narrowband FM (NBFM) only allows tiny squishing, saving space, used in walkie-talkies.</p>
+            </div>
+
+            <!-- PHASE MODULATION -->
+            <div class="concept-card border-t-4 border-t-purple-500">
+                <h3 class="text-xl font-black text-purple-900 mb-4">C. Phase Modulation (PM)</h3>
+                
+                <p class="font-bold text-slate-800 text-lg">1. Definition:</p>
+                <p class="text-slate-700 mb-3">PM is a technique where we change the <strong>starting angle (phase)</strong> of the carrier wave based on the voice signal. Like FM, the height stays completely flat.</p>
+
+                <p class="font-bold text-slate-800 text-lg">2. How it works:</p>
+                <p class="text-slate-700 mb-3">Instead of making the wave go faster or slower, PM suddenly shifts the wave forward or backward in time. Imagine a swinging pendulum that suddenly gets pushed forward a bit; that "push" represents your voice data.</p>
+
+                <p class="font-bold text-slate-800 text-lg">3. Diagram:</p>
+                <div class="my-4 p-4 bg-slate-50 border border-slate-200 rounded text-center">
+                    <p class="text-sm font-bold text-slate-500 mb-2">PM Wave: Notice the sharp, sudden breaks (shifts) where the wave resets its cycle.</p>
+                    <svg width="400" height="80" viewBox="0 0 400 80" class="mx-auto block">
+                        <!-- PM Wave with phase shifts -->
+                        <path d="M 20 40 Q 30 10, 40 40 T 60 40 T 80 40 T 100 40 T 120 40 M 120 40 Q 130 70, 140 40 T 160 40 T 180 40 M 180 40 Q 190 10, 200 40 T 220 40 T 240 40 T 260 40 M 260 40 Q 270 70, 280 40 T 300 40 T 320 40" fill="none" stroke="#9333ea" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">4. Dependence:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>What Changes:</strong> The Phase (Starting Angle).</li>
+                    <li><strong>What Stays Constant:</strong> Amplitude and Frequency.</li>
+                    <li><strong>Depends on:</strong> The phase shifts based strictly on the amplitude (loudness) of the message. <em>Unlike FM, it doesn't care at all about the message frequency.</em></li>
+                </ul>
+
+                <p class="font-bold text-slate-800 text-lg">5. Uses & Disadvantages:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>Uses:</strong> The absolute foundation for modern digital networks like Wi-Fi and 5G (using Phase-Shift Keying). Highly secure and efficient for computer data.</li>
+                    <li><strong>Disadvantages:</strong> Incredibly complex and expensive hardware required to decode the sudden phase shifts. Not used for basic analog radio.</li>
+                </ul>
+
+                <p class="font-bold text-slate-800 text-lg">6. Numerical (How to solve easily):</p>
+                <div class="bg-purple-50 p-4 border border-purple-200 rounded mb-3 text-sm text-slate-700">
+                    <p>In Phase Modulation, the math is delightfully simple! The <strong>Modulation Index</strong> is exactly equal to the <strong>Maximum Phase Deviation</strong>. If they tell you the wave deviates by 5 radians, then the index is just 5. Done!</p>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">7. Any Other Concept:</p>
+                <p class="text-slate-700 text-sm">Phase modulation is almost identical to Frequency modulation mathematically. They are brothers. If you change the phase, the frequency briefly changes too! But the core difference is PM only reacts to the <em>height</em> of the message, while FM reacts to both height and speed.</p>
+            </div>
+
+        </section>
+
+        <!-- ========================================== -->
+        <!-- 3. MULTIPLEXING -->
+        <!-- ========================================== -->
+        <section id="multiplexing" class="mb-12">
+            <h2 class="section-title">3. Multiplexing (Combining Signals)</h2>
+            
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">What is Multiplexing?</h3>
+                <p class="text-slate-700 mb-2"><strong>Simple Definition:</strong> Multiplexing is the technique of combining many different signals into one massive signal so they can all travel through a single shared cable or airway at the same time. </p>
+                <p class="text-slate-700">Imagine a highway. Instead of building 100 different tiny roads for 100 cars, we build one massive highway and let all the cars share it. A <strong>Multiplexer (MUX)</strong> merges the signals at the start, and a <strong>Demultiplexer (DEMUX)</strong> separates them back to normal at the end, saving massive amounts of money on cables.</p>
+            </div>
+
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">The Different Types of Multiplexing</h3>
+                <p class="text-slate-700 mb-4">There are four main ways to share a communication channel. Think of them simply like this:</p>
+                <ul class="list-disc pl-6 space-y-3 text-slate-700">
+                    <li><strong class="text-blue-800">FDM (Frequency Division):</strong> Splitting the channel into different "Frequency Lanes". Everyone gets their own lane to drive in continuously.</li>
+                    <li><strong class="text-green-800">TDM (Time Division):</strong> Everyone uses the exact same lane, but they take turns really fast.</li>
+                    <li><strong class="text-purple-800">WDM (Wavelength Division):</strong> Used for fiber optics. Sending different signals using different <em>colors</em> of laser light at the same time.</li>
+                    <li><strong class="text-red-800">CDMA (Code Division):</strong> Everyone transmits at the exact same time and frequency, but speaks a different "coded language" so the receiver can filter them out.</li>
+                </ul>
+            </div>
+
+            <div class="concept-card border-t-4 border-t-blue-500">
+                <h3 class="text-xl font-black text-blue-900 mb-4">A. Frequency Division Multiplexing (FDM)</h3>
+                
+                <p class="font-bold text-slate-800 text-lg">What it is & How it works:</p>
+                <p class="text-slate-700 mb-3">FDM is used for <strong>Analog</strong> signals. It takes the total bandwidth (the size of the cable) and chops it up into smaller, non-overlapping "slots". Each user is assigned their own specific slot. Because they are in different slots, they can all transmit continuously at the exact same time without crashing into each other.</p>
+
+                <p class="font-bold text-slate-800 text-lg mt-4">Professional Working (How the Telecom Industry does it):</p>
+                <div class="bg-blue-50 p-4 border border-blue-200 rounded mb-3 text-sm text-slate-700">
+                    <p class="mb-2">In real-world telephone networks, millions of calls need to be managed. Engineers bundle them into standardized groups to keep things organized:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>The Basic Group:</strong> The smallest building block. Engineers take exactly <strong>12 telephone channels</strong> (each given 4 kHz of space) and bundle them together into one group spanning 60 to 108 kHz.</li>
+                        <li><strong>The Pilot Signal:</strong> To make sure the equipment stays perfectly tuned and synchronized, a continuous low-level "pilot" tone is injected at exactly 104.08 kHz.</li>
+                        <li><strong>The Basic Supergroup:</strong> To scale up, they take <strong>5 Basic Groups</strong> (60 total calls) and bundle them into an even larger supergroup.</li>
+                    </ul>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg mt-4">Apply it to an Example:</p>
+                <div class="bg-slate-50 p-4 border border-slate-200 rounded mb-3 text-sm text-slate-700">
+                    <p><strong>Radio Stations:</strong> The air around you is the shared cable. Radio stations use FDM! One station broadcasts exactly at 98.3 MHz, and another broadcasts at 104.2 MHz. They are both in the air at the exact same time, but because they are in different frequency "slots", your radio can easily separate them. <em>(Note: They leave small blank spaces between stations called "Guard Bands" so the signals don't accidentally bleed into each other)</em>.</p>
+                </div>
+            </div>
+
+            <div class="concept-card border-t-4 border-t-green-500">
+                <h3 class="text-xl font-black text-green-900 mb-4">B. Time Division Multiplexing (TDM)</h3>
+                
+                <p class="font-bold text-slate-800 text-lg">What it is & How it works:</p>
+                <p class="text-slate-700 mb-3">TDM is used for <strong>Digital</strong> signals. Instead of splitting the channel into frequency slots, TDM makes everyone use the exact same full frequency! However, it separates users by <strong>Time</strong>. The system rapidly takes turns, giving User 1 the cable for a microsecond, then User 2, then User 3, in a continuous circle. Because digital pulses are very fast, you don't even notice the gaps.</p>
+
+                <p class="font-bold text-slate-800 text-lg mt-4">Professional Working (The Hardware Mechanism):</p>
+                <div class="bg-green-50 p-4 border border-green-200 rounded mb-3 text-sm text-slate-700">
+                    <p class="mb-2">How does a machine actually take turns so fast? It uses a standard 24-channel system built with high-speed electronic switches and logic gates:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Sampling & Framing:</strong> The system takes 8,000 snapshots of a voice every second. It packages one snapshot from all 24 users into a "Frame" and transmits the entire frame in just 125 microseconds.</li>
+                        <li><strong>Transmitter (Delay Lines):</strong> To line the users up perfectly, the hardware uses <strong>Delay Lines</strong>. User 1's signal goes straight through. User 2's signal is delayed by exactly 5 microseconds so it falls perfectly in line right behind User 1. User 3 is delayed by 10 microseconds, and so on.</li>
+                        <li><strong>Receiver (AND Gates):</strong> The receiver uses 24 <strong>AND gates</strong> (digital doors). A synchronized clock sends a tiny trigger pulse to open the doors. Delay lines are used on the clock so that Door #2 only opens at the exact microsecond User 2's data arrives.</li>
+                    </ul>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg mt-4">Apply it to an Example:</p>
+                <div class="bg-slate-50 p-4 border border-slate-200 rounded mb-3 text-sm text-slate-700">
+                    <p><strong>Taking Turns on a Phone Line:</strong> Imagine 24 people trying to talk through one single telephone wire. In TDM, the system uses digital switching hardware (like logic gates) to take a tiny 1-millisecond snippet of Person 1's voice and sends it. Then a 1-millisecond snippet of Person 2's voice. It repeats this circle 8,000 times a second! The receiver on the other side catches the snippets and glues them back together smoothly.</p>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">Difference Between FDM and TDM</h3>
+                <div class="overflow-x-auto">
+                    <table class="comparison-table">
+                        <tr>
+                            <th class="w-1/3">Feature</th>
+                            <th class="w-1/3 bg-blue-50">FDM (Frequency Division)</th>
+                            <th class="w-1/3 bg-green-50">TDM (Time Division)</th>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-slate-50">How it shares</td>
+                            <td>Shares by dividing <strong>Frequencies</strong>.</td>
+                            <td>Shares by dividing <strong>Time</strong>.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-slate-50">Signal Type</td>
+                            <td>Used primarily for <strong>Analog</strong> signals.</td>
+                            <td>Used primarily for <strong>Digital</strong> signals.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-slate-50">Time vs Bandwidth</td>
+                            <td>User transmits all the time, but only gets a tiny piece of the bandwidth.</td>
+                            <td>User gets the full bandwidth, but only for a tiny piece of time.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-slate-50">Interference Problem</td>
+                            <td>Suffers from <strong>Crosstalk</strong> (channels bleeding into each other). Needs guard bands.</td>
+                            <td>Suffers from <strong>Synchronization issues</strong>. If clocks are off, data mixes up. Needs sync bits.</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
         </section>
 
-        <!-- 6. MASS STORAGE STRUCTURE -->
-        <section id="storage" class="mb-16">
-            <h2 class="section-title">6. Mass Storage Structure</h2>
+        <!-- ========================================== -->
+        <!-- 4. ERROR DETECTION & CORRECTION -->
+        <!-- ========================================== -->
+        <section id="errors" class="mb-12">
+            <h2 class="section-title">4. Error Detection, Correction & Matrices</h2>
+            
             <div class="concept-card">
-                <p class="mb-4 text-slate-700">The main mass-storage system of a computer is secondary storage (Hard Disk Drives and Non-Volatile Memory). Tertiary storage includes slower, larger capacity mediums like magnetic tapes and optical disks.</p>
-                
-                <h3 class="sub-topic-title">A. Hard Disk Drives (HDD) Physical Structure</h3>
-                <p class="text-slate-700 mb-2">HDDs are mechanical devices that store data magnetically. They consist of several moving parts:</p>
-                
-                <!-- HDD Diagram -->
-                <div class="diagram-container my-6">
-                    <svg width="600" height="300" viewBox="0 0 600 300" class="mx-auto block">
-                        <!-- Platter -->
-                        <circle cx="200" cy="150" r="120" fill="#e2e8f0" stroke="#475569" stroke-width="2"/>
-                        <!-- Tracks -->
-                        <circle cx="200" cy="150" r="90" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4"/>
-                        <circle cx="200" cy="150" r="60" fill="none" stroke="#94a3b8" stroke-width="1.5" stroke-dasharray="4"/>
-                        
-                        <!-- Sector Highlight -->
-                        <path d="M 200 150 L 285 65 A 120 120 0 0 1 315 115 Z" fill="#bae6fd" stroke="#0284c7" stroke-width="2" opacity="0.6"/>
-                        
-                        <!-- Track Highlight (partial arc) -->
-                        <path d="M 110 150 A 90 90 0 0 1 200 60" fill="none" stroke="#3b82f6" stroke-width="4"/>
-                        
-                        <!-- Spindle -->
-                        <circle cx="200" cy="150" r="15" fill="#64748b" stroke="#334155" stroke-width="2"/>
+                <p class="mb-4">During transmission, noise and system impairments can corrupt the data stream (e.g., flipping a 1 to a 0). Procedures must be implemented to detect and fix these errors, though doing so increases transmission costs.</p>
 
-                        <!-- Actuator Arm -->
-                        <path d="M 450 250 L 420 220 L 220 100 L 210 110 L 400 240 Z" fill="#94a3b8" stroke="#475569" stroke-width="2"/>
-                        <!-- Actuator Axis / Pivot -->
-                        <circle cx="430" cy="235" r="20" fill="#cbd5e1" stroke="#475569" stroke-width="2"/>
-                        <circle cx="430" cy="235" r="8" fill="#64748b" />
-                        
-                        <!-- Read/Write Head -->
-                        <polygon points="220,100 210,110 190,105 200,95" fill="#fca5a5" stroke="#b91c1c" stroke-width="2"/>
+                <h3 class="sub-topic-title mt-0">A. Error Detection Methods</h3>
+                <ul class="list-disc pl-6 space-y-4 text-slate-700">
+                    <li><strong>Parity-Check Codes:</strong> The most popular form of redundancy. A parity bit (a 1 or 0) is added to the end of a character block to force the total sum of 1s to be either exclusively odd or exclusively even. If the receiver calculates the wrong parity, it requests a retransmission.</li>
+                    
+                    <li><strong>Constant-Ratio Codes:</strong> Provides inherent error detection. For example, the <em>2-out-of-5 code</em> enforces a strict pattern: every received block must contain exactly two 1s and three 0s. If the ratio alters, an error is flagged.
+                        <br><em>The Limitation:</em> An odd number of errors will be detected, but an even number of errors (one 1 flips to 0, and one 0 flips to 1 simultaneously) will maintain the ratio and sneak past undetected.
+                        <br><em>Combinatorics Formula:</em> Number of valid combinations = <span class="formula">T! / [ M! &times; (T - M)! ]</span> (Where T is Total bits, M is number of 1s, and ! is Factorial).
+                    </li>
+                    
+                    <li><strong>Redundant Codes (100% Replication):</strong> Transmitting the exact same information twice and comparing the two sets. Statistically, it is unlikely a random error will hit the exact same spot twice.
+                        <br><em>Formula:</em> <span class="formula">Efficiency = Information Bits / Total Bits</span>. In complete retransmission, efficiency is an abysmal 50%.
+                    </li>
+                </ul>
 
-                        <!-- Labels & Arrows -->
+                <h3 class="sub-topic-title mt-8">B. Error Correction Methods</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
+                    <div class="bg-blue-50 border border-blue-200 p-5 rounded-lg">
+                        <h4 class="font-bold text-blue-900 mb-2">1. Retransmission (ARQ)</h4>
+                        <p class="text-sm text-slate-700">The most popular and expeditious method. Uses an Automatic Request for Repeat (ARQ) or ACK/NAK system.</p>
+                        <p class="text-sm text-slate-700 mt-2">If parity is correct upon receipt, a positive acknowledgment <strong>(ACK)</strong> is sent, and the next block begins. If a parity error is detected, a negative acknowledgment <strong>(NAK)</strong> is sent, and the transmitter repeats just that specific block.</p>
+                    </div>
+
+                    <div class="bg-green-50 border border-green-200 p-5 rounded-lg">
+                        <h4 class="font-bold text-green-900 mb-2">2. Forward Error-Correcting (FEC) Codes</h4>
+                        <p class="text-sm text-slate-700">For maximum transmission efficiency over difficult links, we want to correct errors without waiting for retransmissions. FEC codes include heavy mathematical redundancy in the transmission, allowing the receiver to independently find and fix the corrupted bits.</p>
+                    </div>
+                </div>
+
+                <div class="numerical-box bg-slate-50 border-slate-300 mt-6">
+                    <div class="num-title text-slate-800">FEC Exam Example: The 3-Level Matrix Sum</div>
+                    <p class="text-sm mb-4">A powerful FEC method is the matrix sum, where data is transmitted in a grid with checksums attached to the end of every row and column. (The sum of the rows must equal the sum of the columns).</p>
+                    
+                    <p class="font-bold text-slate-800">1. Normal Encoding & Sending:</p>
+                    <p class="text-sm mb-4">Suppose the message is "ADD". We convert to alphabet numbers: A=1, D=4, D=4. <br>Row 1 is: [1, 4, 4]. The checksum total is 9. The 9th letter is 'I'. We transmit the string "ADDI".</p>
+                    
+                    <p class="font-bold text-slate-800">2. Catching and Fixing an Error (Step-by-Step Logic):</p>
+                    <p class="text-sm mb-2">Imagine electrical noise hits the very first number during transmission, corrupting the '1' into an <strong class="text-red-600">11</strong>. The receiver constructs the matrix:</p>
+                    
+                    <!-- MATRIX SUM ERROR DIAGRAM -->
+                    <svg width="400" height="250" viewBox="0 0 400 250" class="mx-auto block bg-white border border-slate-200 rounded-lg p-4 shadow-sm mb-4">
                         <style>
-                            .lbl-txt { font-family: 'Inter', sans-serif; font-size: 13px; font-weight: bold; fill: #0f172a; }
-                            .lbl-line { stroke: #334155; stroke-width: 1.5; }
+                            .cell { fill: none; stroke: #cbd5e1; stroke-width: 1; }
+                            .val { font-family: monospace; font-size: 16px; font-weight: bold; fill: #1e293b; text-anchor: middle; dominant-baseline: middle;}
+                            .err { fill: #dc2626; }
+                            .chk { fill: #2563eb; }
                         </style>
                         
-                        <line x1="200" y1="150" x2="100" y2="40" class="lbl-line" />
-                        <text x="90" y="30" class="lbl-txt" text-anchor="middle">Spindle</text>
+                        <text x="200" y="20" class="svg-text" font-size="14" fill="#0f172a">Received Data Matrix</text>
 
-                        <line x1="120" y1="230" x2="70" y2="260" class="lbl-line" />
-                        <text x="60" y="275" class="lbl-txt" text-anchor="middle">Platter</text>
+                        <!-- Grid Lines -->
+                        <rect x="100" y="40" width="200" height="150" class="cell" />
+                        <line x1="150" y1="40" x2="150" y2="190" class="cell" />
+                        <line x1="200" y1="40" x2="200" y2="190" class="cell" />
+                        <line x1="250" y1="40" x2="250" y2="190" class="cell" />
+                        
+                        <line x1="100" y1="90" x2="300" y2="90" class="cell" />
+                        <line x1="100" y1="140" x2="300" y2="140" class="cell" />
 
-                        <line x1="280" y1="90" x2="360" y2="40" class="lbl-line" />
-                        <text x="370" y="30" class="lbl-txt" text-anchor="middle">Sector</text>
+                        <!-- Row 1 -->
+                        <text x="125" y="65" class="val err">11</text>
+                        <circle cx="125" cy="65" r="15" fill="none" stroke="#dc2626" stroke-width="2" />
+                        <text x="175" y="65" class="val">4</text>
+                        <text x="225" y="65" class="val">4</text>
+                        <text x="275" y="65" class="val chk">9</text>
+                        <text x="340" y="65" class="svg-text err" font-size="10">Sum=19 &ne; 9</text>
 
-                        <line x1="120" y1="110" x2="60" y2="90" class="lbl-line" />
-                        <text x="40" y="85" class="lbl-txt" text-anchor="middle">Track</text>
+                        <!-- Row 2 -->
+                        <text x="125" y="115" class="val">2</text>
+                        <text x="175" y="115" class="val">5</text>
+                        <text x="225" y="115" class="val">7</text>
+                        <text x="275" y="115" class="val chk">14</text>
+                        <text x="340" y="115" class="svg-text text-green-600" font-size="10">Sum=14 &check;</text>
 
-                        <line x1="200" y1="100" x2="350" y2="70" class="lbl-line" />
-                        <text x="360" y="65" class="lbl-txt" text-anchor="middle">Read/Write Head</text>
+                        <!-- Row 3 (Col Sums) -->
+                        <text x="125" y="165" class="val chk">3</text>
+                        <text x="175" y="165" class="val chk">9</text>
+                        <text x="225" y="165" class="val chk">11</text>
+                        <text x="275" y="165" class="val chk">23</text>
 
-                        <line x1="330" y1="165" x2="450" y2="140" class="lbl-line" />
-                        <text x="460" y="135" class="lbl-txt" text-anchor="middle">Actuator Arm</text>
+                        <!-- Col Errors -->
+                        <text x="125" y="210" class="svg-text err" font-size="10">Sum=13</text>
+                        <text x="125" y="225" class="svg-text err" font-size="10">&ne; 3</text>
+                        
+                        <text x="175" y="210" class="svg-text text-green-600" font-size="10">Sum=9</text>
+                        <text x="175" y="225" class="svg-text text-green-600" font-size="10">&check;</text>
+
+                        <text x="225" y="210" class="svg-text text-green-600" font-size="10">Sum=11</text>
+                        <text x="225" y="225" class="svg-text text-green-600" font-size="10">&check;</text>
+                        
+                        <!-- Arrow pointing to intersection -->
+                        <path d="M 50 65 L 100 65" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow-red)"/>
+                        <path d="M 125 20 L 125 40" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow-red)"/>
+                        
+                        <defs>
+                            <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                                <path d="M0,0 L0,8 L8,4 z" fill="#dc2626" />
+                            </marker>
+                        </defs>
                     </svg>
-                    <div class="num-title text-center text-sm text-slate-500 mt-2">Figure: Physical components of a Hard Disk Drive (HDD)</div>
-                </div>
 
-                <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                    <li><strong>Platters:</strong> Flat, circular disks covered with magnetic material where data is physically written.</li>
-                    <li><strong>Read-Write Head:</strong> A mechanism that "flies" just above each platter surface to read or alter the magnetic polarity. They are attached to a single disk arm that moves all heads together as a unit.</li>
-                    <li><strong>Tracks:</strong> The surface of each platter is logically divided into concentric circular rings called tracks.</li>
-                    <li><strong>Sectors:</strong> Tracks are further subdivided into sectors. A sector is the fixed, smallest unit of data transfer (commonly 512 bytes).</li>
-                    <li><strong>Cylinder:</strong> The vertical collection of all matching tracks across all platters at a given arm position.</li>
-                    <li><strong>Spindle/Motor:</strong> Spins the platters at high speeds (RPMs like 5400, 7200, 10000, or 15000).</li>
-                </ul>
-
-                <div class="highlight-box mt-4">
-                    <h4 class="font-bold text-slate-800">HDD Performance Metrics</h4>
-                    <p class="text-sm text-slate-700"><strong>Positioning Time (Random-Access Time):</strong> The total time required to reach a specific block of data. It is the sum of two factors:</p>
-                    <ul class="list-disc pl-5 mt-2 text-sm text-slate-800">
-                        <li><strong>Seek Time:</strong> The time it takes to mechanically move the disk arm and read-write head to the desired cylinder/track.</li>
-                        <li><strong>Rotational Latency:</strong> The time spent waiting for the desired sector to rotate under the read-write head.</li>
+                    <ul class="text-sm list-disc pl-5 mb-4 text-red-700 font-medium">
+                        <li>Row 1 Received as: <strong>[11, 4, 4]</strong>. 
+                            <br>Internal sum is 19. But the received Checksum 'I' dictates the sum must be 9! (Error flagged in Row 1).</li>
+                        <li>Column 1 Received as: <strong>[11, 2]</strong>. 
+                            <br>Internal sum is 13. But the received Column Checksum dictates it must be 3! (Error flagged in Column 1).</li>
                     </ul>
+                    <p class="text-sm text-green-800 font-bold">The Correction: Since Row 1 and Column 1 both failed their checksums, the corrupted bit MUST be at their intersection (the 11). <br><br>
+                    Look at the mathematical variance: The row total is 19, but it should be 9 (Variance of +10). The column total is 13, but it should be 3 (Variance of +10). <br><br>
+                    We simply take the corrupted number (11), subtract the exact variance (10), resulting in 1. The data is mathematically restored to its correct original form without requiring any ARQ retransmission!</p>
                 </div>
-
-                <h3 class="sub-topic-title mt-6">B. Nonvolatile Memory Devices (NVM / SSD)</h3>
-                <p class="text-slate-700 mb-2">Unlike HDDs, NVMs (like Solid State Drives - SSDs, and USB flash drives) are entirely electrical, composed of a controller and flash NAND semiconductor chips.</p>
-                <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                    <li><strong>No Moving Parts:</strong> Makes them drastically more reliable, durable, and shock-resistant.</li>
-                    <li><strong>Extreme Speed:</strong> They completely eliminate "Seek Time" and "Rotational Latency," making random data access near-instantaneous.</li>
-                    <li><strong>Connection:</strong> Modern NVMs connect directly to the system bus (e.g., PCIe interfaces) to maximize transfer rates.</li>
-                    <li><strong>Trade-offs:</strong> Historically more expensive per Gigabyte and generally have smaller total capacities compared to bulk HDDs, though the gap is closing.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- 7. I/O HARDWARE -->
-        <section id="hardware" class="mb-16">
-            <h2 class="section-title">7. I/O Hardware & Data Transfer Methods</h2>
-            <div class="concept-card">
-                <p class="text-slate-700">I/O hardware consists of a system bus, a device controller, an I/O port, and its registers. To move data between the CPU/Memory and external devices, the operating system utilizes three primary transfer techniques.</p>
-
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6">
-                    <div class="bg-red-50 border border-red-200 p-4 rounded-lg">
-                        <h4 class="font-bold text-red-800 mb-2">1. Programmed I/O (PIO)</h4>
-                        <p class="text-sm text-slate-700">The CPU issues an I/O command and then repeatedly checks the device's status register to see if it is finished. This constant checking is called <strong>Polling</strong> or <strong>Busy Waiting</strong>.</p>
-                        <p class="text-sm text-red-700 mt-2 font-semibold">Disadvantage: Severely wastes CPU cycles, as the processor is stuck doing nothing but asking "Are you done yet?" instead of executing other programs.</p>
-                    </div>
-                    
-                    <div class="bg-blue-50 border border-blue-200 p-4 rounded-lg">
-                        <h4 class="font-bold text-blue-800 mb-2">2. Interrupt-Driven I/O</h4>
-                        <p class="text-sm text-slate-700">The CPU issues an I/O command and immediately moves on to execute other processes. When the I/O device finishes its task, it sends a hardware <strong>Interrupt Signal</strong> to the CPU to grab its attention.</p>
-                        <p class="text-sm text-blue-700 mt-2 font-semibold">Advantage: Eliminates busy waiting. CPU time is utilized efficiently, making it ideal for slow character devices like keyboards.</p>
-                    </div>
-
-                    <div class="bg-green-50 border border-green-200 p-4 rounded-lg">
-                        <h4 class="font-bold text-green-800 mb-2">3. Direct Memory Access (DMA)</h4>
-                        <p class="text-sm text-slate-700">Used for high-speed devices (like disks). The CPU offloads the work to a specialized <strong>DMA Controller (DMAC)</strong>. The DMAC transfers massive blocks of data directly to/from main memory, completely bypassing the CPU.</p>
-                        <p class="text-sm text-green-700 mt-2 font-semibold">Advantage: The CPU is only interrupted once at the very beginning (to set up the transfer) and once at the very end (when the entire block is successfully transferred).</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 8. DISK ORGANIZATION -->
-        <section id="disk-org" class="mb-16">
-            <h2 class="section-title">8. Disk Organization</h2>
-            <div class="concept-card">
-                <p class="text-slate-700">Before a raw physical disk can store files, the operating system must organize and structure it logically.</p>
-
-                <h3 class="sub-topic-title mt-4">Key Steps in Disk Organization & Management</h3>
-                <ul class="list-disc pl-6 space-y-3 text-slate-700">
-                    <li><strong>Logical Formatting (Clusters):</strong> The OS abstracts the physical hardware by grouping physical sectors into larger logical blocks (clusters) to improve read/write efficiency and manageability.</li>
-                    <li><strong>Partitioning:</strong> Dividing a single physical hard drive into multiple independent logical drives (e.g., C: drive, D: drive). This allows multiple file systems or different operating systems to coexist cleanly on the same disk.</li>
-                    <li><strong>High-Level Formatting:</strong> Preparing a partition by writing a specific File System structure (like NTFS, FAT32, or ext4) onto it, which dictates exactly how data directories will be indexed and stored.</li>
-                    <li><strong>The Boot Block:</strong> A special, reserved sector at the very beginning of the disk that stores the <strong>Bootstrap Loader</strong>—a tiny program responsible for starting the OS during computer power-up.</li>
-                    <li><strong>Bad Block Management:</strong> Disks inevitably develop physically defective sectors over time. The OS/Controller detects these "bad blocks" and logically maps them to hidden spare sectors so data is not corrupted.</li>
-                    <li><strong>RAID (Redundant Array of Independent Disks):</strong> A technology that combines multiple physical disks into a single logical unit to massively increase performance (via data striping) and reliability (via data mirroring/parity).</li>
-                    <li><strong>Common System Tools:</strong> Features like Windows Disk Management, Linux <code>fdisk</code>/<code>parted</code>, or macOS Disk Utility are used by administrators to perform these structural changes.</li>
-                </ul>
-            </div>
-        </section>
-
-        <!-- 9. I/O MANAGEMENT -->
-        <section id="io-management" class="mb-16">
-            <h2 class="section-title">9. I/O Management</h2>
-            <div class="concept-card">
-                <p class="text-slate-700">I/O Management is the OS subsystem responsible for coordinating the complex data flow between the CPU, main memory, and external peripheral devices.</p>
-
-                <h3 class="sub-topic-title mt-4">Core Components & Responsibilities</h3>
-                <ul class="list-disc pl-6 space-y-3 text-slate-700">
-                    <li><strong>Device Controllers vs. Device Drivers:</strong> 
-                        The <em>Device Controller</em> is the physical electronic hardware component managing the actual device mechanics. The <em>Device Driver</em> is the OS software component that translates generic OS commands into specific hardware-level instructions the controller understands.
-                    </li>
-                    <li><strong>Buffering & Caching:</strong>
-                        <ul class="list-circle pl-6 mt-1 text-sm">
-                            <li><em>Buffering:</em> Temporarily storing data in memory while it is being transferred to handle speed mismatches between extremely fast CPUs and relatively slow I/O devices.</li>
-                            <li><em>Caching:</em> Keeping copies of frequently accessed disk data in fast RAM to improve overall system read/write performance.</li>
-                        </ul>
-                    </li>
-                    <li><strong>I/O Scheduling:</strong> Ordering and prioritizing read/write requests to optimize performance (e.g., reordering disk requests via algorithms like SCAN or SSTF to minimize mechanical head movement).</li>
-                    <li><strong>Interrupt Handling:</strong> The complex OS routines that pause the CPU, save its current state, and efficiently process the completion signals triggered by external devices.</li>
-                </ul>
-
-                <h3 class="sub-topic-title mt-6">Types of I/O Devices Managed</h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
-                    <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg">
-                        <p class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-2">1. Block Devices</p>
-                        <p class="text-sm text-slate-600">Store and transfer data in fixed-size blocks (e.g., 512 bytes or 4KB). They are capable of immediate random access.<br><br><em>Examples: Hard Drives, SSDs, Optical Drives.</em></p>
-                    </div>
-                    <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg">
-                        <p class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-2">2. Character Devices</p>
-                        <p class="text-sm text-slate-600">Send and receive a continuous stream of characters (bytes) sequentially, one by one. They are not addressable for random access.<br><br><em>Examples: Keyboards, Mice, Serial Ports.</em></p>
-                    </div>
-                    <div class="bg-slate-50 p-4 border border-slate-200 rounded-lg">
-                        <p class="font-bold text-slate-800 border-b border-slate-200 pb-2 mb-2">3. Network Devices</p>
-                        <p class="text-sm text-slate-600">Specialized for remote communication over networks, transmitting data as discrete formatted packets.<br><br><em>Examples: Ethernet cards, Wi-Fi adapters.</em></p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 10. DISK SCHEDULING ALGORITHMS (NUMERICALS) -->
-        <section id="scheduling" class="mb-16">
-            <h2 class="section-title text-yellow-600 border-b-yellow-200">10. Disk Scheduling Algorithms & Numericals</h2>
-            <div class="concept-card border-yellow-400">
-                <p class="mb-4"><strong>Goal:</strong> Minimize access time (seek time + rotational latency) by optimizing the order of read/write requests.</p>
-                
-                <div class="bg-blue-50 p-5 rounded-lg border border-blue-200 mb-6">
-                    <h3 class="text-blue-900 font-bold mb-2">Disk Scheduling Criteria</h3>
-                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
-                        <li><strong>Seek Time:</strong> The time required for the disk arm to move the read/write heads to the cylinder containing the desired sector. Our primary goal is to minimize this, as it is the slowest mechanical operation.</li>
-                        <li><strong>Rotational Latency:</strong> The additional time waiting for the disk to rotate the desired sector under the disk head.</li>
-                        <li><strong>Access Time:</strong> Total delay (Seek Time + Rotational Latency).</li>
-                        <li><strong>Disk Bandwidth:</strong> The total number of bytes transferred divided by the total time between the first request and the completion of the last transfer.</li>
-                        <li><strong>Response Time & Variance:</strong> Providing a fast, predictable, and uniform waiting time for all requests (preventing starvation).</li>
-                    </ul>
-                </div>
-
-                <div class="bg-yellow-50 p-4 border border-yellow-200 rounded text-sm font-bold text-yellow-900 mb-6 shadow-sm">
-                    MASTER PROBLEM DATA FOR ALL ALGORITHMS:<br>
-                    Request Queue = 98, 183, 37, 122, 14, 124, 65, 67.<br>
-                    Initial Head Position = 53.
-                </div>
-
-                <!-- FCFS -->
-                <h3 class="sub-topic-title">1. FCFS (First-Come, First-Served)</h3>
-                <p class="text-sm">Serves requests in the exact order they arrive. Intrinsically fair, but generally not the fastest.</p>
-                <div class="numerical-box">
-                    <div class="num-title">Path & Calculation:</div>
-                    53 &rarr; 98 &rarr; 183 &rarr; 37 &rarr; 122 &rarr; 14 &rarr; 124 &rarr; 65 &rarr; 67<br>
-                    Movements: |53-98|=45, |98-183|=85, |183-37|=146, |37-122|=85, |122-14|=108, |14-124|=110, |124-65|=59, |65-67|=2.<br>
-                    <strong>Total Head Movement: 640 cylinders.</strong>
-                    
-                    <svg width="100%" height="170" viewBox="0 0 500 170" class="mx-auto block mt-4 bg-white border border-slate-200 rounded p-2 shadow-sm">
-                        <!-- Grid & Axes -->
-                        <line x1="30" y1="20" x2="30" y2="160" class="g-line" /> <text x="30" y="15" class="a-text">0</text>
-                        <line x1="61" y1="20" x2="61" y2="160" class="g-line" /> <text x="61" y="15" class="a-text">14</text>
-                        <line x1="112" y1="20" x2="112" y2="160" class="g-line" /> <text x="112" y="15" class="a-text">37</text>
-                        <line x1="147" y1="20" x2="147" y2="160" class="g-line" /> <text x="147" y="15" class="a-text font-bold" fill="#2563eb">53</text>
-                        <line x1="174" y1="20" x2="174" y2="160" class="g-line" /> <text x="168" y="15" class="a-text">65</text>
-                        <line x1="178" y1="20" x2="178" y2="160" class="g-line" /> <text x="186" y="15" class="a-text">67</text>
-                        <line x1="247" y1="20" x2="247" y2="160" class="g-line" /> <text x="247" y="15" class="a-text">98</text>
-                        <line x1="300" y1="20" x2="300" y2="160" class="g-line" /> <text x="295" y="15" class="a-text">122</text>
-                        <line x1="304" y1="20" x2="304" y2="160" class="g-line" /> <text x="312" y="15" class="a-text">124</text>
-                        <line x1="435" y1="20" x2="435" y2="160" class="g-line" /> <text x="435" y="15" class="a-text">183</text>
-                        <line x1="470" y1="20" x2="470" y2="160" class="g-line" /> <text x="470" y="15" class="a-text">199</text>
-                        <line x1="20" y1="20" x2="480" y2="20" class="a-line" />
-                        
-                        <!-- Path -->
-                        <polyline points="147,30 247,45 435,60 112,75 300,90 61,105 304,120 174,135 178,150" class="p-line" />
-                        
-                        <!-- Nodes -->
-                        <circle cx="147" cy="30" r="3" class="node" />
-                        <circle cx="247" cy="45" r="3" class="node" />
-                        <circle cx="435" cy="60" r="3" class="node" />
-                        <circle cx="112" cy="75" r="3" class="node" />
-                        <circle cx="300" cy="90" r="3" class="node" />
-                        <circle cx="61" cy="105" r="3" class="node" />
-                        <circle cx="304" cy="120" r="3" class="node" />
-                        <circle cx="174" cy="135" r="3" class="node" />
-                        <circle cx="178" cy="150" r="3" class="node" />
-                    </svg>
-                </div>
-
-                <!-- SSTF -->
-                <h3 class="sub-topic-title">2. SSTF (Shortest Seek Time First)</h3>
-                <p class="text-sm">Selects the request closest to the current head position. Reduces total movement but can cause starvation for edge requests.</p>
-                <div class="numerical-box">
-                    <div class="num-title">Path & Calculation:</div>
-                    53 &rarr; 65 &rarr; 67 &rarr; 37 &rarr; 14 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183<br>
-                    Movements: |53-65|=12, |65-67|=2, |67-37|=30, |37-14|=23, |14-98|=84, |98-122|=24, |122-124|=2, |124-183|=59.<br>
-                    <strong>Total Head Movement: 236 cylinders.</strong>
-                    
-                    <svg width="100%" height="170" viewBox="0 0 500 170" class="mx-auto block mt-4 bg-white border border-slate-200 rounded p-2 shadow-sm">
-                        <!-- Grid & Axes -->
-                        <line x1="30" y1="20" x2="30" y2="160" class="g-line" /> <text x="30" y="15" class="a-text">0</text>
-                        <line x1="61" y1="20" x2="61" y2="160" class="g-line" /> <text x="61" y="15" class="a-text">14</text>
-                        <line x1="112" y1="20" x2="112" y2="160" class="g-line" /> <text x="112" y="15" class="a-text">37</text>
-                        <line x1="147" y1="20" x2="147" y2="160" class="g-line" /> <text x="147" y="15" class="a-text font-bold" fill="#2563eb">53</text>
-                        <line x1="174" y1="20" x2="174" y2="160" class="g-line" /> <text x="168" y="15" class="a-text">65</text>
-                        <line x1="178" y1="20" x2="178" y2="160" class="g-line" /> <text x="186" y="15" class="a-text">67</text>
-                        <line x1="247" y1="20" x2="247" y2="160" class="g-line" /> <text x="247" y="15" class="a-text">98</text>
-                        <line x1="300" y1="20" x2="300" y2="160" class="g-line" /> <text x="295" y="15" class="a-text">122</text>
-                        <line x1="304" y1="20" x2="304" y2="160" class="g-line" /> <text x="312" y="15" class="a-text">124</text>
-                        <line x1="435" y1="20" x2="435" y2="160" class="g-line" /> <text x="435" y="15" class="a-text">183</text>
-                        <line x1="470" y1="20" x2="470" y2="160" class="g-line" /> <text x="470" y="15" class="a-text">199</text>
-                        <line x1="20" y1="20" x2="480" y2="20" class="a-line" />
-                        
-                        <!-- Path -->
-                        <polyline points="147,30 174,45 178,60 112,75 61,90 247,105 300,120 304,135 435,150" class="p-line" />
-                        
-                        <!-- Nodes -->
-                        <circle cx="147" cy="30" r="3" class="node" />
-                        <circle cx="174" cy="45" r="3" class="node" />
-                        <circle cx="178" cy="60" r="3" class="node" />
-                        <circle cx="112" cy="75" r="3" class="node" />
-                        <circle cx="61" cy="90" r="3" class="node" />
-                        <circle cx="247" cy="105" r="3" class="node" />
-                        <circle cx="300" cy="120" r="3" class="node" />
-                        <circle cx="304" cy="135" r="3" class="node" />
-                        <circle cx="435" cy="150" r="3" class="node" />
-                    </svg>
-                </div>
-
-                <!-- SCAN -->
-                <h3 class="sub-topic-title">3. SCAN (Elevator Algorithm)</h3>
-                <p class="text-sm">Arm moves to one physical end of the disk, servicing along the way, reverses direction at the end, and continues. <em>(Assumption: Total cylinders 0-199. Moving towards higher end 199 first).</em></p>
-                <div class="numerical-box">
-                    <div class="num-title">Path & Calculation:</div>
-                    Sorted Queue: 14, 37, 65, 67, 98, 122, 124, 183.<br>
-                    Path: 53 &rarr; 65 &rarr; 67 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183 &rarr; <strong>199 (Disk End)</strong> &rarr; 37 &rarr; 14<br>
-                    Movements: (199 - 53) + (199 - 14) = 146 + 185<br>
-                    <strong>Total Head Movement: 331 cylinders.</strong>
-                    
-                    <svg width="100%" height="185" viewBox="0 0 500 185" class="mx-auto block mt-4 bg-white border border-slate-200 rounded p-2 shadow-sm">
-                        <!-- Grid & Axes -->
-                        <line x1="30" y1="20" x2="30" y2="175" class="g-line" /> <text x="30" y="15" class="a-text">0</text>
-                        <line x1="61" y1="20" x2="61" y2="175" class="g-line" /> <text x="61" y="15" class="a-text">14</text>
-                        <line x1="112" y1="20" x2="112" y2="175" class="g-line" /> <text x="112" y="15" class="a-text">37</text>
-                        <line x1="147" y1="20" x2="147" y2="175" class="g-line" /> <text x="147" y="15" class="a-text font-bold" fill="#2563eb">53</text>
-                        <line x1="174" y1="20" x2="174" y2="175" class="g-line" /> <text x="168" y="15" class="a-text">65</text>
-                        <line x1="178" y1="20" x2="178" y2="175" class="g-line" /> <text x="186" y="15" class="a-text">67</text>
-                        <line x1="247" y1="20" x2="247" y2="175" class="g-line" /> <text x="247" y="15" class="a-text">98</text>
-                        <line x1="300" y1="20" x2="300" y2="175" class="g-line" /> <text x="295" y="15" class="a-text">122</text>
-                        <line x1="304" y1="20" x2="304" y2="175" class="g-line" /> <text x="312" y="15" class="a-text">124</text>
-                        <line x1="435" y1="20" x2="435" y2="175" class="g-line" /> <text x="435" y="15" class="a-text">183</text>
-                        <line x1="470" y1="20" x2="470" y2="175" class="g-line" /> <text x="470" y="15" class="a-text font-bold" fill="#b91c1c">199</text>
-                        <line x1="20" y1="20" x2="480" y2="20" class="a-line" />
-                        
-                        <!-- Path -->
-                        <polyline points="147,30 174,45 178,60 247,75 300,90 304,105 435,120 470,135 112,150 61,165" class="p-line" />
-                        
-                        <!-- Nodes -->
-                        <circle cx="147" cy="30" r="3" class="node" />
-                        <circle cx="174" cy="45" r="3" class="node" />
-                        <circle cx="178" cy="60" r="3" class="node" />
-                        <circle cx="247" cy="75" r="3" class="node" />
-                        <circle cx="300" cy="90" r="3" class="node" />
-                        <circle cx="304" cy="105" r="3" class="node" />
-                        <circle cx="435" cy="120" r="3" class="node" />
-                        <circle cx="470" cy="135" r="3" fill="#b91c1c" /> <!-- Endpoint marker -->
-                        <circle cx="112" cy="150" r="3" class="node" />
-                        <circle cx="61" cy="165" r="3" class="node" />
-                    </svg>
-                </div>
-
-                <!-- C-SCAN -->
-                <h3 class="sub-topic-title">4. C-SCAN (Circular SCAN)</h3>
-                <p class="text-sm">Variant of SCAN for uniform wait time. Moves to one end, services requests, jumps <em>immediately</em> to the beginning (0) without servicing on the return trip, and sweeps again.</p>
-                <div class="numerical-box">
-                    <div class="num-title">Path & Calculation:</div>
-                    Path: 53 &rarr; 65 &rarr; 67 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183 &rarr; <strong>199 (End)</strong> &rarr; <strong>0 (Start)</strong> &rarr; 14 &rarr; 37<br>
-                    Movements: (199 - 53) + (199 - 0) + (37 - 0) = 146 + 199 + 37<br>
-                    <strong>Total Head Movement: 382 cylinders.</strong>
-                    
-                    <svg width="100%" height="200" viewBox="0 0 500 200" class="mx-auto block mt-4 bg-white border border-slate-200 rounded p-2 shadow-sm">
-                        <!-- Grid & Axes -->
-                        <line x1="30" y1="20" x2="30" y2="190" class="g-line" /> <text x="30" y="15" class="a-text font-bold" fill="#b91c1c">0</text>
-                        <line x1="61" y1="20" x2="61" y2="190" class="g-line" /> <text x="61" y="15" class="a-text">14</text>
-                        <line x1="112" y1="20" x2="112" y2="190" class="g-line" /> <text x="112" y="15" class="a-text">37</text>
-                        <line x1="147" y1="20" x2="147" y2="190" class="g-line" /> <text x="147" y="15" class="a-text font-bold" fill="#2563eb">53</text>
-                        <line x1="174" y1="20" x2="174" y2="190" class="g-line" /> <text x="168" y="15" class="a-text">65</text>
-                        <line x1="178" y1="20" x2="178" y2="190" class="g-line" /> <text x="186" y="15" class="a-text">67</text>
-                        <line x1="247" y1="20" x2="247" y2="190" class="g-line" /> <text x="247" y="15" class="a-text">98</text>
-                        <line x1="300" y1="20" x2="300" y2="190" class="g-line" /> <text x="295" y="15" class="a-text">122</text>
-                        <line x1="304" y1="20" x2="304" y2="190" class="g-line" /> <text x="312" y="15" class="a-text">124</text>
-                        <line x1="435" y1="20" x2="435" y2="190" class="g-line" /> <text x="435" y="15" class="a-text">183</text>
-                        <line x1="470" y1="20" x2="470" y2="190" class="g-line" /> <text x="470" y="15" class="a-text font-bold" fill="#b91c1c">199</text>
-                        <line x1="20" y1="20" x2="480" y2="20" class="a-line" />
-                        
-                        <!-- Path -->
-                        <polyline points="147,30 174,45 178,60 247,75 300,90 304,105 435,120 470,135" class="p-line" />
-                        <line x1="470" y1="135" x2="30" y2="150" class="p-line-jump" />
-                        <polyline points="30,150 61,165 112,180" class="p-line" />
-                        
-                        <!-- Nodes -->
-                        <circle cx="147" cy="30" r="3" class="node" />
-                        <circle cx="174" cy="45" r="3" class="node" />
-                        <circle cx="178" cy="60" r="3" class="node" />
-                        <circle cx="247" cy="75" r="3" class="node" />
-                        <circle cx="300" cy="90" r="3" class="node" />
-                        <circle cx="304" cy="105" r="3" class="node" />
-                        <circle cx="435" cy="120" r="3" class="node" />
-                        <circle cx="470" cy="135" r="3" fill="#b91c1c" />
-                        <circle cx="30" cy="150" r="3" fill="#b91c1c" />
-                        <circle cx="61" cy="165" r="3" class="node" />
-                        <circle cx="112" cy="180" r="3" class="node" />
-                    </svg>
-                </div>
-
-                <!-- LOOK -->
-                <h3 class="sub-topic-title">5. LOOK</h3>
-                <p class="text-sm">Improved SCAN. Reverses direction immediately after the <em>last request</em> in a given direction, rather than going all the way to the physical edge of the disk.</p>
-                <div class="numerical-box">
-                    <div class="num-title">Path & Calculation:</div>
-                    Move Higher: 53 &rarr; 65 &rarr; 67 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183 (Last request, reverse!)<br>
-                    Move Lower: 183 &rarr; 37 &rarr; 14<br>
-                    Movements: 12 + 2 + 31 + 24 + 2 + 59 + 146 + 23<br>
-                    <strong>Total Head Movement: 299 cylinders.</strong>
-                    
-                    <svg width="100%" height="170" viewBox="0 0 500 170" class="mx-auto block mt-4 bg-white border border-slate-200 rounded p-2 shadow-sm">
-                        <!-- Grid & Axes -->
-                        <line x1="30" y1="20" x2="30" y2="160" class="g-line" /> <text x="30" y="15" class="a-text">0</text>
-                        <line x1="61" y1="20" x2="61" y2="160" class="g-line" /> <text x="61" y="15" class="a-text">14</text>
-                        <line x1="112" y1="20" x2="112" y2="160" class="g-line" /> <text x="112" y="15" class="a-text">37</text>
-                        <line x1="147" y1="20" x2="147" y2="160" class="g-line" /> <text x="147" y="15" class="a-text font-bold" fill="#2563eb">53</text>
-                        <line x1="174" y1="20" x2="174" y2="160" class="g-line" /> <text x="168" y="15" class="a-text">65</text>
-                        <line x1="178" y1="20" x2="178" y2="160" class="g-line" /> <text x="186" y="15" class="a-text">67</text>
-                        <line x1="247" y1="20" x2="247" y2="160" class="g-line" /> <text x="247" y="15" class="a-text">98</text>
-                        <line x1="300" y1="20" x2="300" y2="160" class="g-line" /> <text x="295" y="15" class="a-text">122</text>
-                        <line x1="304" y1="20" x2="304" y2="160" class="g-line" /> <text x="312" y="15" class="a-text">124</text>
-                        <line x1="435" y1="20" x2="435" y2="160" class="g-line" /> <text x="435" y="15" class="a-text">183</text>
-                        <line x1="470" y1="20" x2="470" y2="160" class="g-line" /> <text x="470" y="15" class="a-text">199</text>
-                        <line x1="20" y1="20" x2="480" y2="20" class="a-line" />
-                        
-                        <!-- Path -->
-                        <polyline points="147,30 174,45 178,60 247,75 300,90 304,105 435,120 112,135 61,150" class="p-line" />
-                        
-                        <!-- Nodes -->
-                        <circle cx="147" cy="30" r="3" class="node" />
-                        <circle cx="174" cy="45" r="3" class="node" />
-                        <circle cx="178" cy="60" r="3" class="node" />
-                        <circle cx="247" cy="75" r="3" class="node" />
-                        <circle cx="300" cy="90" r="3" class="node" />
-                        <circle cx="304" cy="105" r="3" class="node" />
-                        <circle cx="435" cy="120" r="3" class="node" />
-                        <circle cx="112" cy="135" r="3" class="node" />
-                        <circle cx="61" cy="150" r="3" class="node" />
-                    </svg>
-                </div>
-
-                <!-- C-LOOK -->
-                <h3 class="sub-topic-title">6. C-LOOK</h3>
-                <p class="text-sm">Improved C-SCAN. Jumps from the last request in one direction to the first request at the other end, bypassing the physical edges.</p>
-                <div class="numerical-box">
-                    <div class="num-title">Path & Calculation:</div>
-                    Order: 53 &rarr; 65 &rarr; 67 &rarr; 98 &rarr; 122 &rarr; 124 &rarr; 183 (Jump!) &rarr; 14 &rarr; 37<br>
-                    Movements: |65-53|=12, |67-65|=2, |98-67|=31, |122-98|=24, |124-122|=2, |183-124|=59, |14-183|=169 (Wrap), |37-14|=23.<br>
-                    <strong>Total Head Movement: 326 cylinders.</strong>
-                    
-                    <svg width="100%" height="170" viewBox="0 0 500 170" class="mx-auto block mt-4 bg-white border border-slate-200 rounded p-2 shadow-sm">
-                        <!-- Grid & Axes -->
-                        <line x1="30" y1="20" x2="30" y2="160" class="g-line" /> <text x="30" y="15" class="a-text">0</text>
-                        <line x1="61" y1="20" x2="61" y2="160" class="g-line" /> <text x="61" y="15" class="a-text">14</text>
-                        <line x1="112" y1="20" x2="112" y2="160" class="g-line" /> <text x="112" y="15" class="a-text">37</text>
-                        <line x1="147" y1="20" x2="147" y2="160" class="g-line" /> <text x="147" y="15" class="a-text font-bold" fill="#2563eb">53</text>
-                        <line x1="174" y1="20" x2="174" y2="160" class="g-line" /> <text x="168" y="15" class="a-text">65</text>
-                        <line x1="178" y1="20" x2="178" y2="160" class="g-line" /> <text x="186" y="15" class="a-text">67</text>
-                        <line x1="247" y1="20" x2="247" y2="160" class="g-line" /> <text x="247" y="15" class="a-text">98</text>
-                        <line x1="300" y1="20" x2="300" y2="160" class="g-line" /> <text x="295" y="15" class="a-text">122</text>
-                        <line x1="304" y1="20" x2="304" y2="160" class="g-line" /> <text x="312" y="15" class="a-text">124</text>
-                        <line x1="435" y1="20" x2="435" y2="160" class="g-line" /> <text x="435" y="15" class="a-text">183</text>
-                        <line x1="470" y1="20" x2="470" y2="160" class="g-line" /> <text x="470" y="15" class="a-text">199</text>
-                        <line x1="20" y1="20" x2="480" y2="20" class="a-line" />
-                        
-                        <!-- Path -->
-                        <polyline points="147,30 174,45 178,60 247,75 300,90 304,105 435,120" class="p-line" />
-                        <line x1="435" y1="120" x2="61" y2="135" class="p-line-jump" />
-                        <polyline points="61,135 112,150" class="p-line" />
-                        
-                        <!-- Nodes -->
-                        <circle cx="147" cy="30" r="3" class="node" />
-                        <circle cx="174" cy="45" r="3" class="node" />
-                        <circle cx="178" cy="60" r="3" class="node" />
-                        <circle cx="247" cy="75" r="3" class="node" />
-                        <circle cx="300" cy="90" r="3" class="node" />
-                        <circle cx="304" cy="105" r="3" class="node" />
-                        <circle cx="435" cy="120" r="3" class="node" />
-                        <circle cx="61" cy="135" r="3" class="node" />
-                        <circle cx="112" cy="150" r="3" class="node" />
-                    </svg>
-                </div>
-
-                <div class="highlight-box mt-8">
-                    <h4 class="font-bold text-slate-800 mb-2">Algorithm Comparisons (LOOK vs C-LOOK)</h4>
-                    <ul class="list-disc pl-5 text-sm text-slate-700 space-y-1">
-                        <li><strong>Direction:</strong> LOOK serves requests in both directions. C-LOOK serves in one direction only.</li>
-                        <li><strong>Performance:</strong> C-LOOK has the best overall performance among algorithms. LOOK lags behind C-LOOK.</li>
-                        <li><strong>Handling:</strong> C-LOOK handles requests more effectively than LOOK.</li>
-                        <li><strong>Variance:</strong> LOOK has higher throughput but C-LOOK provides perfectly uniform waiting and response times.</li>
-                    </ul>
-                </div>
-
             </div>
         </section>
 
     </main>
 
-    <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
-        <p>Prepared for Vatsal's Study Hub. Numericals solved accurately for exam preparation.</p>
+    <footer class="text-center py-8 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Tailored for detailed exam answers, numericals, and engineering derivations.</p>
     </footer>
 
 </body>
