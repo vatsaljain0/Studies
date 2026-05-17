@@ -18,18 +18,6 @@
             padding-bottom: 0.5rem;
         }
 
-        /* Theory Box */
-        .theory-box {
-            background-color: #ffffff;
-            border-left: 4px solid #3b82f6;
-            padding: 1.5rem;
-            border-radius: 0 0.5rem 0.5rem 0;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
-        }
-        .theory-title { font-weight: 800; font-size: 1.2rem; color: #1e3a8a; margin-bottom: 0.75rem; }
-
-        /* Concept Block */
         .concept-block {
             background-color: #ffffff;
             border: 1px solid #cbd5e1;
@@ -52,114 +40,227 @@
         }
         .concept-header::before { content: "🔹"; }
 
-        /* Breakdown Section */
         .breakdown-section {
             background-color: #fffbeb;
             padding: 1.5rem;
             border-bottom: 1px dashed #cbd5e1;
         }
-        
-        .word-breakdown { list-style-type: none; padding: 0; margin: 0; font-size: 0.95rem; color: #451a03; line-height: 1.6;}
-        .word-breakdown li { margin-bottom: 0.5rem; }
-        .word-breakdown strong { color: #92400e; }
 
+        .memory-trick { background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 1rem; margin: 1rem 0; border-radius: 0 0.5rem 0.5rem 0;}
+        
         /* Tables */
         .comparison-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; text-align: left; }
         .comparison-table th, .comparison-table td { border: 1px solid #cbd5e1; padding: 0.75rem; }
         .comparison-table th { background-color: #f8fafc; font-weight: 700; color: #0f172a; }
         .pro-td { background-color: #f0fdf4; border-left: 3px solid #22c55e !important; }
         .con-td { background-color: #fef2f2; border-left: 3px solid #ef4444 !important; }
+
+        details {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+        summary {
+            padding: 1rem;
+            font-weight: 800;
+            color: #0f172a;
+            cursor: pointer;
+            background-color: #e2e8f0;
+            list-style: none;
+            display: flex;
+            align-items: center;
+        }
+        summary::before { content: '🔍 Expand for Deep-Dive Details'; margin-right: 0.75rem; color: #1e40af; }
+        .exam-content { padding: 1.5rem; background-color: #ffffff; font-size: 0.95rem; line-height: 1.7; }
+
+        p { margin-bottom: 1rem; line-height: 1.7; }
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
     </style>
 </head>
 <body class="antialiased">
 
+    <!-- Sticky Navigation -->
     <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
         <div class="max-w-7xl mx-auto px-4">
             <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-4">
-                <li><a href="#devices" class="hover:text-blue-300">1. Telecommunication Devices</a></li>
-                <li><a href="#standards" class="hover:text-blue-300">2. Standards (ITU, IEEE, 3GPP)</a></li>
-                <li><a href="#generations" class="hover:text-blue-300">3. Cellular Generations (1G to 5G)</a></li>
+                <li><a href="#devices" class="hover:text-blue-300">1. Phones, Devices & Modems</a></li>
+                <li><a href="#standards" class="hover:text-blue-300">2. Telecom Standards (ITU, IEEE, 3GPP)</a></li>
+                <li><a href="#generations" class="hover:text-blue-300">3. 1G to 5G Evolution</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
         <h1 class="text-4xl font-black text-slate-900 mb-2">Telecommunication Devices & Standards</h1>
-        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Module 4: Devices, Global Protocols, and the Evolution of Mobile Networks</p>
+        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Module 4: Phones, Network Devices, Standards, and Mobile Evolution</p>
 
         <!-- ========================================== -->
-        <!-- 1. TELECOMMUNICATION DEVICES -->
+        <!-- 1. NETWORK DEVICES & PHONES -->
         <!-- ========================================== -->
         <section id="devices" class="mb-16">
-            <h2 class="section-title">1. Telecommunication Devices</h2>
+            <h2 class="section-title">1. Telephones, Mobile Phones, and Network Devices</h2>
             
-            <div class="theory-box">
-                <h3 class="theory-title">Foundational Hardware</h3>
-                <p class="text-slate-700 mb-2">Network devices are the physical appliances required for communication and interaction between systems. They act as the "plumbing" of a network, directing data traffic, amplifying signals, converting data formats, and securing connections.</p>
+            <!-- Telephones vs Mobile Phones -->
+            <div class="concept-block">
+                <div class="concept-header">The Fundamentals: Telephone vs. Mobile Phone</div>
+                <div class="breakdown-section">
+                    <p class="text-slate-700 mb-4">Before massive internet routers existed, the world was connected by simple voice devices. Understanding the leap from wired landlines to wireless cellular phones is the foundation of telecom.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Telephone -->
+                        <div class="bg-white p-4 border-2 border-blue-200 rounded-lg shadow-sm">
+                            <h4 class="font-black text-blue-800 text-lg mb-2 border-b pb-1">1. The Traditional Telephone</h4>
+                            <p class="text-sm text-slate-700 mb-2">An analog device that converts human sound into electrical signals and transmits them over physical copper wires. It relies entirely on the <strong>PSTN (Public Switched Telephone Network)</strong>.</p>
+                            <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
+                                <li><strong>Transmitter (Microphone):</strong> Converts acoustic sound waves into varying electrical currents.</li>
+                                <li><strong>Receiver (Speaker):</strong> Takes incoming electrical currents and uses an electromagnet to vibrate a diaphragm, recreating sound.</li>
+                                <li><strong>Switch Hook & Ringer:</strong> Alerts the user of an incoming call and signals the network when the phone is picked up.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Mobile Phone -->
+                        <div class="bg-white p-4 border-2 border-indigo-200 rounded-lg shadow-sm">
+                            <h4 class="font-black text-indigo-800 text-lg mb-2 border-b pb-1">2. The Mobile Phone</h4>
+                            <p class="text-sm text-slate-700 mb-2">A portable device that connects to a wireless cellular network using radio waves. Instead of a continuous physical wire, it communicates with nearby cell towers (Base Stations).</p>
+                            <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
+                                <li><strong>Wireless Radio Transceiver:</strong> Modulates digital voice data onto high-frequency radio waves to send to the cell tower.</li>
+                                <li><strong>Handoff Mechanism:</strong> As you drive, the phone seamlessly switches its connection from one cell tower to the next without dropping the call.</li>
+                                <li><strong>Evolution:</strong> Started as voice-only (1G) and evolved into massive data-processing pocket computers (4G/5G smartphones).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="p-6 bg-slate-50">
+                    <p class="font-bold text-slate-800 mb-2">Quick Comparison</p>
+                    <table class="comparison-table text-sm">
+                        <tr>
+                            <th class="w-1/4">Feature</th>
+                            <th class="w-3/8 text-blue-900">Traditional Telephone</th>
+                            <th class="w-3/8 text-indigo-900">Mobile Phone</th>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Medium</td>
+                            <td>Physical copper/fiber wires (Guided).</td>
+                            <td>Radio frequencies through the air (Unguided).</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Mobility</td>
+                            <td>Fixed to a specific wall jack/location.</td>
+                            <td>Highly portable; works anywhere with cell coverage.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold">Power Source</td>
+                            <td>Draws power directly from the telephone line.</td>
+                            <td>Relies on an internal, rechargeable battery.</td>
+                        </tr>
+                    </table>
+                </div>
             </div>
 
-            <!-- The Telephone -->
+            <p class="text-slate-700 mb-4 text-lg"><strong>Network Devices:</strong> While phones connect individuals, Network Devices (or networking hardware) are the physical appliances required for communication between massive computer networks. They act as the "plumbing" of the internet.</p>
+            
+            <div class="bg-blue-50 p-4 border border-blue-200 rounded-lg mb-6">
+                <p class="font-bold text-blue-900 mb-2">Functions of Network Devices:</p>
+                <ul class="list-disc pl-5 text-sm text-blue-800 space-y-1">
+                    <li>Enable communication by transmitting and receiving data.</li>
+                    <li>Allow devices to connect efficiently and securely.</li>
+                    <li>Improve performance by reducing congestion and managing traffic.</li>
+                    <li>Provide security by controlling access and preventing unauthorized activities.</li>
+                    <li>Extend network coverage and solve signal loss (attenuation) problems.</li>
+                </ul>
+            </div>
+
+            <!-- OSI Layer Breakdown -->
             <div class="concept-block">
-                <div class="concept-header">The Telephone</div>
+                <div class="concept-header">The 10 Network Devices (Grouped by Capability)</div>
                 <div class="p-6">
-                    <p class="text-slate-700 mb-4">The telephone is the foundational communication device designed for the simultaneous two-way (full-duplex) transmission and reception of the human voice. It is a wired device that converts sound waves into electrical signals and vice versa.</p>
-                    <h4 class="font-bold text-slate-800 mb-2">Working Mechanism & Features:</h4>
-                    <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                        <li><strong>Transducer Principle:</strong> It contains a microphone (transmitter) which converts acoustic sound waves from the user's voice into varying electrical currents. The earpiece (receiver) takes incoming electrical currents and converts them back into sound waves.</li>
-                        <li><strong>Network Foundation:</strong> Telephones rely entirely on the <strong>PSTN (Public Switched Telephone Network)</strong>. </li>
-                        <li><strong>Circuit Switching:</strong> When a number is dialed, local exchanges use circuit switching to create a dedicated, uninterrupted physical copper-wire path between the caller and receiver for the duration of the call.</li>
-                        <li><strong>Power Supply:</strong> Traditional telephones do not need to be plugged into a wall outlet for power; they draw all necessary operational power (usually 48 volts DC) directly from the telephone line provided by the local exchange.</li>
+                    <p class="text-slate-600 italic mb-4 text-sm">To memorize these easily, we group them by their intelligence level (from raw electrical signals to smart security analysis).</p>
+
+                    <h4 class="font-bold text-slate-800 text-lg border-b pb-1 mb-2 text-indigo-700">Layer 1: The "Dumb" Physical Devices</h4>
+                    <p class="text-sm text-slate-700 mb-2">These deal with raw electrical/optical signals (bits). They do NOT understand IP or MAC addresses.</p>
+                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700 mb-6">
+                        <li><strong>Hub:</strong> A central connection point. When it receives a signal on one port, it blindly broadcasts it out to <em>all</em> other ports. This causes severe data collisions and network congestion.</li>
+                        <li><strong>Repeater:</strong> Over long distances, signals lose power (Attenuation). A repeater receives a weak signal, regenerates it to full strength, and sends it further to extend network range.</li>
+                    </ul>
+
+                    <h4 class="font-bold text-slate-800 text-lg border-b pb-1 mb-2 text-indigo-700">Layer 2: Local Network (LAN) Devices</h4>
+                    <p class="text-sm text-slate-700 mb-2">These devices understand MAC addresses and operate within a single local network.</p>
+                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700 mb-6">
+                        <li><strong>Switch:</strong> Intelligent alternative to a Hub. It learns MAC addresses and sends data <em>only</em> to the intended device, eliminating collisions.</li>
+                        <li><strong>NIC (Network Interface Card):</strong> The physical hardware card inside a PC that connects it to the network. It holds the permanent MAC address.</li>
+                        <li><strong>WAP (Wireless Access Point):</strong> A device that allows wireless devices (like your phone) to connect to a wired network using Wi-Fi.</li>
+                    </ul>
+
+                    <h4 class="font-bold text-slate-800 text-lg border-b pb-1 mb-2 text-indigo-700">Layer 3: Global Routing & Translation</h4>
+                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700 mb-6">
+                        <li><strong>Router:</strong> Reads IP addresses. It connects completely different networks together (e.g., your home LAN to the Internet) and calculates the fastest path for data.</li>
+                        <li><strong>Gateway:</strong> The ultimate translator. It connects two networks that operate with completely different protocols (languages). Can operate at any OSI layer.</li>
+                    </ul>
+
+                    <h4 class="font-bold text-slate-800 text-lg border-b pb-1 mb-2 text-indigo-700">Layer 4-7: Security & Protection Devices</h4>
+                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700">
+                        <li><strong>Firewall:</strong> Monitors incoming and outgoing traffic. Blocks or allows data based on strict security rules. Forms a barrier between trusted and untrusted networks.</li>
+                        <li><strong>IDPS (Intrusion Detection and Prevention System):</strong> Monitors the network for malicious activity. It can <em>Detect</em> (send alerts) and <em>Prevent</em> (actively block attacks).</li>
+                        <li><strong>VPN (Virtual Private Network):</strong> Creates a secure, encrypted "tunnel" over a less secure network (the Internet) to protect sensitive data and hide your IP address.</li>
                     </ul>
                 </div>
             </div>
 
-            <!-- Mobile Phones -->
-            <div class="concept-block">
-                <div class="concept-header">Mobile Phones</div>
-                <div class="p-6">
-                    <p class="text-slate-700 mb-4">A mobile phone (or cellular phone) is a portable telecommunication device that makes and receives calls over a radio frequency (RF) link while the user is moving within a broad geographic service area.</p>
-                    <h4 class="font-bold text-slate-800 mb-2">Working Mechanism & Features:</h4>
-                    <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                        <li><strong>Cellular Architecture:</strong> Unlike landlines, mobile phones communicate wirelessly via radio waves with a local <strong>Base Transceiver Station (BTS)</strong> or cell tower. The coverage area is divided into hexagonal "cells" to efficiently reuse radio frequencies.</li>
-                        <li><strong>Mobility and Handoffs:</strong> As a user drives or walks out of the range of one cell tower, the network automatically seamlessly transfers (hands off) the connection to the next closest tower without dropping the call.</li>
-                        <li><strong>Evolution:</strong> Early mobile phones were purely analog voice devices. Modern smartphones contain sophisticated microprocessors, Digital Signal Processors (DSPs), and modems to handle high-speed internet data, video processing, and complex operating systems.</li>
-                        <li><strong>Identification:</strong> Every mobile phone uses a SIM (Subscriber Identity Module) card to securely identify the user to the network for billing and security.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Modems -->
+            <!-- Modems Deep Dive -->
             <div class="concept-block">
                 <div class="concept-header">Modems (Modulator-Demodulator)</div>
                 <div class="breakdown-section">
-                    <p class="text-slate-700 mb-4">Computers process data digitally (as 0s and 1s), but many long-distance communication mediums (like telephone lines or radio waves) carry analog signals. A modem is the essential translation device. It converts digital signals from a computer into analog signals (<strong>Modulation</strong>), and converts incoming analog signals back into digital signals for the computer (<strong>Demodulation</strong>).</p>
+                    <p class="text-slate-700 mb-4">A modem is an essential hardware device that acts as a bridge between a digital computer and an analog transmission medium. It performs <strong>Modulation</strong> (converting digital to analog) and <strong>Demodulation</strong> (converting analog back to digital).</p>
                     
-                    <h4 class="font-bold text-slate-800 mb-2 border-b border-slate-300 pb-1">Types of Modems</h4>
-                    <ul class="word-breakdown">
-                        <li><strong>1. Dial-up Modem:</strong> Converts data between a computer and a standard telephone line. It operates at a maximum theoretical speed of <strong>56 Kbps</strong>.</li>
-                        <li><strong>2. Cable Modem:</strong> Provides high-speed bi-directional data communication via radio frequency channels on a Hybrid Fibre-Coaxial (HFC) or cable TV network. Often acts as an external device connected to desktops.</li>
-                        <li><strong>3. Optical Modem:</strong> Connects to optical fiber cables. It converts digital data into pulses of light instead of electrical waves. Known for extremely high speeds and total immunity to electromagnetic interference.</li>
-                        <li><strong>4. Digital Modem:</strong> Converts digital data into digital signals suitable for transmission over specialized digital networks (like ISDN).</li>
-                        <li><strong>5. Satellite Modem:</strong> Provides internet connection through satellite dishes. Converts input bits into radio signals sent into space. Highly reliable and efficient for remote locations where cables cannot reach.</li>
+                    <div class="bg-white p-5 rounded-lg border border-slate-200 mb-6 shadow-sm">
+                        <h4 class="font-bold text-indigo-800 text-lg mb-3 border-b pb-2">Step-by-Step Working Mechanism</h4>
+                        <ol class="list-decimal pl-5 space-y-3 text-sm text-slate-700">
+                            <li><strong>Data Generation (DTE):</strong> The source computer (Data Terminal Equipment) generates a digital message consisting entirely of discrete 0s and 1s.</li>
+                            <li><strong>Transfer to Modem (DCE):</strong> The digital bits are sent to the transmitting modem (Data Circuit-terminating Equipment) via an internal bus or external interface.</li>
+                            <li><strong>Modulation (Encoding):</strong> The transmitting modem generates a continuous, high-frequency analog "carrier wave". It then alters this wave's amplitude, frequency, or phase to physically encode the digital 0s and 1s onto the wave.</li>
+                            <li><strong>Line Transmission:</strong> The newly modulated analog signal is pushed out onto the physical wide-area network (e.g., standard copper telephone lines or coaxial cables).</li>
+                            <li><strong>Reception & Filtering:</strong> The receiving modem on the other side of the world intercepts the analog signal. It runs the signal through electronic filters to strip away background static and line noise picked up during transmission.</li>
+                            <li><strong>Demodulation (Decoding):</strong> The receiving modem mathematically analyzes the incoming analog wave, recognizes the specific amplitude/frequency shifts, and translates them back into the exact original sequence of digital 0s and 1s.</li>
+                            <li><strong>Data Delivery:</strong> The completely restored digital signal is handed off to the destination computer to be processed.</li>
+                        </ol>
+                    </div>
+                    
+                    <h4 class="font-bold text-slate-800 mb-2">The 5 Types of Modems:</h4>
+                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-800">
+                        <li><strong>1. Optical Modem:</strong> Connects to optical fiber cables. Converts digital data into pulses of light. Absolute highest speeds.</li>
+                        <li><strong>2. Cable Modem:</strong> Uses coaxial cables (Cable TV networks). Connects to desktops as external devices. Shares bandwidth but offers high speeds.</li>
+                        <li><strong>3. Digital (DSL) Modem:</strong> Uses standard telephone lines but operates at high frequencies so you can use the internet and phone simultaneously.</li>
+                        <li><strong>4. Satellite Modem:</strong> Sends input bits into space as radio signals. Reliable and efficient for highly remote areas.</li>
+                        <li><strong>5. Dial Modem:</strong> The classic modem. Ties up the phone line while in use. Transmits data at a maximum speed of exactly <strong>56,000 bits per sec (56 Kbps)</strong>.</li>
                     </ul>
                 </div>
+
                 <div class="p-6">
-                    <table class="comparison-table">
+                    <p class="font-bold text-slate-800 mb-2">Exam Points: Advantages & Disadvantages of Modems</p>
+                    <table class="comparison-table text-sm">
                         <tr>
-                            <th class="w-1/2 text-green-900 bg-green-100">Advantages of Modems</th>
-                            <th class="w-1/2 text-red-900 bg-red-100">Disadvantages of Modems</th>
+                            <th class="w-1/2 text-green-900 bg-green-100">Advantages</th>
+                            <th class="w-1/2 text-red-900 bg-red-100">Disadvantages</th>
                         </tr>
                         <tr>
-                            <td class="pro-td">Converts digital signals to analog seamlessly, enabling global internet access over existing lines.</td>
-                            <td class="con-td">A modem alone cannot intelligently route traffic to multiple devices (you need a router for that).</td>
+                            <td class="pro-td">Converts digital signals into an analog signal.</td>
+                            <td class="con-td">The working of the modem slows down when connected to a hub.</td>
                         </tr>
                         <tr>
-                            <td class="pro-td">Performs both modulation and demodulation simultaneously (Full-Duplex).</td>
-                            <td class="con-td">High risk of security-related attacks if a computer is connected directly to a modem without a firewall.</td>
+                            <td class="pro-td">The cost of a modem increases according to the features it has.</td>
+                            <td class="con-td">The modem cannot track the traffic between the LAN and the internet. (Does not provide maintenance of traffic).</td>
                         </tr>
                         <tr>
-                            <td class="pro-td">Cost scales according to features (speed, broadband vs dial-up).</td>
-                            <td class="con-td">Working speed drops significantly when improperly connected to network hubs.</td>
+                            <td class="pro-td">Helps to connect the LAN to the internet.</td>
+                            <td class="con-td">When using a modem, a limited number of network devices can be connected.</td>
+                        </tr>
+                        <tr>
+                            <td class="pro-td">Performs both modulation and demodulation processes simultaneously.</td>
+                            <td class="con-td">Modems have a high risk of security-related attacks.</td>
                         </tr>
                     </table>
                 </div>
@@ -170,28 +271,30 @@
         <!-- 2. STANDARDS -->
         <!-- ========================================== -->
         <section id="standards" class="mb-16">
-            <h2 class="section-title">2. Telecommunication Standards</h2>
+            <h2 class="section-title">2. Telecommunication Standards (ITU, IEEE, 3GPP)</h2>
             
-            <div class="theory-box">
-                <h3 class="theory-title">Why do we need standards?</h3>
-                <p class="text-slate-700 mb-2">Telecommunication standards are published, agreed-upon documents consisting of exact technical specifications and procedures. They are absolutely mandatory for:</p>
-                <ol class="list-decimal pl-6 space-y-1 text-slate-700 font-medium mt-2">
-                    <li><strong>Interoperability:</strong> Ensuring devices from entirely different manufacturers (e.g., an Apple iPhone, a Samsung network tower, and a Cisco router) can communicate seamlessly without translation errors.</li>
-                    <li><strong>Quality Assurance:</strong> Ensuring reliability, security, and consistent service levels for products people use every day.</li>
-                    <li><strong>Consistency of Evolution:</strong> Providing a solid building block to develop next-generation technologies without breaking existing global connectivity.</li>
-                </ol>
+            <div class="bg-blue-50 border border-blue-200 p-5 rounded-lg mb-6">
+                <h3 class="font-bold text-blue-900 text-lg mb-2">The Need for Telecommunication Standards</h3>
+                <p class="text-sm text-slate-800 mb-2">Published documents consisting of specifications and procedures that ensure reliability of materials, products, and services. They are needed for:</p>
+                <ul class="list-disc pl-6 text-sm text-slate-800 font-bold space-y-1">
+                    <li>Interoperability</li>
+                    <li>Quality Insurance (Assurance)</li>
+                    <li>Consistency of Evolution</li>
+                </ul>
+                <p class="text-sm text-slate-700 mt-2">A standard gives the basic building block to develop consistent protocols which are internationally understood and adopted.</p>
             </div>
 
             <!-- ITU -->
             <div class="concept-block">
                 <div class="concept-header">ITU (International Telecommunication Union)</div>
                 <div class="p-6">
-                    <p class="text-slate-700 mb-4">The ITU is a specialized agency of the <strong>United Nations (UN)</strong> that is responsible for all matters related to information and communication technologies (ICTs). It is one of the oldest international organizations in the world.</p>
-                    <p class="font-bold text-blue-900 mb-2">Three Main Sectors of the ITU:</p>
-                    <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                        <li><strong>ITU-T (Telecommunication Standardization Sector):</strong> Develops international standards (Recommendations) for telecommunications, including network protocols, video compression (like H.264), and broadband tech.</li>
-                        <li><strong>ITU-R (Radiocommunication Sector):</strong> Manages the international radio-frequency spectrum and satellite orbit resources. This ensures that a satellite launched by one country doesn't interfere with the radio signals of another country.</li>
-                        <li><strong>ITU-D (Development Sector):</strong> Works to bridge the global digital divide, providing equitable access to telecommunications and internet infrastructure in developing nations.</li>
+                    <p class="text-slate-700 text-sm mb-3">Founded in 1865 (as the International Telegraph Union), it is the United Nations specialized agency for ICTs. Based in Geneva, Switzerland, with 193 Member States. It manages global radio spectrum, satellite orbits, and develops telecom standards to bridge the digital divide.</p>
+                    
+                    <h4 class="font-bold text-slate-800 mb-2">The 3 ITU Sectors:</h4>
+                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700">
+                        <li><strong class="text-blue-700">ITU-R (Radiocommunication):</strong> Manages the international radio-frequency spectrum and satellite orbit resources. Ensures interference-free communications globally.</li>
+                        <li><strong class="text-blue-700">ITU-T (Standardization):</strong> Produces international standards (called "Recommendations") defining how networks and services operate globally.</li>
+                        <li><strong class="text-blue-700">ITU-D (Development):</strong> Fosters international cooperation to expand access to telecom networks in developing countries.</li>
                     </ul>
                 </div>
             </div>
@@ -199,14 +302,30 @@
             <!-- IEEE -->
             <div class="concept-block">
                 <div class="concept-header">IEEE (Institute of Electrical and Electronics Engineers)</div>
-                <div class="p-6">
-                    <p class="text-slate-700 mb-4">The IEEE Standards Association (IEEE SA) is an operating unit that develops global standards across a broad range of industries. For telecommunications, their <strong>802 Local and Metropolitan Area Network (LMSC)</strong> working groups are legendary and define the local networking we use daily.</p>
-                    <ul class="list-disc pl-6 space-y-2 text-slate-700 bg-slate-50 p-4 border border-slate-200 rounded-lg">
-                        <li><strong>IEEE 802.3 (Ethernet):</strong> Governs wired Local Area Network (LAN) technologies, defining how physical cables and switches transmit data.</li>
-                        <li><strong>IEEE 802.11 (Wi-Fi):</strong> Defines standards for Wireless Local Area Networks (WLAN), ensuring your laptop can connect to any wireless router globally.</li>
-                        <li><strong>IEEE 802.15 (Wireless PAN):</strong> Covers short-range Wireless Personal Area Networks like Bluetooth and Zigbee, heavily utilized in IoT and smart home devices.</li>
-                        <li><strong>IEEE 802.16 (WiMAX):</strong> Standards for Wireless Metropolitan Area Networks (WMAN) designed to deliver broadband across entire cities.</li>
-                    </ul>
+                <div class="breakdown-section">
+                    <p class="text-slate-700 text-sm mb-3">While the ITU handles the big global rules, the <strong>IEEE</strong> focuses heavily on hardware, electronics, and local networking standards. If you are plugging in a cable or connecting to a local wireless router, you are using IEEE standards.</p>
+                    <p class="text-slate-700 text-sm">Their goal is to ensure that a laptop manufactured in Japan can seamlessly connect to a router manufactured in America. This is managed primarily by their <strong>IEEE 802 Committee</strong>.</p>
+                </div>
+                <div class="p-6 bg-white">
+                    <h4 class="font-bold text-slate-800 mb-4">The "Big 3" IEEE Standards (Must Memorize):</h4>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg text-center shadow-sm">
+                            <p class="font-black text-xl text-blue-700 mb-1">IEEE 802.3</p>
+                            <p class="font-bold text-slate-800 mb-2">(Ethernet)</p>
+                            <p class="text-xs text-slate-600">Governs all wired Local Area Networks (LANs). When you plug a physical network cable into a PC, you are using 802.3 rules.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg text-center shadow-sm">
+                            <p class="font-black text-xl text-sky-600 mb-1">IEEE 802.11</p>
+                            <p class="font-bold text-slate-800 mb-2">(Wi-Fi)</p>
+                            <p class="text-xs text-slate-600">Defines Wireless LANs (WLAN). This standard ensures your phone can connect to any Wi-Fi hotspot in the world.</p>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg text-center shadow-sm">
+                            <p class="font-black text-xl text-indigo-600 mb-1">IEEE 802.15</p>
+                            <p class="font-bold text-slate-800 mb-2">(Bluetooth / WPAN)</p>
+                            <p class="text-xs text-slate-600">Covers short-range Wireless Personal Area Networks (WPAN). Used for connecting wireless earbuds, smartwatches, and IoT devices.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -214,25 +333,36 @@
             <div class="concept-block">
                 <div class="concept-header">3GPP (3rd Generation Partnership Project)</div>
                 <div class="breakdown-section">
-                    <p class="text-slate-700 mb-4">3GPP is the global consortium responsible for developing the technical specifications for modern cellular mobile telecommunications (including 3G UMTS, 4G LTE, and 5G NR). The overall project is coordinated by the <strong>PCG (Project Coordination Group)</strong>.</p>
+                    <p class="text-slate-700 text-sm mb-3">Unlike the ITU (which regulates the world) or IEEE (which focuses on local Wi-Fi/LAN), <strong>3GPP strictly focuses on Cellular Mobile Networks</strong>. They are the master architects behind 3G, 4G LTE, and 5G.</p>
+                    <p class="text-slate-700 text-sm">It is a "partnership" of 7 major regional telecom standard organizations (like ETSI in Europe, ATIS in America, and TSDSI in India). They meet quarterly to agree on how global cellular networks should be built.</p>
+                </div>
+                <div class="p-6 bg-white">
+                    <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">The 3 Technical Pillars of 3GPP</h4>
+                    <p class="text-sm text-slate-600 mb-4 italic">3GPP divides its engineering work into three massive Technical Specification Groups (TSGs). Instead of memorizing 20 different working groups, you just need to understand these three core pillars:</p>
                     
-                    <p class="font-bold text-blue-900 mb-2">Technical Specification Groups (TSGs)</p>
-                    <p class="text-sm text-slate-700 mb-4">Technical standard drafting is done within Working Groups (WGs) which fall under three main TSGs:</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-white p-3 border border-slate-300 rounded shadow-sm">
-                            <strong class="text-indigo-800">1. RAN (Radio Access Network)</strong>
-                            <p class="text-xs text-slate-600 mt-1">Defines the radio layers (Layer 1/2/3). It manages how a mobile phone physically communicates over the air with a cell tower, and handles mobile terminal conformance testing.</p>
-                        </div>
-                        <div class="bg-white p-3 border border-slate-300 rounded shadow-sm">
-                            <strong class="text-indigo-800">2. CT (Core Network & Terminals)</strong>
-                            <p class="text-xs text-slate-600 mt-1">Defines protocols within the hidden "Core Network" of the provider, smart card application aspects (SIM cards), and how the cellular network interfaces with the global internet.</p>
-                        </div>
-                        <div class="bg-white p-3 border border-slate-300 rounded shadow-sm">
-                            <strong class="text-indigo-800">3. SA (Service & Systems Aspects)</strong>
-                            <p class="text-xs text-slate-600 mt-1">Defines the overall architecture, network security, multimedia codecs, telecom management, and mission-critical applications.</p>
-                        </div>
-                    </div>
+                    <ul class="space-y-4">
+                        <li class="flex gap-4 items-start">
+                            <div class="bg-red-100 text-red-800 font-bold p-2 rounded shrink-0">RAN</div>
+                            <div>
+                                <p class="font-bold text-slate-800">Radio Access Network</p>
+                                <p class="text-sm text-slate-600">Handles the physical radio waves. It defines exactly how your mobile phone's antenna connects to the physical cell tower through the air, including testing and signal power.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 items-start">
+                            <div class="bg-amber-100 text-amber-800 font-bold p-2 rounded shrink-0">CT</div>
+                            <div>
+                                <p class="font-bold text-slate-800">Core Network & Terminals</p>
+                                <p class="text-sm text-slate-600">This is the "Brain" of the telecom provider. It handles the internal networking: routing calls globally, authenticating your SIM card, and connecting your phone to the global internet.</p>
+                            </div>
+                        </li>
+                        <li class="flex gap-4 items-start">
+                            <div class="bg-emerald-100 text-emerald-800 font-bold p-2 rounded shrink-0">SA</div>
+                            <div>
+                                <p class="font-bold text-slate-800">Service & Systems Aspects</p>
+                                <p class="text-sm text-slate-600">Handles the overall high-level architecture. It defines security (encryption rules to stop hackers), multimedia codecs (how video calls are compressed), and new telecom services.</p>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -242,96 +372,122 @@
         <!-- 3. CELLULAR GENERATIONS -->
         <!-- ========================================== -->
         <section id="generations" class="mb-16">
-            <h2 class="section-title">3. Cellular Generations (1G to 5G)</h2>
+            <h2 class="section-title">3. Basics of 1G, 2G, 3G, 4G, and 5G</h2>
             
-            <div class="theory-box">
-                <h3 class="theory-title">The Evolution of Telecommunications</h3>
-                <p class="text-slate-700 mb-2">The telecom revolution started in the 1970s. Roughly every ten years, a new "Generation" (G) of cellular technology is released. Each generation brings a fundamental shift in technology—from pure analog voice signals to digital text, then to broadband internet, and now to AI-driven ubiquitous computing.</p>
+            <div class="concept-block">
+                <div class="concept-header">Evolution of Mobile Generations</div>
+                <div class="p-6">
+                    <p class="text-slate-700 mb-6 text-sm">Every new "Generation" (G) represents a massive architectural leap in how data is transmitted. Understanding <strong>how</strong> and <strong>why</strong> these changes were made provides the core context for telecom evolution.</p>
+
+                    <!-- 1G & 2G -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
+                            <h3 class="text-xl font-black text-slate-800 mb-2 border-b pb-1">1G (The Analog Era)</h3>
+                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
+                                <li><strong>What it was:</strong> The era of massive "brick" phones. It used strictly <strong>Analog</strong> radio signals.</li>
+                                <li><strong>Capability:</strong> Voice calls ONLY. No text messages, no internet.</li>
+                                <li><strong>How & Why:</strong> It used <strong>FDMA (Frequency Division)</strong>, simply assigning a dedicated physical radio frequency to each active call. Because it transmitted raw analog sound instead of digital code, it couldn't compress or encrypt data. This resulted in poor battery life, terrible static noise, and zero security (anyone with a radio scanner could listen in).</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
+                            <h3 class="text-xl font-black text-slate-800 mb-2 border-b pb-1">2G (The Digital & Text Era)</h3>
+                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
+                                <li><strong>What it was:</strong> The revolutionary switch from Analog to <strong>Digital</strong> signals.</li>
+                                <li><strong>Capability:</strong> Introduced <strong>SMS (Text Messaging)</strong>, picture messages, and extremely basic, slow internet (GPRS/EDGE).</li>
+                                <li><strong>How & Why:</strong> By digitizing voice into 0s and 1s and using <strong>TDMA/CDMA</strong>, the network squeezed multiple users into the same frequency by having them take rapid turns or use unique codes. Digitizing the voice freed up enough bandwidth to allow tiny data packets like SMS, and added digital encryption to finally secure calls from eavesdropping.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 3G & 4G -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
+                            <h3 class="text-xl font-black text-slate-800 mb-2 border-b pb-1">3G (The Mobile Web Era)</h3>
+                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
+                                <li><strong>What it was:</strong> The beginning of the smartphone era (BlackBerry, early iPhones).</li>
+                                <li><strong>Capability:</strong> True mobile broadband. It introduced video calling, mobile TV, and fast enough speeds to actually browse the World Wide Web on a phone.</li>
+                                <li><strong>How & Why:</strong> It introduced <strong>Packet-Switching</strong> alongside traditional circuit switching. By using wider frequency bands (Wideband CDMA) and IP technology, it allowed high-volume data transfers. The 'Why' was simple: phones needed to stop acting just like telephones and start acting like mini-computers connected to the internet.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
+                            <h3 class="text-xl font-black text-slate-800 mb-2 border-b pb-1">4G (The Video & LTE Era)</h3>
+                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
+                                <li><strong>What it was:</strong> A 100% Unified IP network (Long Term Evolution - LTE).</li>
+                                <li><strong>Capability:</strong> Brought true broadband speeds (up to 200 Mbps) to mobile. Made high-definition video streaming (Netflix/YouTube), ride-sharing apps (Uber), and online gaming possible.</li>
+                                <li><strong>How & Why:</strong> To handle HD video and live apps, 4G abandoned legacy circuit-switching completely to become a <strong>100% Packet-Switched network</strong>. It achieved massive speeds using a math trick called <strong>OFDMA</strong>, which packs frequency channels tightly together without them interfering. Even voice calls were converted to internet data (VoLTE) to ensure crystal-clear quality.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- 5G -->
+                    <div class="bg-purple-50 border border-purple-200 p-5 rounded-lg shadow-sm">
+                        <h3 class="text-xl font-black text-purple-900 mb-2 border-b border-purple-200 pb-1">5G (The IoT & AI Era)</h3>
+                        <p class="text-sm text-purple-800 mb-3">5G isn't just about faster phones; it's a total architectural redesign meant to connect machines, sensors, and AI globally with zero delay.</p>
+                        <ul class="list-disc pl-5 text-sm text-purple-900 font-medium space-y-2">
+                            <li><strong>Capability:</strong> 1 Gbps+ speeds, near-zero latency (~1 millisecond), and the ability to connect millions of IoT devices simultaneously. Enables real-time remote robotic surgery and autonomous self-driving cars.</li>
+                            <li><strong>How & Why:</strong> To achieve these extreme speeds and zero delay, 5G introduced <strong>Massive MIMO</strong> (putting hundreds of tiny antennas on a tower instead of just a few) and utilized higher frequency bands (mmWave). It also uses <strong>"Network Slicing"</strong> in the cloud to guarantee a dedicated, un-crashable slice of the network for critical AI and IoT devices, ensuring perfect Quality of Service (QoS).</li>
+                        </ul>
+                    </div>
+                </div>
             </div>
 
-            <!-- Deep Dive into Generations -->
-            <div class="space-y-6 mt-6">
-                
-                <!-- 1G & 2G -->
-                <div class="bg-white border border-slate-300 p-6 rounded-xl shadow-sm">
-                    <h4 class="font-black text-blue-800 text-2xl border-b-2 border-blue-100 pb-2 mb-4">1G and 2G: The Analog to Digital Shift</h4>
-                    
-                    <p class="text-slate-700 mb-3"><strong class="text-lg">1G (First Generation - 1970s/1980s):</strong> 1G networks were entirely <strong>Analog Cellular</strong> networks. They were designed exclusively for transmitting voice. They used <strong>Circuit Switching</strong> and FDMA (Frequency Division Multiple Access). Because the signals were analog, call quality was poor, there was intense background static, and absolutely no encryption—anyone with a radio scanner could listen to phone calls. Data bandwidth was a minuscule 2 Kbps.</p>
-                    
-                    <p class="text-slate-700"><strong class="text-lg">2G (Second Generation - 1990s):</strong> 2G was a massive revolution because it shifted telecommunications from analog to <strong>Digital Cellular</strong> signals. Digital encoding allowed for crisp, clear, and fully encrypted voice calls. More importantly, 2G introduced basic data services to mobile phones for the first time, most notably <strong>SMS (Text Messaging)</strong>. It utilized TDMA and CDMA multiplexing techniques and introduced a mix of Circuit Switching (for voice) and Packet Switching (for data). Speeds ranged from 15 to 64 Kbps.</p>
-                </div>
-
-                <!-- 3G & 4G -->
-                <div class="bg-white border border-slate-300 p-6 rounded-xl shadow-sm">
-                    <h4 class="font-black text-indigo-800 text-2xl border-b-2 border-indigo-100 pb-2 mb-4">3G and 4G: The Mobile Broadband Era</h4>
-                    
-                    <p class="text-slate-700 mb-3"><strong class="text-lg">3G (Third Generation - 2000s):</strong> 3G introduced the concept of <strong>Mobile Broadband</strong>. It transitioned networks heavily toward <strong>Packet Switching</strong> and IP-based technology. With data speeds reaching up to 2 Mbps, 3G made it possible to actually browse the World Wide Web, send emails with attachments, and conduct early forms of video calling on a mobile device.</p>
-                    
-                    <p class="text-slate-700"><strong class="text-lg">4G (Fourth Generation - 2010s):</strong> 4G represents the era of <strong>Unified IP</strong>. Everything—including voice calls (VoLTE)—was routed over internet protocols. It brought genuine broadband speeds (up to 200 Mbps). This immense bandwidth enabled the "App Economy"—making seamless HD video streaming, ride-sharing apps (Uber), and highly interactive social media a part of daily life.</p>
-                </div>
-
-                <!-- 5G -->
-                <div class="bg-white border border-slate-300 p-6 rounded-xl shadow-sm border-l-4 border-l-purple-600">
-                    <h4 class="font-black text-purple-900 text-2xl border-b-2 border-purple-100 pb-2 mb-4">5G: The Era of Interconnectivity (2020s)</h4>
-                    <p class="text-slate-700 mb-4">5G is not just about faster phones; it is designed for an interconnected world of machines, vehicles, and smart cities. It operates entirely on Packet Switching and leverages advanced technologies like massive MIMO to achieve massive bandwidth.</p>
-                    <p class="font-bold text-slate-800 mb-2">Defining Features of 5G:</p>
-                    <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                        <li><strong>1 Gbps+ Bandwidth:</strong> Unprecedented speeds where heavy web pages and 4K videos upload and download almost instantly.</li>
-                        <li><strong>Computing Everywhere:</strong> Extremely low latency allows heavy processing to be offloaded from the device to edge-network servers in real-time.</li>
-                        <li><strong>AI Integration:</strong> Built to support continuous data streams for Artificial Intelligence and wearable health devices.</li>
-                        <li><strong>Best Quality of Service (QoS):</strong> Network slicing allows 5G to guarantee stable, zero-lag connections for critical systems like remote robotic surgery or autonomous self-driving cars.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="concept-block mt-10">
-                <div class="command-header">Summary Matrix for Examinations</div>
+            <div class="concept-block">
+                <div class="concept-header">The Master Generation Table</div>
                 <div class="p-6 overflow-x-auto">
-                    <table class="comparison-table whitespace-nowrap">
+                    <p class="text-sm text-slate-600 mb-4 italic">This table contains the exact values provided in the university slides for guaranteed accuracy.</p>
+                    <table class="comparison-table whitespace-nowrap text-center">
                         <tr>
-                            <th class="bg-slate-200">Metric</th>
-                            <th class="text-slate-500">1G</th>
+                            <th class="bg-slate-200">Technology</th>
+                            <th class="text-slate-600">1G</th>
                             <th class="text-blue-700">2G</th>
                             <th class="text-blue-700">3G</th>
                             <th class="text-indigo-700">4G</th>
                             <th class="text-purple-700 font-bold">5G</th>
                         </tr>
                         <tr>
-                            <td class="font-bold">Start / Deployment</td>
-                            <td>1970 / 1984</td>
-                            <td>1980 / 1999</td>
-                            <td>1990 / 2002</td>
-                            <td>2000 / 2010</td>
-                            <td class="bg-purple-50 font-bold">2014 / 2020</td>
+                            <td class="font-bold bg-slate-50 text-left">Start</td>
+                            <td>1970</td>
+                            <td>1980</td>
+                            <td>1990</td>
+                            <td>2000</td>
+                            <td class="bg-purple-50 font-bold">2014</td>
                         </tr>
                         <tr>
-                            <td class="font-bold">Data Bandwidth</td>
-                            <td>2 Kbps</td>
-                            <td>15 - 64 Kbps</td>
-                            <td>2 Mbps</td>
+                            <td class="font-bold bg-slate-50 text-left">Deployment</td>
+                            <td>1984</td>
+                            <td>1999</td>
+                            <td>2002</td>
+                            <td>2010</td>
+                            <td class="bg-purple-50 font-bold">2020</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-slate-50 text-left">Data Bandwidth</td>
+                            <td>2Kbps</td>
+                            <td>15-64 Kbps</td>
+                            <td>2Mbps</td>
                             <td>200 Mbps</td>
-                            <td class="bg-purple-50 font-bold">1 Gbps+</td>
+                            <td class="bg-purple-50 font-bold">1Gbps</td>
                         </tr>
                         <tr>
-                            <td class="font-bold">Technology Basis</td>
+                            <td class="font-bold bg-slate-50 text-left">Technology</td>
                             <td>Analog Cellular</td>
                             <td>Digital Cellular</td>
-                            <td>CFMS / IP Technology</td>
+                            <td>CFMS/IP Technology</td>
                             <td>Unified IP</td>
-                            <td class="bg-purple-50 font-bold">4G + WWW</td>
+                            <td class="bg-purple-50 font-bold">4G+WWW</td>
                         </tr>
                         <tr>
-                            <td class="font-bold">Multiplexing</td>
+                            <td class="font-bold bg-slate-50 text-left">Multiplexing</td>
                             <td>FDMA</td>
-                            <td>TDMA / CDMA</td>
+                            <td>TDMA/CDMA</td>
                             <td>CDMA</td>
                             <td>CDMA</td>
                             <td class="bg-purple-50">CDMA</td>
                         </tr>
                         <tr>
-                            <td class="font-bold">Switching Type</td>
+                            <td class="font-bold bg-slate-50 text-left">Switching</td>
                             <td>Circuit Switching</td>
-                            <td>Circuit + Packet</td>
+                            <td>Circuit + Packet Switching</td>
                             <td>Packet Switching</td>
                             <td>Packet Switching</td>
                             <td class="bg-purple-50 font-bold">Packet Switching</td>
@@ -346,7 +502,7 @@
     </main>
 
     <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
-        <p>Prepared for Vatsal's Study Hub. Tailored for Deep Conceptual Telecom Exams.</p>
+        <p>Prepared for Vatsal's Study Hub. Tailored strictly to your uploaded presentations for 100% data fidelity.</p>
     </footer>
 
 </body>

@@ -3,12 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 4 - Telecommunication Devices and Standards</title>
+    <title>OS Module 4 - Memory Management (Detailed Guide)</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
         section { scroll-margin-top: 6rem; }
         
+        .concept-card {
+            background-color: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            margin: 1.5rem 0;
+            padding: 2.2rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
         .section-title {
             color: #1e40af;
             font-weight: 900;
@@ -18,49 +27,35 @@
             padding-bottom: 0.5rem;
         }
 
-        .concept-block {
-            background-color: #ffffff;
-            border: 1px solid #cbd5e1;
-            border-radius: 0.75rem;
-            margin-bottom: 2.5rem;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-        
-        .concept-header {
-            background-color: #f1f5f9;
-            padding: 1rem 1.5rem;
+        .sub-topic-title {
+            color: #0369a1;
             font-weight: 800;
-            font-size: 1.25rem;
-            color: #0f172a;
-            border-bottom: 1px solid #cbd5e1;
+            font-size: 1.3rem;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-        .concept-header::before { content: "🔹"; }
+        
+        .sub-topic-title::before { content: "🔹"; font-size: 1.1rem; }
 
-        .breakdown-section {
-            background-color: #fffbeb;
+        p { margin-bottom: 1.25rem; line-height: 1.8; text-align: justify; }
+        
+        .highlight-box {
+            background-color: #f0fdf4;
+            border-left: 4px solid #22c55e;
             padding: 1.5rem;
-            border-bottom: 1px dashed #cbd5e1;
+            border-radius: 0 0.5rem 0.5rem 0;
+            margin: 1.5rem 0;
         }
 
-        .memory-trick { background-color: #ecfdf5; border-left: 4px solid #10b981; padding: 1rem; margin: 1rem 0; border-radius: 0 0.5rem 0.5rem 0;}
-        
-        /* Tables */
-        .comparison-table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-size: 0.9rem; text-align: left; }
-        .comparison-table th, .comparison-table td { border: 1px solid #cbd5e1; padding: 0.75rem; }
-        .comparison-table th { background-color: #f8fafc; font-weight: 700; color: #0f172a; }
-        .pro-td { background-color: #f0fdf4; border-left: 3px solid #22c55e !important; }
-        .con-td { background-color: #fef2f2; border-left: 3px solid #ef4444 !important; }
-
+        /* Exam Details Styling */
         details {
             background-color: #f8fafc;
             border: 1px solid #cbd5e1;
             border-radius: 0.5rem;
-            margin-top: 1rem;
-            margin-bottom: 1rem;
+            margin-top: 1.5rem;
             overflow: hidden;
         }
         summary {
@@ -73,436 +68,431 @@
             display: flex;
             align-items: center;
         }
-        summary::before { content: '🔍 Expand for Deep-Dive Details'; margin-right: 0.75rem; color: #1e40af; }
+        summary::before { content: '🎓 Exam Numerical / Detailed View'; margin-right: 0.75rem; color: #1e40af; }
         .exam-content { padding: 1.5rem; background-color: #ffffff; font-size: 0.95rem; line-height: 1.7; }
 
-        p { margin-bottom: 1rem; line-height: 1.7; }
-        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+        .diagram-container {
+            background-color: #f1f5f9;
+            border: 2px dashed #cbd5e1;
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            text-align: center;
+            overflow-x: auto;
+        }
+        .diagram-caption { font-size: 0.9rem; color: #64748b; font-weight: 600; margin-top: 1rem; }
+
+        .math-def { font-family: 'Consolas', monospace; font-weight: bold; color: #1d4ed8; background: #e0e7ff; padding: 2px 6px; border-radius: 4px;}
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; fill: #1e293b; font-weight: 600; text-anchor: middle; dominant-baseline: middle;}
+        
+        table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; text-align: center; }
+        th, td { border: 1px solid #cbd5e1; padding: 0.75rem; }
+        th { background-color: #f1f5f9; font-weight: 700; color: #0f172a; }
+        
+        .trace-table th { background-color: #e2e8f0; font-size: 0.85rem; }
+        .trace-table td { padding: 0.5rem; font-size: 0.85rem; }
+        .hit { color: #16a34a; font-weight: bold; }
+        .miss { color: #dc2626; font-weight: bold; }
     </style>
 </head>
 <body class="antialiased">
 
-    <!-- Sticky Navigation -->
     <nav class="sticky top-0 bg-blue-900 text-white shadow-md z-50">
-        <div class="max-w-7xl mx-auto px-4">
+        <div class="max-w-6xl mx-auto px-4">
             <ul class="flex flex-wrap justify-center md:justify-start items-center py-3 text-xs md:text-sm font-bold gap-4">
-                <li><a href="#devices" class="hover:text-blue-300">1. Phones, Devices & Modems</a></li>
-                <li><a href="#standards" class="hover:text-blue-300">2. Telecom Standards (ITU, IEEE, 3GPP)</a></li>
-                <li><a href="#generations" class="hover:text-blue-300">3. 1G to 5G Evolution</a></li>
+                <li><a href="#swapping" class="hover:text-blue-300">Swapping & Allocation</a></li>
+                <li><a href="#paging" class="hover:text-blue-300">Paging & TLB</a></li>
+                <li><a href="#segmentation" class="hover:text-blue-300">Segmentation</a></li>
+                <li><a href="#virtual" class="hover:text-blue-300">Virtual Memory & CoW</a></li>
+                <li><a href="#replacement" class="hover:text-blue-300">Page Replacement & Thrashing</a></li>
             </ul>
         </div>
     </nav>
 
     <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
-        <h1 class="text-4xl font-black text-slate-900 mb-2">Telecommunication Devices & Standards</h1>
-        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Module 4: Phones, Network Devices, Standards, and Mobile Evolution</p>
+        <h1 class="text-4xl font-black text-slate-900 mb-2">Memory Management</h1>
+        <p class="text-blue-600 font-bold mb-10 text-lg border-b-2 border-slate-200 pb-4">Part 1 & 2: Basic Concepts, Virtual Memory, and Exam Numericals</p>
 
-        <!-- ========================================== -->
-        <!-- 1. NETWORK DEVICES & PHONES -->
-        <!-- ========================================== -->
-        <section id="devices" class="mb-16">
-            <h2 class="section-title">1. Telephones, Mobile Phones, and Network Devices</h2>
+        <section id="swapping" class="mb-16">
+            <h2 class="section-title">1. Basic Concepts: Swapping & Allocation</h2>
             
-            <!-- Telephones vs Mobile Phones -->
-            <div class="concept-block">
-                <div class="concept-header">The Fundamentals: Telephone vs. Mobile Phone</div>
-                <div class="breakdown-section">
-                    <p class="text-slate-700 mb-4">Before massive internet routers existed, the world was connected by simple voice devices. Understanding the leap from wired landlines to wireless cellular phones is the foundation of telecom.</p>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <!-- Telephone -->
-                        <div class="bg-white p-4 border-2 border-blue-200 rounded-lg shadow-sm">
-                            <h4 class="font-black text-blue-800 text-lg mb-2 border-b pb-1">1. The Traditional Telephone</h4>
-                            <p class="text-sm text-slate-700 mb-2">An analog device that converts human sound into electrical signals and transmits them over physical copper wires. It relies entirely on the <strong>PSTN (Public Switched Telephone Network)</strong>.</p>
-                            <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
-                                <li><strong>Transmitter (Microphone):</strong> Converts acoustic sound waves into varying electrical currents.</li>
-                                <li><strong>Receiver (Speaker):</strong> Takes incoming electrical currents and uses an electromagnet to vibrate a diaphragm, recreating sound.</li>
-                                <li><strong>Switch Hook & Ringer:</strong> Alerts the user of an incoming call and signals the network when the phone is picked up.</li>
-                            </ul>
-                        </div>
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">A. Swapping</h3>
+                <p>Main memory (RAM) is limited. If a system wants to execute more processes than it has RAM for, it uses a technique called <strong>Swapping</strong>. The Operating System temporarily moves a process out of main memory and writes it to a secondary storage device (the hard disk or "Backing Store"). Later, when the CPU is ready to execute that process again, it swaps it back into RAM.</p>
+                <p><strong>Pros:</strong> Allows a higher degree of multiprogramming and frees up memory for urgent processes.<br>
+                <strong>Cons:</strong> Hard disks are drastically slower than RAM. Constant swapping can cause severe execution delays.</p>
 
-                        <!-- Mobile Phone -->
-                        <div class="bg-white p-4 border-2 border-indigo-200 rounded-lg shadow-sm">
-                            <h4 class="font-black text-indigo-800 text-lg mb-2 border-b pb-1">2. The Mobile Phone</h4>
-                            <p class="text-sm text-slate-700 mb-2">A portable device that connects to a wireless cellular network using radio waves. Instead of a continuous physical wire, it communicates with nearby cell towers (Base Stations).</p>
-                            <ul class="list-disc pl-5 text-sm text-slate-600 space-y-1">
-                                <li><strong>Wireless Radio Transceiver:</strong> Modulates digital voice data onto high-frequency radio waves to send to the cell tower.</li>
-                                <li><strong>Handoff Mechanism:</strong> As you drive, the phone seamlessly switches its connection from one cell tower to the next without dropping the call.</li>
-                                <li><strong>Evolution:</strong> Started as voice-only (1G) and evolved into massive data-processing pocket computers (4G/5G smartphones).</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="p-6 bg-slate-50">
-                    <p class="font-bold text-slate-800 mb-2">Quick Comparison</p>
-                    <table class="comparison-table text-sm">
-                        <tr>
-                            <th class="w-1/4">Feature</th>
-                            <th class="w-3/8 text-blue-900">Traditional Telephone</th>
-                            <th class="w-3/8 text-indigo-900">Mobile Phone</th>
-                        </tr>
-                        <tr>
-                            <td class="font-bold">Medium</td>
-                            <td>Physical copper/fiber wires (Guided).</td>
-                            <td>Radio frequencies through the air (Unguided).</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold">Mobility</td>
-                            <td>Fixed to a specific wall jack/location.</td>
-                            <td>Highly portable; works anywhere with cell coverage.</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold">Power Source</td>
-                            <td>Draws power directly from the telephone line.</td>
-                            <td>Relies on an internal, rechargeable battery.</td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+                <div class="diagram-container">
+                    <svg width="500" height="200" viewBox="0 0 500 200" class="mx-auto">
+                        <rect x="50" y="20" width="120" height="160" rx="4" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+                        <rect x="50" y="20" width="120" height="40" rx="4" fill="#cbd5e1" stroke="#334155" stroke-width="2"/>
+                        <text x="110" y="40" class="svg-text">Operating System</text>
+                        <rect x="60" y="70" width="100" height="40" rx="4" fill="#bae6fd" stroke="#0284c7" stroke-width="2"/>
+                        <text x="110" y="90" class="svg-text">Process P1</text>
+                        <text x="110" y="195" class="svg-text">Main Memory</text>
 
-            <p class="text-slate-700 mb-4 text-lg"><strong>Network Devices:</strong> While phones connect individuals, Network Devices (or networking hardware) are the physical appliances required for communication between massive computer networks. They act as the "plumbing" of the internet.</p>
-            
-            <div class="bg-blue-50 p-4 border border-blue-200 rounded-lg mb-6">
-                <p class="font-bold text-blue-900 mb-2">Functions of Network Devices:</p>
-                <ul class="list-disc pl-5 text-sm text-blue-800 space-y-1">
-                    <li>Enable communication by transmitting and receiving data.</li>
-                    <li>Allow devices to connect efficiently and securely.</li>
-                    <li>Improve performance by reducing congestion and managing traffic.</li>
-                    <li>Provide security by controlling access and preventing unauthorized activities.</li>
-                    <li>Extend network coverage and solve signal loss (attenuation) problems.</li>
+                        <path d="M 350 40 C 350 25, 450 25, 450 40 L 450 160 C 450 175, 350 175, 350 160 Z" fill="#f8fafc" stroke="#334155" stroke-width="2"/>
+                        <path d="M 350 40 C 350 55, 450 55, 450 40" fill="none" stroke="#334155" stroke-width="2"/>
+                        <rect x="370" y="80" width="60" height="30" rx="2" fill="#fca5a5" stroke="#b91c1c" stroke-width="2"/>
+                        <text x="400" y="95" class="svg-text">Process P2</text>
+                        <text x="400" y="195" class="svg-text">Backing Store (Disk)</text>
+
+                        <path d="M 180 80 L 330 80" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="255" y="70" class="svg-text">Swap Out</text>
+                        
+                        <path d="M 330 120 L 180 120" stroke="#0f172a" stroke-width="2" marker-end="url(#arrow)"/>
+                        <text x="255" y="110" class="svg-text">Swap In</text>
+
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L9,3 z" fill="#0f172a" />
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="diagram-caption">Swapping processes between Main Memory and Disk</div>
+                </div>
+
+                <h3 class="sub-topic-title">B. Memory Allocation Strategies</h3>
+                <p>When a process enters the system, the OS must allocate it a continuous block of memory. This is called <strong>Contiguous Memory Allocation</strong>. To find the right spot, the OS uses one of the following search algorithms:</p>
+                <ul class="list-disc pl-6 space-y-2">
+                    <li><strong>First Fit:</strong> Allocates the <em>first</em> hole that is big enough. It stops searching immediately. Fast, but can leave awkward gaps.</li>
+                    <li><strong>Next Fit:</strong> Operates like First Fit, but starts searching from the location of the <em>last</em> allocation rather than the beginning.</li>
+                    <li><strong>Best Fit:</strong> Searches the <em>entire list</em> and allocates the smallest hole that is big enough. It produces the smallest leftover partition.</li>
+                    <li><strong>Worst Fit:</strong> Searches the entire list and allocates the <em>largest</em> available hole. Strangely, this is often better than Best Fit because it leaves behind a large leftover gap that can be used by another process later, whereas Best Fit leaves tiny, useless gaps.</li>
                 </ul>
-            </div>
 
-            <!-- OSI Layer Breakdown -->
-            <div class="concept-block">
-                <div class="concept-header">The 10 Network Devices (Grouped by Capability)</div>
-                <div class="p-6">
-                    <p class="text-slate-600 italic mb-4 text-sm">To memorize these easily, we group them by their intelligence level (from raw electrical signals to smart security analysis).</p>
+                <details>
+                    <summary>Exam Numerical: First Fit vs. Best Fit Proof</summary>
+                    <div class="exam-content">
+                        <p class="font-bold text-red-700 mb-2">The Problem Scenario (From Slides):</p>
+                        <p>We have 3 available memory blocks: <span class="math-def">150K, 150K, 350K</span>.</p>
+                        <p>Processes request memory in this order: <span class="math-def">300K, 25K, 125K, 50K</span>.</p>
 
-                    <h4 class="font-bold text-slate-800 text-lg border-b pb-1 mb-2 text-indigo-700">Layer 1: The "Dumb" Physical Devices</h4>
-                    <p class="text-sm text-slate-700 mb-2">These deal with raw electrical/optical signals (bits). They do NOT understand IP or MAC addresses.</p>
-                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700 mb-6">
-                        <li><strong>Hub:</strong> A central connection point. When it receives a signal on one port, it blindly broadcasts it out to <em>all</em> other ports. This causes severe data collisions and network congestion.</li>
-                        <li><strong>Repeater:</strong> Over long distances, signals lose power (Attenuation). A repeater receives a weak signal, regenerates it to full strength, and sends it further to extend network range.</li>
-                    </ul>
+                        <h4 class="font-bold mt-4 text-blue-800">Why Best Fit FAILS:</h4>
+                        <ol class="list-decimal pl-5 space-y-1">
+                            <li><strong>300K</strong> process requests memory. Best Fit puts it in the 350K block. (Remaining: 50K).</li>
+                            <li><strong>25K</strong> process requests memory. The smallest block that fits is the new 50K block. (Remaining: 25K).</li>
+                            <li><strong>125K</strong> process requests memory. It fits into a 150K block. (Remaining: 25K).</li>
+                            <li><strong>50K</strong> process requests memory. <span class="text-red-600 font-bold">FAILURE!</span> The remaining free blocks are 25K, 25K, and 150K. The 50K process cannot fit into the 25K gaps, even though total free memory is 200K. This is External Fragmentation.</li>
+                        </ol>
 
-                    <h4 class="font-bold text-slate-800 text-lg border-b pb-1 mb-2 text-indigo-700">Layer 2: Local Network (LAN) Devices</h4>
-                    <p class="text-sm text-slate-700 mb-2">These devices understand MAC addresses and operate within a single local network.</p>
-                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700 mb-6">
-                        <li><strong>Switch:</strong> Intelligent alternative to a Hub. It learns MAC addresses and sends data <em>only</em> to the intended device, eliminating collisions.</li>
-                        <li><strong>NIC (Network Interface Card):</strong> The physical hardware card inside a PC that connects it to the network. It holds the permanent MAC address.</li>
-                        <li><strong>WAP (Wireless Access Point):</strong> A device that allows wireless devices (like your phone) to connect to a wired network using Wi-Fi.</li>
-                    </ul>
-
-                    <h4 class="font-bold text-slate-800 text-lg border-b pb-1 mb-2 text-indigo-700">Layer 3: Global Routing & Translation</h4>
-                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700 mb-6">
-                        <li><strong>Router:</strong> Reads IP addresses. It connects completely different networks together (e.g., your home LAN to the Internet) and calculates the fastest path for data.</li>
-                        <li><strong>Gateway:</strong> The ultimate translator. It connects two networks that operate with completely different protocols (languages). Can operate at any OSI layer.</li>
-                    </ul>
-
-                    <h4 class="font-bold text-slate-800 text-lg border-b pb-1 mb-2 text-indigo-700">Layer 4-7: Security & Protection Devices</h4>
-                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700">
-                        <li><strong>Firewall:</strong> Monitors incoming and outgoing traffic. Blocks or allows data based on strict security rules. Forms a barrier between trusted and untrusted networks.</li>
-                        <li><strong>IDPS (Intrusion Detection and Prevention System):</strong> Monitors the network for malicious activity. It can <em>Detect</em> (send alerts) and <em>Prevent</em> (actively block attacks).</li>
-                        <li><strong>VPN (Virtual Private Network):</strong> Creates a secure, encrypted "tunnel" over a less secure network (the Internet) to protect sensitive data and hide your IP address.</li>
-                    </ul>
-                </div>
-            </div>
-
-            <!-- Modems Deep Dive -->
-            <div class="concept-block">
-                <div class="concept-header">Modems (Modulator-Demodulator)</div>
-                <div class="breakdown-section">
-                    <p class="text-slate-700 mb-4">A modem is an essential hardware device that acts as a bridge between a digital computer and an analog transmission medium. It performs <strong>Modulation</strong> (converting digital to analog) and <strong>Demodulation</strong> (converting analog back to digital).</p>
-                    
-                    <div class="bg-white p-5 rounded-lg border border-slate-200 mb-6 shadow-sm">
-                        <h4 class="font-bold text-indigo-800 text-lg mb-3 border-b pb-2">Step-by-Step Working Mechanism</h4>
-                        <ol class="list-decimal pl-5 space-y-3 text-sm text-slate-700">
-                            <li><strong>Data Generation (DTE):</strong> The source computer (Data Terminal Equipment) generates a digital message consisting entirely of discrete 0s and 1s.</li>
-                            <li><strong>Transfer to Modem (DCE):</strong> The digital bits are sent to the transmitting modem (Data Circuit-terminating Equipment) via an internal bus or external interface.</li>
-                            <li><strong>Modulation (Encoding):</strong> The transmitting modem generates a continuous, high-frequency analog "carrier wave". It then alters this wave's amplitude, frequency, or phase to physically encode the digital 0s and 1s onto the wave.</li>
-                            <li><strong>Line Transmission:</strong> The newly modulated analog signal is pushed out onto the physical wide-area network (e.g., standard copper telephone lines or coaxial cables).</li>
-                            <li><strong>Reception & Filtering:</strong> The receiving modem on the other side of the world intercepts the analog signal. It runs the signal through electronic filters to strip away background static and line noise picked up during transmission.</li>
-                            <li><strong>Demodulation (Decoding):</strong> The receiving modem mathematically analyzes the incoming analog wave, recognizes the specific amplitude/frequency shifts, and translates them back into the exact original sequence of digital 0s and 1s.</li>
-                            <li><strong>Data Delivery:</strong> The completely restored digital signal is handed off to the destination computer to be processed.</li>
+                        <h4 class="font-bold mt-4 text-blue-800">Why First Fit SUCCEEDS:</h4>
+                        <ol class="list-decimal pl-5 space-y-1">
+                            <li><strong>300K</strong> goes to 350K block. (Remaining: 50K).</li>
+                            <li><strong>25K</strong> goes to the <em>first</em> 150K block. (Remaining: 125K).</li>
+                            <li><strong>125K</strong> goes exactly into the 125K block left over from step 2. (Remaining: 0K).</li>
+                            <li><strong>50K</strong> goes exactly into the 50K block left over from step 1. (Remaining: 0K). <span class="text-green-600 font-bold">ALL PROCESSES ALLOCATED!</span></li>
                         </ol>
                     </div>
-                    
-                    <h4 class="font-bold text-slate-800 mb-2">The 5 Types of Modems:</h4>
-                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-800">
-                        <li><strong>1. Optical Modem:</strong> Connects to optical fiber cables. Converts digital data into pulses of light. Absolute highest speeds.</li>
-                        <li><strong>2. Cable Modem:</strong> Uses coaxial cables (Cable TV networks). Connects to desktops as external devices. Shares bandwidth but offers high speeds.</li>
-                        <li><strong>3. Digital (DSL) Modem:</strong> Uses standard telephone lines but operates at high frequencies so you can use the internet and phone simultaneously.</li>
-                        <li><strong>4. Satellite Modem:</strong> Sends input bits into space as radio signals. Reliable and efficient for highly remote areas.</li>
-                        <li><strong>5. Dial Modem:</strong> The classic modem. Ties up the phone line while in use. Transmits data at a maximum speed of exactly <strong>56,000 bits per sec (56 Kbps)</strong>.</li>
-                    </ul>
-                </div>
-
-                <div class="p-6">
-                    <p class="font-bold text-slate-800 mb-2">Exam Points: Advantages & Disadvantages of Modems</p>
-                    <table class="comparison-table text-sm">
-                        <tr>
-                            <th class="w-1/2 text-green-900 bg-green-100">Advantages</th>
-                            <th class="w-1/2 text-red-900 bg-red-100">Disadvantages</th>
-                        </tr>
-                        <tr>
-                            <td class="pro-td">Converts digital signals into an analog signal.</td>
-                            <td class="con-td">The working of the modem slows down when connected to a hub.</td>
-                        </tr>
-                        <tr>
-                            <td class="pro-td">The cost of a modem increases according to the features it has.</td>
-                            <td class="con-td">The modem cannot track the traffic between the LAN and the internet. (Does not provide maintenance of traffic).</td>
-                        </tr>
-                        <tr>
-                            <td class="pro-td">Helps to connect the LAN to the internet.</td>
-                            <td class="con-td">When using a modem, a limited number of network devices can be connected.</td>
-                        </tr>
-                        <tr>
-                            <td class="pro-td">Performs both modulation and demodulation processes simultaneously.</td>
-                            <td class="con-td">Modems have a high risk of security-related attacks.</td>
-                        </tr>
-                    </table>
+                </details>
+                
+                <div class="highlight-box mt-6">
+                    <p class="font-bold text-blue-900 mb-2">Understanding Fragmentation</p>
+                    <p><strong>Internal Fragmentation:</strong> Occurs when memory is divided into fixed-size blocks. If you assign a 25KB process to a rigid 50KB block, the 25KB inside that block is completely wasted. It is "internal" to the block.</p>
+                    <p><strong>External Fragmentation:</strong> Occurs in dynamic allocation. As processes load and exit, they leave behind scattered gaps of free memory. Even if the total free memory is 100KB, a new 80KB process cannot be loaded because the free space is not contiguous (it's broken into tiny pieces). <em>Solution: Compaction (shuffling memory to group free space) or Paging.</em></p>
                 </div>
             </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- 2. STANDARDS -->
-        <!-- ========================================== -->
-        <section id="standards" class="mb-16">
-            <h2 class="section-title">2. Telecommunication Standards (ITU, IEEE, 3GPP)</h2>
+        <section id="paging" class="mb-16">
+            <h2 class="section-title">2. Paging, Page Tables, and the TLB</h2>
             
-            <div class="bg-blue-50 border border-blue-200 p-5 rounded-lg mb-6">
-                <h3 class="font-bold text-blue-900 text-lg mb-2">The Need for Telecommunication Standards</h3>
-                <p class="text-sm text-slate-800 mb-2">Published documents consisting of specifications and procedures that ensure reliability of materials, products, and services. They are needed for:</p>
-                <ul class="list-disc pl-6 text-sm text-slate-800 font-bold space-y-1">
-                    <li>Interoperability</li>
-                    <li>Quality Insurance (Assurance)</li>
-                    <li>Consistency of Evolution</li>
+            <div class="concept-card">
+                <p>To completely eliminate External Fragmentation, Operating Systems use a non-contiguous memory allocation technique called <strong>Paging</strong>.</p>
+                <ul class="list-disc pl-6 space-y-3">
+                    <li><strong>The Concept:</strong> The physical memory (RAM) is divided into fixed-sized blocks called <strong>Frames</strong>. The logical memory (the user process) is divided into blocks of the exact same size called <strong>Pages</strong>.</li>
+                    <li>Because they are the exact same size, any Page can be loaded into any available Frame, no matter where it is located in RAM. No memory is wasted between blocks!</li>
                 </ul>
-                <p class="text-sm text-slate-700 mt-2">A standard gives the basic building block to develop consistent protocols which are internationally understood and adopted.</p>
-            </div>
 
-            <!-- ITU -->
-            <div class="concept-block">
-                <div class="concept-header">ITU (International Telecommunication Union)</div>
-                <div class="p-6">
-                    <p class="text-slate-700 text-sm mb-3">Founded in 1865 (as the International Telegraph Union), it is the United Nations specialized agency for ICTs. Based in Geneva, Switzerland, with 193 Member States. It manages global radio spectrum, satellite orbits, and develops telecom standards to bridge the digital divide.</p>
-                    
-                    <h4 class="font-bold text-slate-800 mb-2">The 3 ITU Sectors:</h4>
-                    <ul class="list-disc pl-6 space-y-2 text-sm text-slate-700">
-                        <li><strong class="text-blue-700">ITU-R (Radiocommunication):</strong> Manages the international radio-frequency spectrum and satellite orbit resources. Ensures interference-free communications globally.</li>
-                        <li><strong class="text-blue-700">ITU-T (Standardization):</strong> Produces international standards (called "Recommendations") defining how networks and services operate globally.</li>
-                        <li><strong class="text-blue-700">ITU-D (Development):</strong> Fosters international cooperation to expand access to telecom networks in developing countries.</li>
-                    </ul>
-                </div>
-            </div>
+                <h3 class="sub-topic-title">Address Translation Hardware</h3>
+                <p>When the CPU executes code, it generates a <strong>Logical Address</strong>. The physical RAM does not understand logical addresses. The Memory Management Unit (MMU) uses a <strong>Page Table</strong> to translate the logical address into a <strong>Physical Address</strong>.</p>
+                <p>A Logical Address consists of two parts: 1. <strong>Page Number (p)</strong> (used as an index to the Page Table), and 2. <strong>Page Offset (d)</strong> (the exact location inside the page/frame). The MMU looks up the Page Number to find the matching Frame Number, and attaches the identical Offset to generate the physical address.</p>
 
-            <!-- IEEE -->
-            <div class="concept-block">
-                <div class="concept-header">IEEE (Institute of Electrical and Electronics Engineers)</div>
-                <div class="breakdown-section">
-                    <p class="text-slate-700 text-sm mb-3">While the ITU handles the big global rules, the <strong>IEEE</strong> focuses heavily on hardware, electronics, and local networking standards. If you are plugging in a cable or connecting to a local wireless router, you are using IEEE standards.</p>
-                    <p class="text-slate-700 text-sm">Their goal is to ensure that a laptop manufactured in Japan can seamlessly connect to a router manufactured in America. This is managed primarily by their <strong>IEEE 802 Committee</strong>.</p>
-                </div>
-                <div class="p-6 bg-white">
-                    <h4 class="font-bold text-slate-800 mb-4">The "Big 3" IEEE Standards (Must Memorize):</h4>
-                    
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg text-center shadow-sm">
-                            <p class="font-black text-xl text-blue-700 mb-1">IEEE 802.3</p>
-                            <p class="font-bold text-slate-800 mb-2">(Ethernet)</p>
-                            <p class="text-xs text-slate-600">Governs all wired Local Area Networks (LANs). When you plug a physical network cable into a PC, you are using 802.3 rules.</p>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg text-center shadow-sm">
-                            <p class="font-black text-xl text-sky-600 mb-1">IEEE 802.11</p>
-                            <p class="font-bold text-slate-800 mb-2">(Wi-Fi)</p>
-                            <p class="text-xs text-slate-600">Defines Wireless LANs (WLAN). This standard ensures your phone can connect to any Wi-Fi hotspot in the world.</p>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg text-center shadow-sm">
-                            <p class="font-black text-xl text-indigo-600 mb-1">IEEE 802.15</p>
-                            <p class="font-bold text-slate-800 mb-2">(Bluetooth / WPAN)</p>
-                            <p class="text-xs text-slate-600">Covers short-range Wireless Personal Area Networks (WPAN). Used for connecting wireless earbuds, smartwatches, and IoT devices.</p>
-                        </div>
+                <details>
+                    <summary>Exam Numerical: Paging Address Calculation (Decimal)</summary>
+                    <div class="exam-content">
+                        <p class="mb-2"><strong>Problem:</strong> Given a logical address of <span class="math-def">21205</span> and a Page Size of <span class="math-def">1024 bytes (1 KB)</span>, find the Page Number and Offset.</p>
+                        <p><strong>Formulas:</strong></p>
+                        <ul class="list-disc pl-5 mb-4">
+                            <li>Page Number = Logical Address / Page Size</li>
+                            <li>Offset = Logical Address % Page Size (Remainder)</li>
+                        </ul>
+                        <p><strong>Step-by-Step Solution:</strong></p>
+                        <p>1. Page Number = 21205 / 1024 = <strong>20</strong> (Take the whole number)</p>
+                        <p>2. Offset = 21205 % 1024 = <strong>725</strong></p>
+                        <p class="mt-2 text-green-700 font-bold">Answer: Page Number is 20, Offset is 725.</p>
                     </div>
-                </div>
-            </div>
+                </details>
 
-            <!-- 3GPP -->
-            <div class="concept-block">
-                <div class="concept-header">3GPP (3rd Generation Partnership Project)</div>
-                <div class="breakdown-section">
-                    <p class="text-slate-700 text-sm mb-3">Unlike the ITU (which regulates the world) or IEEE (which focuses on local Wi-Fi/LAN), <strong>3GPP strictly focuses on Cellular Mobile Networks</strong>. They are the master architects behind 3G, 4G LTE, and 5G.</p>
-                    <p class="text-slate-700 text-sm">It is a "partnership" of 7 major regional telecom standard organizations (like ETSI in Europe, ATIS in America, and TSDSI in India). They meet quarterly to agree on how global cellular networks should be built.</p>
-                </div>
-                <div class="p-6 bg-white">
-                    <h4 class="font-bold text-slate-800 mb-3 border-b pb-2">The 3 Technical Pillars of 3GPP</h4>
-                    <p class="text-sm text-slate-600 mb-4 italic">3GPP divides its engineering work into three massive Technical Specification Groups (TSGs). Instead of memorizing 20 different working groups, you just need to understand these three core pillars:</p>
-                    
-                    <ul class="space-y-4">
-                        <li class="flex gap-4 items-start">
-                            <div class="bg-red-100 text-red-800 font-bold p-2 rounded shrink-0">RAN</div>
-                            <div>
-                                <p class="font-bold text-slate-800">Radio Access Network</p>
-                                <p class="text-sm text-slate-600">Handles the physical radio waves. It defines exactly how your mobile phone's antenna connects to the physical cell tower through the air, including testing and signal power.</p>
-                            </div>
-                        </li>
-                        <li class="flex gap-4 items-start">
-                            <div class="bg-amber-100 text-amber-800 font-bold p-2 rounded shrink-0">CT</div>
-                            <div>
-                                <p class="font-bold text-slate-800">Core Network & Terminals</p>
-                                <p class="text-sm text-slate-600">This is the "Brain" of the telecom provider. It handles the internal networking: routing calls globally, authenticating your SIM card, and connecting your phone to the global internet.</p>
-                            </div>
-                        </li>
-                        <li class="flex gap-4 items-start">
-                            <div class="bg-emerald-100 text-emerald-800 font-bold p-2 rounded shrink-0">SA</div>
-                            <div>
-                                <p class="font-bold text-slate-800">Service & Systems Aspects</p>
-                                <p class="text-sm text-slate-600">Handles the overall high-level architecture. It defines security (encryption rules to stop hackers), multimedia codecs (how video calls are compressed), and new telecom services.</p>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+                <h3 class="sub-topic-title">Translation Lookaside Buffer (TLB)</h3>
+                <p>Every time the CPU wants to access memory, it has to check the Page Table. Since the Page Table is stored in RAM, this requires two trips to memory (one for the table, one for the actual data), cutting performance in half! To fix this, we use a <strong>TLB</strong>.</p>
+                <p>The TLB is a small, ultra-fast hardware cache placed inside the MMU. It stores the most recently used Page-to-Frame mappings. When a logical address is generated, the CPU checks the TLB first.</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>TLB Hit:</strong> The mapping is found in the TLB. Fast access!</li>
+                    <li><strong>TLB Miss:</strong> The mapping is not found. The CPU must access the Page Table in RAM, and then copies that mapping into the TLB for future use.</li>
+                </ul>
 
+                <details>
+                    <summary>Exam Numerical: Effective Memory Access Time (EMAT)</summary>
+                    <div class="exam-content">
+                        <p class="mb-2"><strong>Problem:</strong> Assume a TLB hit ratio of 80% (0.80). It takes 15ns to search the TLB, and 150ns to access main memory. Calculate the EMAT.</p>
+                        <p class="mb-2"><strong>Formula:</strong></p>
+                        <p class="math-def inline-block p-2 mb-4">EMAT = Hit Ratio * (TLB_time + Mem_time) + Miss Ratio * (TLB_time + Mem_time + Mem_time)</p>
+                        <p class="italic text-sm text-slate-500 mb-2">*Note on Miss: You search TLB (15ns), fail, search Page Table in RAM (150ns), then access the actual data in RAM (150ns).</p>
+                        
+                        <p><strong>Step-by-Step Solution:</strong></p>
+                        <p>1. Hit Case = 0.80 * (15 + 150) = 0.80 * 165 = <strong>132 ns</strong></p>
+                        <p>2. Miss Case = 0.20 * (15 + 150 + 150) = 0.20 * 315 = <strong>63 ns</strong></p>
+                        <p>3. EMAT = 132 + 63 = <strong class="text-green-700 text-lg">195 ns</strong></p>
+                    </div>
+                </details>
+            </div>
         </section>
 
-        <!-- ========================================== -->
-        <!-- 3. CELLULAR GENERATIONS -->
-        <!-- ========================================== -->
-        <section id="generations" class="mb-16">
-            <h2 class="section-title">3. Basics of 1G, 2G, 3G, 4G, and 5G</h2>
+        <section id="segmentation" class="mb-16">
+            <h2 class="section-title">3. Segmentation</h2>
+            <div class="concept-card">
+                <p>While Paging divides memory into fixed, meaningless mathematical blocks, <strong>Segmentation</strong> divides memory logically. A programmer doesn't think of memory as "Page 1 and Page 2". They think of it as "The Main Program", "The Stack", "The Math Library", and "The Variables".</p>
+                <p>Segmentation supports this <strong>Logical View</strong>. Memory is divided into variable-sized segments based on the actual components of the program. Because segments are different sizes, it suffers from External Fragmentation.</p>
+                
+                <h3 class="font-bold text-lg text-slate-800 mt-4">The Segment Table</h3>
+                <p>Instead of a Page Table, the MMU uses a Segment Table. Because segments vary in size, the table must track two things for every segment:</p>
+                <ul class="list-disc pl-6 space-y-1">
+                    <li><strong>Base:</strong> The exact starting physical address of the segment in RAM.</li>
+                    <li><strong>Limit:</strong> The length of the segment. If the CPU tries to access an offset that is larger than the Limit, the OS throws a "Segmentation Fault" error to prevent illegal memory access.</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="virtual" class="mb-16">
+            <h2 class="section-title">4. Virtual Memory, Demand Paging & Copy-on-Write</h2>
             
-            <div class="concept-block">
-                <div class="concept-header">Evolution of Mobile Generations</div>
-                <div class="p-6">
-                    <p class="text-slate-700 mb-6 text-sm">Every new "Generation" (G) represents a massive architectural leap in how data is transmitted. Understanding <strong>how</strong> and <strong>why</strong> these changes were made provides the core context for telecom evolution.</p>
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">Basic Concepts of Virtual Memory</h3>
+                <p>Virtual Memory is a technique that creates the illusion of a massive, continuous memory space, even if your physical RAM is small. It does this by treating a portion of your hard disk as an extension of RAM. Instead of loading an entire 4GB video game into RAM at once, the OS only loads the specific pages the game is actively using right now. The rest stay on the disk.</p>
 
-                    <!-- 1G & 2G -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
-                            <h3 class="text-xl font-black text-slate-800 mb-2 border-b pb-1">1G (The Analog Era)</h3>
-                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
-                                <li><strong>What it was:</strong> The era of massive "brick" phones. It used strictly <strong>Analog</strong> radio signals.</li>
-                                <li><strong>Capability:</strong> Voice calls ONLY. No text messages, no internet.</li>
-                                <li><strong>How & Why:</strong> It used <strong>FDMA (Frequency Division)</strong>, simply assigning a dedicated physical radio frequency to each active call. Because it transmitted raw analog sound instead of digital code, it couldn't compress or encrypt data. This resulted in poor battery life, terrible static noise, and zero security (anyone with a radio scanner could listen in).</li>
-                            </ul>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
-                            <h3 class="text-xl font-black text-slate-800 mb-2 border-b pb-1">2G (The Digital & Text Era)</h3>
-                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
-                                <li><strong>What it was:</strong> The revolutionary switch from Analog to <strong>Digital</strong> signals.</li>
-                                <li><strong>Capability:</strong> Introduced <strong>SMS (Text Messaging)</strong>, picture messages, and extremely basic, slow internet (GPRS/EDGE).</li>
-                                <li><strong>How & Why:</strong> By digitizing voice into 0s and 1s and using <strong>TDMA/CDMA</strong>, the network squeezed multiple users into the same frequency by having them take rapid turns or use unique codes. Digitizing the voice freed up enough bandwidth to allow tiny data packets like SMS, and added digital encryption to finally secure calls from eavesdropping.</li>
-                            </ul>
-                        </div>
-                    </div>
+                <h3 class="sub-topic-title">Demand Paging</h3>
+                <p>This is the mechanism that makes Virtual Memory work. The OS uses a "Lazy Swapper" (or Pager). It never swaps a page into memory unless that page is actually demanded by the CPU. When a process starts, its Page Table is created, but all entries are set to an <strong>Invalid Bit</strong> (meaning the page is on the disk, not in RAM). If the CPU asks for a page and sees the Invalid Bit, a <strong>Page Fault</strong> occurs. The OS pauses the process, fetches the page from the disk, puts it in a free RAM frame, updates the table to "Valid", and resumes the process.</p>
 
-                    <!-- 3G & 4G -->
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
-                            <h3 class="text-xl font-black text-slate-800 mb-2 border-b pb-1">3G (The Mobile Web Era)</h3>
-                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
-                                <li><strong>What it was:</strong> The beginning of the smartphone era (BlackBerry, early iPhones).</li>
-                                <li><strong>Capability:</strong> True mobile broadband. It introduced video calling, mobile TV, and fast enough speeds to actually browse the World Wide Web on a phone.</li>
-                                <li><strong>How & Why:</strong> It introduced <strong>Packet-Switching</strong> alongside traditional circuit switching. By using wider frequency bands (Wideband CDMA) and IP technology, it allowed high-volume data transfers. The 'Why' was simple: phones needed to stop acting just like telephones and start acting like mini-computers connected to the internet.</li>
-                            </ul>
-                        </div>
-                        <div class="bg-slate-50 border border-slate-200 p-5 rounded-lg shadow-sm">
-                            <h3 class="text-xl font-black text-slate-800 mb-2 border-b pb-1">4G (The Video & LTE Era)</h3>
-                            <ul class="list-disc pl-5 text-sm text-slate-700 space-y-2">
-                                <li><strong>What it was:</strong> A 100% Unified IP network (Long Term Evolution - LTE).</li>
-                                <li><strong>Capability:</strong> Brought true broadband speeds (up to 200 Mbps) to mobile. Made high-definition video streaming (Netflix/YouTube), ride-sharing apps (Uber), and online gaming possible.</li>
-                                <li><strong>How & Why:</strong> To handle HD video and live apps, 4G abandoned legacy circuit-switching completely to become a <strong>100% Packet-Switched network</strong>. It achieved massive speeds using a math trick called <strong>OFDMA</strong>, which packs frequency channels tightly together without them interfering. Even voice calls were converted to internet data (VoLTE) to ensure crystal-clear quality.</li>
-                            </ul>
-                        </div>
-                    </div>
+                <h3 class="sub-topic-title">Copy-on-Write (CoW)</h3>
+                <p>Copy-on-Write is a brilliant optimization used during process creation (like the `fork()` system call). When Process A creates a child Process B, normally the OS would duplicate the entire memory of A into B. This is terribly slow and wastes RAM. With CoW, both Process A and Process B simply point to the <em>exact same</em> physical pages in RAM! They share the memory.</p>
+                <p>The pages are marked as "Copy-on-Write". They only share the memory as long as they are just reading it. The moment Process B attempts to modify (write to) a variable, the OS intercepts it, creates a duplicate copy of just that specific page for Process B, and allows the write. This saves massive amounts of time and memory.</p>
 
-                    <!-- 5G -->
-                    <div class="bg-purple-50 border border-purple-200 p-5 rounded-lg shadow-sm">
-                        <h3 class="text-xl font-black text-purple-900 mb-2 border-b border-purple-200 pb-1">5G (The IoT & AI Era)</h3>
-                        <p class="text-sm text-purple-800 mb-3">5G isn't just about faster phones; it's a total architectural redesign meant to connect machines, sensors, and AI globally with zero delay.</p>
-                        <ul class="list-disc pl-5 text-sm text-purple-900 font-medium space-y-2">
-                            <li><strong>Capability:</strong> 1 Gbps+ speeds, near-zero latency (~1 millisecond), and the ability to connect millions of IoT devices simultaneously. Enables real-time remote robotic surgery and autonomous self-driving cars.</li>
-                            <li><strong>How & Why:</strong> To achieve these extreme speeds and zero delay, 5G introduced <strong>Massive MIMO</strong> (putting hundreds of tiny antennas on a tower instead of just a few) and utilized higher frequency bands (mmWave). It also uses <strong>"Network Slicing"</strong> in the cloud to guarantee a dedicated, un-crashable slice of the network for critical AI and IoT devices, ensuring perfect Quality of Service (QoS).</li>
-                        </ul>
+                <details>
+                    <summary>Exam Numerical: Hexadecimal Page Table Translation</summary>
+                    <div class="exam-content">
+                        <p class="mb-2"><strong>Problem Setup:</strong> The system uses 16-bit virtual addresses. The Page Size is 4,096 bytes (4 KB). We must translate logical addresses to physical addresses.</p>
+                        <p class="italic text-sm text-slate-500 mb-4">*Math context: 4,096 bytes means we need 12 bits for the offset. In hexadecimal, every digit is 4 bits. So, the last 3 hex digits are the Offset, and the first hex digit is the Page Number.</p>
+                        
+                        <p class="font-bold text-blue-800">1. Address: <span class="math-def">0x621C</span></p>
+                        <p>Page Number = 6. Offset = 21C. <br>Assume the Page Table maps Page 6 to Frame 8. <br><strong>Physical Address = <span class="text-green-700">0x821C</span></strong></p>
+
+                        <p class="font-bold text-blue-800 mt-4">2. Address: <span class="math-def">0xF0A3</span></p>
+                        <p>Page Number = F (15). Offset = 0A3. <br>Assume the Page Table maps Page 15 to Frame 2. <br><strong>Physical Address = <span class="text-green-700">0x20A3</span></strong></p>
                     </div>
-                </div>
+                </details>
             </div>
+        </section>
 
-            <div class="concept-block">
-                <div class="concept-header">The Master Generation Table</div>
-                <div class="p-6 overflow-x-auto">
-                    <p class="text-sm text-slate-600 mb-4 italic">This table contains the exact values provided in the university slides for guaranteed accuracy.</p>
-                    <table class="comparison-table whitespace-nowrap text-center">
-                        <tr>
-                            <th class="bg-slate-200">Technology</th>
-                            <th class="text-slate-600">1G</th>
-                            <th class="text-blue-700">2G</th>
-                            <th class="text-blue-700">3G</th>
-                            <th class="text-indigo-700">4G</th>
-                            <th class="text-purple-700 font-bold">5G</th>
-                        </tr>
-                        <tr>
-                            <td class="font-bold bg-slate-50 text-left">Start</td>
-                            <td>1970</td>
-                            <td>1980</td>
-                            <td>1990</td>
-                            <td>2000</td>
-                            <td class="bg-purple-50 font-bold">2014</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold bg-slate-50 text-left">Deployment</td>
-                            <td>1984</td>
-                            <td>1999</td>
-                            <td>2002</td>
-                            <td>2010</td>
-                            <td class="bg-purple-50 font-bold">2020</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold bg-slate-50 text-left">Data Bandwidth</td>
-                            <td>2Kbps</td>
-                            <td>15-64 Kbps</td>
-                            <td>2Mbps</td>
-                            <td>200 Mbps</td>
-                            <td class="bg-purple-50 font-bold">1Gbps</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold bg-slate-50 text-left">Technology</td>
-                            <td>Analog Cellular</td>
-                            <td>Digital Cellular</td>
-                            <td>CFMS/IP Technology</td>
-                            <td>Unified IP</td>
-                            <td class="bg-purple-50 font-bold">4G+WWW</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold bg-slate-50 text-left">Multiplexing</td>
-                            <td>FDMA</td>
-                            <td>TDMA/CDMA</td>
-                            <td>CDMA</td>
-                            <td>CDMA</td>
-                            <td class="bg-purple-50">CDMA</td>
-                        </tr>
-                        <tr>
-                            <td class="font-bold bg-slate-50 text-left">Switching</td>
-                            <td>Circuit Switching</td>
-                            <td>Circuit + Packet Switching</td>
-                            <td>Packet Switching</td>
-                            <td>Packet Switching</td>
-                            <td class="bg-purple-50 font-bold">Packet Switching</td>
-                        </tr>
-                    </table>
-                    <p class="text-xs text-slate-500 mt-2 italic">*Note on Multiplexing: While early standard tables list 4G/5G under "CDMA" for simplicity, in actual engineering practice 4G relies heavily on OFDMA (Orthogonal Frequency-Division Multiple Access).</p>
+        <section id="replacement" class="mb-16">
+            <h2 class="section-title">5. Page Replacement Algorithms & Thrashing</h2>
+            
+            <div class="concept-card">
+                <p class="mb-4">What happens if a Page Fault occurs, but the physical RAM is completely full? The OS must perform <strong>Page Replacement</strong>. It evaluates the frames in memory, chooses a "victim" frame, swaps it out to the disk, and loads the newly requested page in its place. The goal of every algorithm is to choose a victim that minimizes future page faults.</p>
+
+                <div class="bg-blue-50 p-4 border border-blue-200 rounded text-sm font-bold text-blue-900 mb-6 text-center shadow-sm">
+                    MASTER PROBLEM DATA FOR ALL ALGORITHM TRACES BELOW:<br>
+                    Reference String = <span class="math-def text-lg">7, 0, 1, 2, 0, 3, 0, 4, 2, 3</span><br>
+                    Available Frames = 3 (Initially Empty)
                 </div>
-            </div>
 
+                <!-- ADDED/EXPANDED SECTION: Page Fault Counter & Victim Selection Mechanics -->
+                <div class="bg-slate-50 p-5 border border-slate-300 rounded-lg mb-6 shadow-sm">
+                    <h4 class="font-bold text-slate-800 text-lg mb-3 border-b pb-2">Mechanics: Page Fault Counter & Victim Selection</h4>
+                    <p class="text-sm text-slate-700 mb-3">Every time the CPU needs to read or write data, it requests a specific <strong>Page</strong>. The OS follows a strict sequence to handle this request and updates the Page Fault Counter accordingly:</p>
+                    
+                    <ol class="list-decimal pl-5 text-sm text-slate-700 space-y-3">
+                        <li><strong>The Request & Check:</strong> The OS checks if the requested page is already loaded into one of the available physical RAM frames.</li>
+                        <li><strong>Case A: Page Hit (No Action)</strong>
+                            <ul class="list-disc pl-5 mt-1 text-green-700 font-medium">
+                                <li>If the page is found in RAM, it's a <strong>Hit</strong>.</li>
+                                <li>The Page Fault Counter <strong>DOES NOT INCREASE</strong>.</li>
+                                <li>No victim is selected, and execution continues instantly.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Case B: Page Fault / Miss (Counter Increases)</strong>
+                            <ul class="list-disc pl-5 mt-1 text-red-700 font-medium">
+                                <li>If the page is missing from RAM, a <strong>Page Fault (Miss)</strong> occurs.</li>
+                                <li>The OS immediately pauses the process, and the <strong>Page Fault Counter increases by +1</strong>.</li>
+                            </ul>
+                        </li>
+                        <li><strong>Resolving the Fault (Frame Allocation & Victim Selection):</strong> The OS must now fetch the missing page from the hard disk into RAM.
+                            <ul class="list-circle pl-5 mt-1 text-slate-700 font-normal space-y-1">
+                                <li><em>Condition 1 (Empty Frames Available):</em> If there is an empty frame (usually at the start of execution), the page is simply placed in the empty frame. No victim is needed.</li>
+                                <li><em>Condition 2 (RAM is Full):</em> If all frames are occupied, the OS triggers the <strong>Victim Selection Logic</strong>. Based on the specific algorithm (FIFO, LRU, etc.), the OS chooses an existing page to be "evicted" (overwritten). The newly requested page replaces this victim.</li>
+                            </ul>
+                        </li>
+                    </ol>
+                    <p class="text-sm text-blue-800 font-bold mt-4 bg-blue-100 p-2 rounded border border-blue-200">Exam Rule: Total Page Faults = (Initial Empty Frame Fills) + (Number of Victim Replacements)</p>
+                </div>
+
+                <div class="highlight-box bg-red-50 border-red-500 mt-2 mb-6">
+                    <p class="font-bold text-red-800 text-lg mb-1">⚠️ Belady's Anomaly</p>
+                    <p class="text-sm text-slate-800 mb-2">Normally, common sense dictates that adding more physical memory (Frames) should decrease the number of Page Faults. <strong>Belady's Anomaly</strong> is a counter-intuitive phenomenon where increasing the number of page frames actually <em>increases</em> the number of page faults!</p>
+                    <p class="text-sm text-slate-800 font-bold mt-2">Example Proof:</p>
+                    <p class="text-sm text-slate-700 mb-2">Given the reference string: <span class="math-def">1, 2, 3, 4, 1, 2, 5, 1, 2, 3, 4, 5</span></p>
+                    <ul class="list-disc pl-5 text-sm text-slate-700 mb-4">
+                        <li>Using FIFO with <strong>3 Frames</strong> yields exactly <strong>9 Page Faults</strong>.</li>
+                        <li>Using FIFO with <strong>4 Frames</strong> yields exactly <strong>10 Page Faults</strong>!</li>
+                    </ul>
+                    <p class="text-sm text-slate-800 font-bold border-t border-red-200 pt-2">How to solve Belady's Anomaly?</p>
+                    <p class="text-sm text-slate-700">Belady's Anomaly strictly affects the FIFO algorithm. To solve it, we use <strong>Stack Algorithms</strong> (like LRU or Optimal). Stack algorithms mathematically guarantee that the set of pages in memory for <em>N</em> frames is always a strict subset of the pages in memory for <em>N+1</em> frames. Thus, increasing frames can never increase faults.</p>
+                </div>
+
+                <!-- 1. FIFO -->
+                <h3 class="sub-topic-title mt-8">A. FIFO (First-In-First-Out)</h3>
+                <p>The simplest algorithm. The OS uses a queue to track pages. When replacement is needed, it simply evicts the oldest page (the one brought into memory first). It performs poorly because an old page might still be heavily used.</p>
+                <details>
+                    <summary>Trace: FIFO Algorithm</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1</th><th>F2</th><th>F3</th><th>Status</th><th class="text-left">Victim Selection Logic</th></tr>
+                            <tr><td>7</td><td>7</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7</td><td>0</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">7 is the oldest page in memory. Replace 7.</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td class="hit">Hit</td><td class="text-left">0 is already in memory. No replacement.</td></tr>
+                            <tr><td>3</td><td>2</td><td>3</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">0 is now the oldest page. Replace 0.</td></tr>
+                            <tr><td>0</td><td>2</td><td>3</td><td>0</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">1 is now the oldest page. Replace 1.</td></tr>
+                            <tr><td>4</td><td>4</td><td>3</td><td>0</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">2 is now the oldest page. Replace 2.</td></tr>
+                            <tr><td>2</td><td>4</td><td>2</td><td>0</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">3 is now the oldest page. Replace 3.</td></tr>
+                            <tr><td>3</td><td>4</td><td>2</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">0 is now the oldest page. Replace 0.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 8</p>
+                    </div>
+                </details>
+
+                <!-- 2. OPTIMAL -->
+                <h3 class="sub-topic-title">B. Optimal (OPT / MIN)</h3>
+                <p>Replaces the page that will not be used for the <em>longest period of time in the future</em>. It requires looking ahead into the reference string. It guarantees the absolute lowest number of page faults but is impossible to implement in real OSs because the future is unpredictable. It is used as a benchmark.</p>
+                <details>
+                    <summary>Trace: Optimal (OPT) Algorithm</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1</th><th>F2</th><th>F3</th><th>Status</th><th class="text-left">Victim Selection Logic (Look Forward)</th></tr>
+                            <tr><td>7</td><td>7</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7</td><td>0</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Look ahead: 0 is needed soon. 7 and 1 are never needed again. Replace 7 (tie-break).</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td class="hit">Hit</td><td class="text-left">0 is already in memory.</td></tr>
+                            <tr><td>3</td><td>2</td><td>0</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Look ahead: 0 is needed next, 2 is needed later. 1 is never needed again. Replace 1.</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>3</td><td class="hit">Hit</td><td class="text-left">0 is already in memory.</td></tr>
+                            <tr><td>4</td><td>2</td><td>4</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Look ahead: 2 and 3 are needed soon. 0 is never needed again. Replace 0.</td></tr>
+                            <tr><td>2</td><td>2</td><td>4</td><td>3</td><td class="hit">Hit</td><td class="text-left">2 is already in memory.</td></tr>
+                            <tr><td>3</td><td>2</td><td>4</td><td>3</td><td class="hit">Hit</td><td class="text-left">3 is already in memory.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 6</p>
+                    </div>
+                </details>
+
+                <!-- 3. LRU -->
+                <h3 class="sub-topic-title">C. LRU (Least Recently Used)</h3>
+                <p>Because we can't look into the future (OPT), we look into the past! LRU replaces the page that has not been used for the longest period of time. This relies on the "Principle of Locality". It performs excellently and avoids Belady's Anomaly, but requires hardware counters to track the time of every memory access.</p>
+                <details>
+                    <summary>Trace: LRU Algorithm</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1</th><th>F2</th><th>F3</th><th>Status</th><th class="text-left">Victim Selection Logic (Look Backward)</th></tr>
+                            <tr><td>7</td><td>7</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7</td><td>0</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2</td><td>0</td><td>1</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 1(recent), 0(older), 7(oldest). Replace 7.</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>1</td><td class="hit">Hit</td><td class="text-left">0 becomes the Most Recently Used.</td></tr>
+                            <tr><td>3</td><td>2</td><td>0</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 0(recent), 2(older), 1(oldest). Replace 1.</td></tr>
+                            <tr><td>0</td><td>2</td><td>0</td><td>3</td><td class="hit">Hit</td><td class="text-left">0 becomes the Most Recently Used again.</td></tr>
+                            <tr><td>4</td><td>4</td><td>0</td><td>3</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 0(recent), 3(older), 2(oldest). Replace 2.</td></tr>
+                            <tr><td>2</td><td>4</td><td>0</td><td>2</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 4(recent), 0(older), 3(oldest). Replace 3.</td></tr>
+                            <tr><td>3</td><td>4</td><td>3</td><td>2</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Past refs: 2(recent), 4(older), 0(oldest). Replace 0.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 8</p>
+                    </div>
+                </details>
+
+                <!-- 4. LFU -->
+                <h3 class="sub-topic-title">D. LFU (Least Frequently Used)</h3>
+                <p>This algorithm replaces the page with the smallest reference count. The logic is that an actively used page will have a large reference count, while a rarely needed page will have a small count. <br><em>Problem:</em> A page used heavily during the initial phase of a process gets a high count and is never evicted, even when it is no longer useful.</p>
+                <details>
+                    <summary>Trace: LFU Algorithm (Tie-breaker: FIFO)</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1 (Freq)</th><th>F2 (Freq)</th><th>F3 (Freq)</th><th>Status</th><th class="text-left">Victim Selection Logic (Lowest Frequency)</th></tr>
+                            <tr><td>7</td><td>7(1)</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7(1)</td><td>0(1)</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7(1)</td><td>0(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2(1)</td><td>0(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 7.</td></tr>
+                            <tr><td>0</td><td>2(1)</td><td>0(2)</td><td>1(1)</td><td class="hit">Hit</td><td class="text-left">Frequency of 0 increases to 2.</td></tr>
+                            <tr><td>3</td><td>2(1)</td><td>0(2)</td><td>3(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Lowest freq is 1 (for pages 2 & 1). Oldest is 1. Replace 1.</td></tr>
+                            <tr><td>0</td><td>2(1)</td><td>0(3)</td><td>3(1)</td><td class="hit">Hit</td><td class="text-left">Frequency of 0 increases to 3.</td></tr>
+                            <tr><td>4</td><td>4(1)</td><td>0(3)</td><td>3(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Lowest freq is 1 (for 2 & 3). Oldest is 2. Replace 2.</td></tr>
+                            <tr><td>2</td><td>4(1)</td><td>0(3)</td><td>2(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Lowest freq is 1 (for 4 & 3). Oldest is 3. Replace 3.</td></tr>
+                            <tr><td>3</td><td>3(1)</td><td>0(3)</td><td>2(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Lowest freq is 1 (for 4 & 2). Oldest is 4. Replace 4.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 8</p>
+                    </div>
+                </details>
+
+                <!-- 5. MFU -->
+                <h3 class="sub-topic-title">E. MFU (Most Frequently Used)</h3>
+                <p>This algorithm replaces the page with the largest reference count. The counter-intuitive logic here is that the page with the smallest count was probably just brought into memory and has yet to be fully used, whereas the page with the highest count has already served its primary purpose.</p>
+                <details>
+                    <summary>Trace: MFU Algorithm (Tie-breaker: FIFO)</summary>
+                    <div class="exam-content">
+                        <table class="trace-table">
+                            <tr><th>Req</th><th>F1 (Freq)</th><th>F2 (Freq)</th><th>F3 (Freq)</th><th>Status</th><th class="text-left">Victim Selection Logic (Highest Frequency)</th></tr>
+                            <tr><td>7</td><td>7(1)</td><td>-</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>0</td><td>7(1)</td><td>0(1)</td><td>-</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>1</td><td>7(1)</td><td>0(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Empty frame available.</td></tr>
+                            <tr><td>2</td><td>2(1)</td><td>0(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 7.</td></tr>
+                            <tr><td>0</td><td>2(1)</td><td>0(2)</td><td>1(1)</td><td class="hit">Hit</td><td class="text-left">Frequency of 0 increases to 2.</td></tr>
+                            <tr><td>3</td><td>2(1)</td><td>3(1)</td><td>1(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">Highest freq is 0 (freq=2). Replace 0.</td></tr>
+                            <tr><td>0</td><td>2(1)</td><td>3(1)</td><td>0(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 1.</td></tr>
+                            <tr><td>4</td><td>4(1)</td><td>3(1)</td><td>0(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 2.</td></tr>
+                            <tr><td>2</td><td>4(1)</td><td>2(1)</td><td>0(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 3.</td></tr>
+                            <tr><td>3</td><td>4(1)</td><td>2(1)</td><td>3(1)</td><td class="miss">Miss (+1 Fault)</td><td class="text-left">All freqs are 1. Tie-break (oldest): Replace 0.</td></tr>
+                        </table>
+                        <p class="mt-4 font-bold text-blue-900">Total Page Faults: 9</p>
+                    </div>
+                </details>
+
+                <h3 class="sub-topic-title border-t pt-8 mt-8">Thrashing</h3>
+                <p>If a system does not have enough physical frames to support the active processes, a process will constantly suffer page faults. The OS will spend all its time rapidly swapping pages in and out of the slow disk, instead of actually executing instructions. This severe performance collapse is called <strong>Thrashing</strong>.</p>
+                <p>Thrashing causes a massive drop in CPU utilization. The OS sees low CPU usage, thinks the system is idle, and tries to load <em>even more</em> processes into memory, making the problem exponentially worse!</p>
+
+                <div class="diagram-container">
+                    <svg width="400" height="250" viewBox="0 0 400 250" class="mx-auto">
+                        <line x1="50" y1="200" x2="350" y2="200" stroke="#334155" stroke-width="2"/>
+                        <line x1="50" y1="200" x2="50" y2="20" stroke="#334155" stroke-width="2"/>
+                        
+                        <text x="200" y="230" class="svg-text">Degree of Multiprogramming (Processes)</text>
+                        <text x="30" y="110" class="svg-text" transform="rotate(-90 30,110)">CPU Utilization</text>
+
+                        <path d="M 50 200 Q 150 50 250 40" fill="none" stroke="#22c55e" stroke-width="3"/>
+                        <path d="M 250 40 Q 280 40 320 200" fill="none" stroke="#ef4444" stroke-width="3"/>
+
+                        <line x1="280" y1="20" x2="280" y2="200" stroke="#64748b" stroke-dasharray="4" stroke-width="2"/>
+                        <text x="330" y="100" class="svg-text font-bold text-red-700">Thrashing</text>
+                    </svg>
+                    <div class="diagram-caption">As multiprogramming increases, CPU utilization drops sharply due to Thrashing.</div>
+                </div>
+
+                <p><strong>How to solve Thrashing?</strong> The OS uses the <strong>Working Set Model</strong>. It observes the "Locality" of a process (the group of pages it is actively using right now) and ensures the process is allocated enough frames to hold its entire working set. If total memory demand exceeds total available frames, the OS suspends an entire process to free up memory.</p>
+            </div>
         </section>
 
     </main>
 
     <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
-        <p>Prepared for Vatsal's Study Hub. Tailored strictly to your uploaded presentations for 100% data fidelity.</p>
+        <p>Prepared for Vatsal's Study Hub. Optimized for detailed, numerical-heavy exam preparation.</p>
     </footer>
 
 </body>

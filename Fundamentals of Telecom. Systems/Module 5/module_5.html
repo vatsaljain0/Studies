@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module 5 - Digital Communication Techniques (Detailed Exam Edition)</title>
+    <title>Module 5 - Digital Communication Techniques</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         body { font-family: 'Inter', system-ui, -apple-system, sans-serif; background-color: #f8fafc; color: #1e293b; }
@@ -59,6 +59,10 @@
 
         p { margin-bottom: 0.75rem; line-height: 1.7; }
         ul { margin-bottom: 1rem; }
+        
+        /* SVG specifics */
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 12px; font-weight: bold; fill: #0f172a; text-anchor: middle; dominant-baseline: middle; }
+        .svg-sub { font-size: 11px; fill: #475569; text-anchor: middle; }
     </style>
 </head>
 <body class="antialiased">
@@ -77,7 +81,7 @@
 
     <main class="max-w-4xl mx-auto px-6 py-10 min-h-screen">
         <h1 class="text-3xl md:text-4xl font-black text-slate-900 mb-2">Digital Communication Techniques</h1>
-        <p class="text-blue-600 font-bold mb-8 text-lg border-b-2 border-slate-200 pb-4">Detailed Exam Edition: Deep Concepts, Plain English & Formulas</p>
+        <p class="text-blue-600 font-bold mb-8 text-lg border-b-2 border-slate-200 pb-4">Detailed Exam Edition: Deep Concepts, Plain English, Formulas & Diagrams</p>
 
         <!-- ========================================== -->
         <!-- 1. COMMUNICATION SYSTEMS -->
@@ -108,148 +112,258 @@
         </section>
 
         <!-- ========================================== -->
-        <!-- 2. MODULATION TECHNIQUES -->
+        <!-- 2. IN-DEPTH MODULATION TECHNIQUES -->
         <!-- ========================================== -->
         <section id="modulation" class="mb-12">
-            <h2 class="section-title">2. In-Depth Modulation (AM, FM, PM)</h2>
+            <h2 class="section-title">2. Modulation Techniques (AM, FM, PM)</h2>
             
             <div class="concept-card">
                 <h3 class="sub-topic-title mt-0">What is Modulation?</h3>
-                <p><strong>Detailed Definition:</strong> Modulation is the process of impressing a low-frequency information signal (the baseband message) onto a high-frequency signal (the carrier wave). A <strong>Modem</strong> (Modulator-Demodulator) performs this process in both directions.</p>
+                <p class="text-slate-700 mb-3"><strong>Simple Definition:</strong> Modulation is like attaching a light paper letter (your voice) to a heavy rock (the carrier wave) so you can throw it far. Your voice is too weak to travel miles through the air. So, we "mix" it with a very powerful, high-frequency radio wave that carries it to the destination.</p>
                 
-                <div class="memory-trick">
-                    <p class="font-bold text-green-900 mb-1">💡 Memory Trick: The Paper and the Rock</p>
-                    <p class="text-sm text-green-800">You can't throw a plain piece of paper (your low-frequency voice) across a football field; the wind stops it. But if you wrap the paper around a heavy rock (the high-frequency carrier wave), you can easily throw it! That wrapping process is Modulation.</p>
-                </div>
-
-                <p class="font-bold mt-4">Why is Modulation strictly necessary? (Write these 2 major points):</p>
-                <ul class="list-disc pl-6 space-y-2 text-slate-700">
-                    <li><strong>1. Size of the Antenna:</strong> Physics dictates that an antenna must be roughly 1/10th the size of the signal's wavelength. A raw 5kHz audio signal has a massive wavelength, requiring an antenna miles long! By modulating the audio onto a 100MHz high-frequency carrier, the wavelength shrinks, allowing us to use a tiny antenna (like on a mobile phone).</li>
-                    <li><strong>2. Wireless Communication:</strong> Low frequencies die out quickly in open space. High frequencies have the energy to propagate (travel) long distances wirelessly, saving the enormous cost of laying physical wires everywhere.</li>
+                <p class="font-bold text-slate-800">Why do we need it?</p>
+                <ul class="list-disc pl-6 space-y-2 text-slate-700 text-sm">
+                    <li><strong>Antenna Size:</strong> An antenna must be proportional to the signal's size. Low frequencies (like human voice) would need an antenna miles long! High-frequency carrier waves let us use tiny antennas (like on a phone).</li>
+                    <li><strong>Wireless Range:</strong> Low frequencies die out quickly. Modulated high frequencies travel massive distances.</li>
                 </ul>
             </div>
 
             <!-- AMPLITUDE MODULATION -->
             <div class="concept-card border-t-4 border-t-blue-500">
-                <h3 class="text-xl font-black text-blue-900 mb-2">A. Amplitude Modulation (AM)</h3>
-                <p class="mb-3"><strong>Core Concept:</strong> The height (amplitude) of the high-frequency carrier wave is continuously varied to match the instantaneous amplitude of the message signal. The frequency and phase of the carrier remain perfectly constant.</p>
+                <h3 class="text-xl font-black text-blue-900 mb-4">A. Amplitude Modulation (AM)</h3>
                 
-                <ul class="list-disc pl-6 space-y-3 text-slate-700">
-                    <li><strong>The Sidebands:</strong> When you mix the signals, physics creates two extra "shadow" signals called the <em>Upper Sideband</em> and <em>Lower Sideband</em>. If the carrier is at frequency f<sub>c</sub> and the message is at f<sub>m</sub>, the sidebands sit at (f<sub>c</sub> + f<sub>m</sub>) and (f<sub>c</sub> - f<sub>m</sub>).</li>
-                    <li><strong>Bandwidth Requirement:</strong> Because of the two sidebands, an AM signal requires exactly twice the bandwidth of the original message. <span class="formula">Bandwidth = 2 &times; f<sub>m</sub></span></li>
-                    <li><strong>Modulation Index (m):</strong> Measures the depth of modulation. <br><span class="formula">m = (V<sub>max</sub> - V<sub>min</sub>) / (V<sub>max</sub> + V<sub>min</sub>)</span>. <br><em>Exam Note:</em> If 'm' exceeds 1.0, the signal becomes "overmodulated." The wave breaks, causing severe static distortion in the receiver.</li>
+                <p class="font-bold text-slate-800 text-lg">1. Definition:</p>
+                <p class="text-slate-700 mb-3">AM is a technique where we change the <strong>height (amplitude)</strong> of the powerful carrier wave to match the exact shape of your voice signal.</p>
+
+                <p class="font-bold text-slate-800 text-lg">2. How it works:</p>
+                <p class="text-slate-700 mb-3">When your voice gets louder, the carrier wave grows taller. When your voice gets softer, the carrier wave shrinks. The receiver simply traces the outline (height) of the wave to get your voice back.</p>
+
+                <p class="font-bold text-slate-800 text-lg">3. Diagram:</p>
+                <div class="my-4 p-4 bg-slate-50 border border-slate-200 rounded text-center">
+                    <p class="text-sm font-bold text-slate-500 mb-2">AM Wave: Notice the height changing, but the waves come at the same speed.</p>
+                    <svg width="400" height="120" viewBox="0 0 400 120" class="mx-auto block">
+                        <!-- AM Outline (Envelope) -->
+                        <path d="M 20 40 Q 110 -20, 200 40 T 380 40" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                        <path d="M 20 80 Q 110 140, 200 80 T 380 80" fill="none" stroke="#94a3b8" stroke-width="2" stroke-dasharray="4"/>
+                        <!-- The Carrier Wave bouncing between the envelopes -->
+                        <path d="M 20 60 L 25 45 L 30 60 L 35 75 L 40 60 L 45 40 L 50 60 L 55 80 L 60 60 L 65 30 L 70 60 L 75 90 L 80 60 L 85 20 L 90 60 L 95 100 L 100 60 L 105 10 L 110 60 L 115 110 L 120 60 L 125 15 L 130 60 L 135 105 L 140 60 L 145 25 L 150 60 L 155 95 L 160 60 L 165 35 L 170 60 L 175 85 L 180 60 L 185 45 L 190 60 L 195 75 L 200 60 L 205 50 L 210 60 L 215 70 L 220 60 L 225 55 L 230 60 L 235 65 L 240 60 L 245 50 L 250 60 L 255 70 L 260 60 L 265 40 L 270 60 L 275 80 L 280 60 L 285 30 L 290 60 L 295 90 L 300 60 L 305 20 L 310 60 L 315 100 L 320 60 L 325 30 L 330 60 L 335 90 L 340 60 L 345 40 L 350 60 L 355 80 L 360 60 L 365 45 L 370 60 L 375 75 L 380 60" fill="none" stroke="#2563eb" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">4. Dependence:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>What Changes:</strong> The Amplitude (Height).</li>
+                    <li><strong>What Stays Constant:</strong> Frequency (Speed) and Phase (Starting Angle).</li>
+                    <li><strong>Depends on:</strong> The height changes based strictly on the loudness (voltage) of your voice signal.</li>
                 </ul>
+
+                <p class="font-bold text-slate-800 text-lg">5. Uses & Disadvantages:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>Uses:</strong> AM Radio stations. Travels incredibly far distances because it can bounce off the Earth's atmosphere.</li>
+                    <li><strong>Disadvantages:</strong> Awful sound quality. Lightning and machines naturally change the height of waves in the air. Since AM relies on height to store data, this static noise ruins the sound.</li>
+                </ul>
+
+                <p class="font-bold text-slate-800 text-lg">6. Numerical (How to solve easily):</p>
+                <div class="bg-blue-50 p-4 border border-blue-200 rounded mb-3 text-sm text-slate-700">
+                    <p class="mb-2"><strong>Modulation Index (m):</strong> A score from 0 to 1 that tells you how deep the modulation is. If it goes over 1, the wave breaks and sound is distorted.<br>
+                    <strong>Formula:</strong> <code>m = (Max Voltage - Min Voltage) / (Max Voltage + Min Voltage)</code></p>
+                    <p><strong>Example:</strong> Max voltage is 10V, Min is 2V.<br>
+                    m = (10 - 2) / (10 + 2) = 8 / 12 = <strong>0.66</strong> (Good! Less than 1).</p>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">7. Any Other Concept:</p>
+                <p class="text-slate-700 text-sm"><strong>Bandwidth:</strong> AM creates two extra waves on the sides (Sidebands). So the total size needed is always exactly <strong>2 × Message Frequency</strong>.</p>
             </div>
 
             <!-- FREQUENCY MODULATION -->
             <div class="concept-card border-t-4 border-t-green-500">
-                <h3 class="text-xl font-black text-green-900 mb-2">B. Frequency Modulation (FM)</h3>
-                <p class="mb-3"><strong>Core Concept:</strong> The speed (frequency) of the carrier wave is shifted dynamically based on the amplitude of the message. When the message is loud, the carrier waves squish together (higher frequency). When quiet, they spread apart. The amplitude remains strictly constant, making FM immune to most static noise.</p>
+                <h3 class="text-xl font-black text-green-900 mb-4">B. Frequency Modulation (FM)</h3>
                 
-                <ul class="list-disc pl-6 space-y-3 text-slate-700 mb-4">
-                    <li><strong>WBFM vs NBFM:</strong> 
-                        <br>&bull; <em>Wide-Band FM:</em> Allows massive frequency shifts (&plusmn;75 kHz deviation). Used for high-quality music radio. Requires 200 kHz of bandwidth.
-                        <br>&bull; <em>Narrow-Band FM:</em> Allows very tiny shifts (&plusmn;3 kHz deviation). Used for efficient two-way radios (walkie-talkies).
-                    </li>
-                    <li><strong>Maximum Deviation (&delta;<sub>f</sub>):</strong> The absolute limit of how far the frequency can bend. <br><span class="formula">&delta;<sub>f</sub> = k<sub>f</sub> &times; V<sub>m</sub></span> (where k<sub>f</sub> is a hardware constant in Hz/Volt).</li>
-                    <li><strong>Modulation Index (m<sub>f</sub>):</strong> <br><span class="formula">m<sub>f</sub> = &delta;<sub>f</sub> / f<sub>m</sub></span>. <em>(Notice that if the message frequency f<sub>m</sub> increases, the index goes down. They are inversely proportional).</em></li>
+                <p class="font-bold text-slate-800 text-lg">1. Definition:</p>
+                <p class="text-slate-700 mb-3">FM is a technique where we change the <strong>speed (frequency)</strong> of the carrier wave to match the voice signal. The height stays perfectly flat.</p>
+
+                <p class="font-bold text-slate-800 text-lg">2. How it works:</p>
+                <p class="text-slate-700 mb-3">When your voice gets louder, the carrier waves squish tightly together (speed up). When your voice gets softer, the waves stretch far apart (slow down). The receiver reads how fast the waves hit it to get your voice back.</p>
+
+                <p class="font-bold text-slate-800 text-lg">3. Diagram:</p>
+                <div class="my-4 p-4 bg-slate-50 border border-slate-200 rounded text-center">
+                    <p class="text-sm font-bold text-slate-500 mb-2">FM Wave: Notice the height is flat, but the waves squish and stretch.</p>
+                    <svg width="400" height="80" viewBox="0 0 400 80" class="mx-auto block">
+                        <!-- FM Modulated Wave -->
+                        <path d="M 20 40 L 25 20 L 30 40 L 35 60 L 40 40 L 50 20 L 60 40 L 70 60 L 80 40 L 95 20 L 110 40 L 125 60 L 140 40 L 160 20 L 180 40 L 195 60 L 210 40 L 220 20 L 230 40 L 240 60 L 250 40 L 255 20 L 260 40 L 265 60 L 270 40 L 275 20 L 280 40 L 285 60 L 290 40 L 300 20 L 310 40 L 320 60 L 330 40 L 345 20 L 360 40 L 375 60 L 390 40" fill="none" stroke="#16a34a" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">4. Dependence:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>What Changes:</strong> The Frequency (Speed).</li>
+                    <li><strong>What Stays Constant:</strong> Amplitude (Height) and Phase.</li>
+                    <li><strong>Depends on:</strong> How much the frequency squishes depends strictly on the loudness (amplitude) of the voice signal.</li>
                 </ul>
 
-                <div class="numerical-box bg-green-50 border-green-200">
-                    <div class="num-title text-green-800">Exam Problem: FM Derivation & Power</div>
-                    <p class="mb-2 font-bold">Question: Find the Carrier Frequency, Modulating Frequency, Index, Max Deviation, and Power (in a 10 &Omega; resistor) for this FM voltage equation:<br>
-                    <span class="text-blue-700 text-lg block text-center mt-2 font-mono">v = 12 sin(6 &times; 10<sup>8</sup> t + 5 cos 1250 t)</span></p>
-                    
-                    <p class="font-bold border-b border-green-300 pb-1 mt-4 mb-2">Solution Steps (Write exactly like this):</p>
-                    <p class="mb-2">Compare it to the standard mathematical FM format: <br><strong>v = V<sub>c</sub> sin(&omega;<sub>c</sub> t + m<sub>f</sub> cos &omega;<sub>m</sub> t)</strong></p>
-                    <ul class="list-disc pl-6 space-y-1 mb-4">
-                        <li>Voltage Amplitude (V<sub>c</sub>) = 12</li>
-                        <li>Carrier Angular Velocity (&omega;<sub>c</sub>) = 6 &times; 10<sup>8</sup></li>
-                        <li>Modulation Index (m<sub>f</sub>) = 5</li>
-                        <li>Message Angular Velocity (&omega;<sub>m</sub>) = 1250</li>
-                    </ul>
+                <p class="font-bold text-slate-800 text-lg">5. Uses & Disadvantages:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>Uses:</strong> FM Radio and TV audio. Excellent sound quality because it ignores static noise (since static only affects height, and FM doesn't care about height).</li>
+                    <li><strong>Disadvantages:</strong> Circuit is expensive and complex to build. Cannot travel as far as AM (blocked by buildings easily).</li>
+                </ul>
 
-                    <p><strong>1. Carrier Frequency (f<sub>c</sub>):</strong> Convert rads to Hertz by dividing by 2&pi;. <br>f<sub>c</sub> = &omega;<sub>c</sub> / 2&pi; = (6 &times; 10<sup>8</sup>) / 2&pi; = <strong>95.5 MHz</strong></p>
-                    <p><strong>2. Modulating Frequency (f<sub>m</sub>):</strong> <br>f<sub>m</sub> = &omega;<sub>m</sub> / 2&pi; = 1250 / 2&pi; = <strong>199 Hz</strong></p>
-                    <p><strong>3. Modulation Index (m<sub>f</sub>):</strong> Extracted directly from equation = <strong>5</strong></p>
-                    <p><strong>4. Max Deviation (&delta;<sub>f</sub>):</strong> Using the formula &delta;<sub>f</sub> = m<sub>f</sub> &times; f<sub>m</sub>. <br>&delta;<sub>f</sub> = 5 &times; 199 = <strong>995 Hz</strong></p>
-                    <p><strong>5. Power Dissipation (P):</strong> Formula is P = (V<sub>c</sub> / &radic;2)<sup>2</sup> / R. <br>
-                    P = (12 / &radic;2)<sup>2</sup> / 10 = (144 / 2) / 10 = 72 / 10 = <strong>7.2 Watts</strong></p>
+                <p class="font-bold text-slate-800 text-lg">6. Numerical (How to solve easily):</p>
+                <div class="bg-green-50 p-4 border border-green-200 rounded mb-3 text-sm text-slate-700">
+                    <p class="mb-2"><strong>The Problem:</strong> Given an FM equation like <code>v = 12 sin(600 t + 5 cos 125 t)</code>. Find the values.</p>
+                    <p class="mb-2 font-bold text-green-900">The Trick: Just match it to the Master Formula:</p>
+                    <p class="mb-2 font-mono bg-white p-2 rounded border border-green-300">v = [Voltage] sin( [Carrier Speed] t + [Index] cos [Message Speed] t )</p>
+                    <ul class="list-disc pl-5 space-y-1">
+                        <li><strong>Voltage:</strong> The first number = 12 Volts.</li>
+                        <li><strong>Carrier Frequency (Fc):</strong> Take the Carrier Speed and divide by 6.28 (2&pi;). So, 600 / 6.28 = 95.5 Hz.</li>
+                        <li><strong>Message Frequency (Fm):</strong> Take the Message Speed and divide by 6.28 (2&pi;). So, 125 / 6.28 = 19.9 Hz.</li>
+                        <li><strong>Modulation Index (m):</strong> The number right before 'cos' = 5.</li>
+                        <li><strong>Max Deviation:</strong> Simply multiply Index &times; Message Freq (5 &times; 19.9 = 99.5 Hz).</li>
+                    </ul>
                 </div>
+
+                <p class="font-bold text-slate-800 text-lg">7. Any Other Concept:</p>
+                <p class="text-slate-700 text-sm"><strong>Wideband vs Narrowband:</strong> Wideband FM (WBFM) allows huge frequency squishing for super-high-quality music, but takes up a lot of space. Narrowband FM (NBFM) only allows tiny squishing, saving space, used in walkie-talkies.</p>
             </div>
 
             <!-- PHASE MODULATION -->
             <div class="concept-card border-t-4 border-t-purple-500">
-                <h3 class="text-xl font-black text-purple-900 mb-2">C. Phase Modulation (PM)</h3>
-                <p class="mb-2"><strong>Core Concept:</strong> Instead of changing the speed, we change the <strong>starting angle (phase)</strong> of the carrier wave based on the message amplitude. The overall amplitude stays constant.</p>
-                <ul class="list-disc pl-6 space-y-3 text-slate-700">
-                    <li><strong>Max Deviation (&delta;<sub>p</sub>):</strong> <span class="formula">&delta;<sub>p</sub> = k<sub>p</sub> &times; V<sub>m</sub></span></li>
-                    <li><strong>Modulation Index (m<sub>p</sub>):</strong> In PM, the index is exactly equal to the max deviation! <span class="formula">m<sub>p</sub> = &delta;<sub>p</sub></span>. It is expressed in radians.</li>
-                    <li><strong>Crucial Difference from FM:</strong> In Phase Modulation, the modulation index depends ONLY on the voltage of the message (V<sub>m</sub>). It is completely <strong>independent</strong> of the message frequency (f<sub>m</sub>).</li>
+                <h3 class="text-xl font-black text-purple-900 mb-4">C. Phase Modulation (PM)</h3>
+                
+                <p class="font-bold text-slate-800 text-lg">1. Definition:</p>
+                <p class="text-slate-700 mb-3">PM is a technique where we change the <strong>starting angle (phase)</strong> of the carrier wave based on the voice signal. Like FM, the height stays completely flat.</p>
+
+                <p class="font-bold text-slate-800 text-lg">2. How it works:</p>
+                <p class="text-slate-700 mb-3">Instead of making the wave go faster or slower, PM suddenly shifts the wave forward or backward in time. Imagine a swinging pendulum that suddenly gets pushed forward a bit; that "push" represents your voice data.</p>
+
+                <p class="font-bold text-slate-800 text-lg">3. Diagram:</p>
+                <div class="my-4 p-4 bg-slate-50 border border-slate-200 rounded text-center">
+                    <p class="text-sm font-bold text-slate-500 mb-2">PM Wave: Notice the sharp, sudden breaks (shifts) where the wave resets its cycle.</p>
+                    <svg width="400" height="80" viewBox="0 0 400 80" class="mx-auto block">
+                        <!-- PM Wave with phase shifts -->
+                        <path d="M 20 40 Q 30 10, 40 40 T 60 40 T 80 40 T 100 40 T 120 40 M 120 40 Q 130 70, 140 40 T 160 40 T 180 40 M 180 40 Q 190 10, 200 40 T 220 40 T 240 40 T 260 40 M 260 40 Q 270 70, 280 40 T 300 40 T 320 40" fill="none" stroke="#9333ea" stroke-width="2"/>
+                    </svg>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">4. Dependence:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>What Changes:</strong> The Phase (Starting Angle).</li>
+                    <li><strong>What Stays Constant:</strong> Amplitude and Frequency.</li>
+                    <li><strong>Depends on:</strong> The phase shifts based strictly on the amplitude (loudness) of the message. <em>Unlike FM, it doesn't care at all about the message frequency.</em></li>
                 </ul>
+
+                <p class="font-bold text-slate-800 text-lg">5. Uses & Disadvantages:</p>
+                <ul class="list-disc pl-6 mb-3 text-slate-700 text-sm">
+                    <li><strong>Uses:</strong> The absolute foundation for modern digital networks like Wi-Fi and 5G (using Phase-Shift Keying). Highly secure and efficient for computer data.</li>
+                    <li><strong>Disadvantages:</strong> Incredibly complex and expensive hardware required to decode the sudden phase shifts. Not used for basic analog radio.</li>
+                </ul>
+
+                <p class="font-bold text-slate-800 text-lg">6. Numerical (How to solve easily):</p>
+                <div class="bg-purple-50 p-4 border border-purple-200 rounded mb-3 text-sm text-slate-700">
+                    <p>In Phase Modulation, the math is delightfully simple! The <strong>Modulation Index</strong> is exactly equal to the <strong>Maximum Phase Deviation</strong>. If they tell you the wave deviates by 5 radians, then the index is just 5. Done!</p>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg">7. Any Other Concept:</p>
+                <p class="text-slate-700 text-sm">Phase modulation is almost identical to Frequency modulation mathematically. They are brothers. If you change the phase, the frequency briefly changes too! But the core difference is PM only reacts to the <em>height</em> of the message, while FM reacts to both height and speed.</p>
             </div>
 
-            <div class="concept-card">
-                <h3 class="sub-topic-title mt-0">Exam Differences Tables</h3>
-                <table class="comparison-table mb-6">
-                    <tr><th class="w-1/2">Amplitude Modulation (AM)</th><th class="w-1/2">Frequency Modulation (FM)</th></tr>
-                    <tr><td>Frequency and phase remain constant. Only Amplitude changes.</td><td>Amplitude and phase remain constant. Only Frequency changes.</td></tr>
-                    <tr><td>Can travel very long distances, but has poor sound quality and is easily ruined by static.</td><td>Better sound quality and rejects static noise, but requires a wider bandwidth.</td></tr>
-                    <tr><td>Produces exactly two sidebands.</td><td>Produces an infinite number of sidebands.</td></tr>
-                    <tr><td>Circuit design is cheap and simple.</td><td>Circuit design is complex and expensive.</td></tr>
-                </table>
-
-                <table class="comparison-table">
-                    <tr><th class="w-1/2">Frequency Modulation (FM)</th><th class="w-1/2">Phase Modulation (PM)</th></tr>
-                    <tr><td>Frequency deviation is proportional to the message's amplitude.</td><td>Phase deviation is proportional to the message's amplitude, independent of its frequency.</td></tr>
-                    <tr><td>Modulation index is <strong>inversely proportional</strong> to the modulation frequency.</td><td>Modulation index is proportional to the modulating voltage <strong>only</strong>.</td></tr>
-                </table>
-            </div>
         </section>
 
         <!-- ========================================== -->
         <!-- 3. MULTIPLEXING -->
         <!-- ========================================== -->
         <section id="multiplexing" class="mb-12">
-            <h2 class="section-title">3. Hardware & Hierarchies of Multiplexing</h2>
+            <h2 class="section-title">3. Multiplexing (Combining Signals)</h2>
             
             <div class="concept-card">
-                <p class="mb-4"><strong>Definition:</strong> Multiplexing combines multiple independent analog or digital signals into one massive stream so they can be transmitted over a single shared physical cable. A <strong>MUX</strong> mixes the signals, and a <strong>DEMUX</strong> separates them at the destination.</p>
-                
-                <h3 class="sub-topic-title">A. Frequency Division Multiplexing (FDM)</h3>
-                <p class="mb-2"><strong>Concept:</strong> FDM combines continuous analog signals. It gives every user their own dedicated frequency "lane" (like stations on a radio dial). They transmit simultaneously without overlapping.</p>
+                <h3 class="sub-topic-title mt-0">What is Multiplexing?</h3>
+                <p class="text-slate-700 mb-2"><strong>Simple Definition:</strong> Multiplexing is the technique of combining many different signals into one massive signal so they can all travel through a single shared cable or airway at the same time. </p>
+                <p class="text-slate-700">Imagine a highway. Instead of building 100 different tiny roads for 100 cars, we build one massive highway and let all the cars share it. A <strong>Multiplexer (MUX)</strong> merges the signals at the start, and a <strong>Demultiplexer (DEMUX)</strong> separates them back to normal at the end, saving massive amounts of money on cables.</p>
+            </div>
+
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">The Different Types of Multiplexing</h3>
+                <p class="text-slate-700 mb-4">There are four main ways to share a communication channel. Think of them simply like this:</p>
                 <ul class="list-disc pl-6 space-y-3 text-slate-700">
-                    <li><strong>Basic Group Formation:</strong> The telecom industry bundles exactly <strong>12 telephone channels</strong> into one basic group. Each channel gets a 4 kHz slot. The whole group occupies the frequency range from <strong>60 to 108 kHz</strong>. To help machines monitor the line, a pilot signal is injected at <strong>104.08 kHz</strong>. <em>(Note: Submarine cables use a tighter 16-channel layout occupying 48 kHz).</em></li>
-                    <li><strong>Basic Supergroup:</strong> The next step up. It bundles <strong>5 Basic Groups (60 total channels)</strong> together. This massive group occupies the frequency range from <strong>312 to 552 kHz</strong> (a 240 kHz bandwidth). It injects a pilot signal at <strong>547.94 kHz</strong>.</li>
+                    <li><strong class="text-blue-800">FDM (Frequency Division):</strong> Splitting the channel into different "Frequency Lanes". Everyone gets their own lane to drive in continuously.</li>
+                    <li><strong class="text-green-800">TDM (Time Division):</strong> Everyone uses the exact same lane, but they take turns really fast.</li>
+                    <li><strong class="text-purple-800">WDM (Wavelength Division):</strong> Used for fiber optics. Sending different signals using different <em>colors</em> of laser light at the same time.</li>
+                    <li><strong class="text-red-800">CDMA (Code Division):</strong> Everyone transmits at the exact same time and frequency, but speaks a different "coded language" so the receiver can filter them out.</li>
                 </ul>
+            </div>
 
-                <h3 class="sub-topic-title mt-8">B. Time Division Multiplexing (TDM) & Hardware</h3>
-                <p class="mb-2"><strong>Concept:</strong> Instead of separating users by frequency, TDM makes everyone use the exact same frequency, but they <strong>take turns really, really fast</strong>. Because digital pulses are narrow, the empty space between pulses is filled with data from other users.</p>
-                <ul class="list-disc pl-6 space-y-3 text-slate-700 mb-6">
-                    <li><strong>The 24-Channel Standard:</strong> A standard system handles 24 phone calls. It takes 8,000 snapshots (samples) of each call every second, at 8 bits per sample. This means the system must send a complete frame of data every <strong>125 microseconds</strong>. Total speed required: <strong>1.544 Mbit/s</strong>.</li>
-                    
-                    <li><strong>Transmitter Hardware (Delay Lines):</strong> High-speed TDM uses electronic switches and <strong>Delay Lines</strong> to mix the signals. Call #1 goes straight to the adder. Call #2 goes through a circuit that delays it by exactly <strong>5 microseconds</strong>. Call #3 is delayed by <strong>10 microseconds</strong>. This perfectly lines them up one-after-another into the 125 microsecond frame!</li>
-                    
-                    <li><strong>Receiver Hardware (AND Gates):</strong> The receiver uses 24 <strong>AND gates</strong> (digital logic doors). A clock generator (a monostable multivibrator) sends a 5-microsecond trigger pulse to open the doors. Delay lines are used again so that Door #2 only opens at the exact 5-microsecond mark when Call #2's data arrives.</li>
-                </ul>
+            <div class="concept-card border-t-4 border-t-blue-500">
+                <h3 class="text-xl font-black text-blue-900 mb-4">A. Frequency Division Multiplexing (FDM)</h3>
+                
+                <p class="font-bold text-slate-800 text-lg">What it is & How it works:</p>
+                <p class="text-slate-700 mb-3">FDM is used for <strong>Analog</strong> signals. It takes the total bandwidth (the size of the cable) and chops it up into smaller, non-overlapping "slots". Each user is assigned their own specific slot. Because they are in different slots, they can all transmit continuously at the exact same time without crashing into each other.</p>
 
-                <p class="font-bold text-slate-800">Digital Multiplex Hierarchies (Memorize Level 1 & 2 for Exams):</p>
-                <div class="overflow-x-auto mt-2">
-                    <table class="comparison-table text-sm">
+                <p class="font-bold text-slate-800 text-lg mt-4">Professional Working (How the Telecom Industry does it):</p>
+                <div class="bg-blue-50 p-4 border border-blue-200 rounded mb-3 text-sm text-slate-700">
+                    <p class="mb-2">In real-world telephone networks, millions of calls need to be managed. Engineers bundle them into standardized groups to keep things organized:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>The Basic Group:</strong> The smallest building block. Engineers take exactly <strong>12 telephone channels</strong> (each given 4 kHz of space) and bundle them together into one group spanning 60 to 108 kHz.</li>
+                        <li><strong>The Pilot Signal:</strong> To make sure the equipment stays perfectly tuned and synchronized, a continuous low-level "pilot" tone is injected at exactly 104.08 kHz.</li>
+                        <li><strong>The Basic Supergroup:</strong> To scale up, they take <strong>5 Basic Groups</strong> (60 total calls) and bundle them into an even larger supergroup.</li>
+                    </ul>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg mt-4">Apply it to an Example:</p>
+                <div class="bg-slate-50 p-4 border border-slate-200 rounded mb-3 text-sm text-slate-700">
+                    <p><strong>Radio Stations:</strong> The air around you is the shared cable. Radio stations use FDM! One station broadcasts exactly at 98.3 MHz, and another broadcasts at 104.2 MHz. They are both in the air at the exact same time, but because they are in different frequency "slots", your radio can easily separate them. <em>(Note: They leave small blank spaces between stations called "Guard Bands" so the signals don't accidentally bleed into each other)</em>.</p>
+                </div>
+            </div>
+
+            <div class="concept-card border-t-4 border-t-green-500">
+                <h3 class="text-xl font-black text-green-900 mb-4">B. Time Division Multiplexing (TDM)</h3>
+                
+                <p class="font-bold text-slate-800 text-lg">What it is & How it works:</p>
+                <p class="text-slate-700 mb-3">TDM is used for <strong>Digital</strong> signals. Instead of splitting the channel into frequency slots, TDM makes everyone use the exact same full frequency! However, it separates users by <strong>Time</strong>. The system rapidly takes turns, giving User 1 the cable for a microsecond, then User 2, then User 3, in a continuous circle. Because digital pulses are very fast, you don't even notice the gaps.</p>
+
+                <p class="font-bold text-slate-800 text-lg mt-4">Professional Working (The Hardware Mechanism):</p>
+                <div class="bg-green-50 p-4 border border-green-200 rounded mb-3 text-sm text-slate-700">
+                    <p class="mb-2">How does a machine actually take turns so fast? It uses a standard 24-channel system built with high-speed electronic switches and logic gates:</p>
+                    <ul class="list-disc pl-5 space-y-2">
+                        <li><strong>Sampling & Framing:</strong> The system takes 8,000 snapshots of a voice every second. It packages one snapshot from all 24 users into a "Frame" and transmits the entire frame in just 125 microseconds.</li>
+                        <li><strong>Transmitter (Delay Lines):</strong> To line the users up perfectly, the hardware uses <strong>Delay Lines</strong>. User 1's signal goes straight through. User 2's signal is delayed by exactly 5 microseconds so it falls perfectly in line right behind User 1. User 3 is delayed by 10 microseconds, and so on.</li>
+                        <li><strong>Receiver (AND Gates):</strong> The receiver uses 24 <strong>AND gates</strong> (digital doors). A synchronized clock sends a tiny trigger pulse to open the doors. Delay lines are used on the clock so that Door #2 only opens at the exact microsecond User 2's data arrives.</li>
+                    </ul>
+                </div>
+
+                <p class="font-bold text-slate-800 text-lg mt-4">Apply it to an Example:</p>
+                <div class="bg-slate-50 p-4 border border-slate-200 rounded mb-3 text-sm text-slate-700">
+                    <p><strong>Taking Turns on a Phone Line:</strong> Imagine 24 people trying to talk through one single telephone wire. In TDM, the system uses digital switching hardware (like logic gates) to take a tiny 1-millisecond snippet of Person 1's voice and sends it. Then a 1-millisecond snippet of Person 2's voice. It repeats this circle 8,000 times a second! The receiver on the other side catches the snippets and glues them back together smoothly.</p>
+                </div>
+            </div>
+
+            <div class="concept-card">
+                <h3 class="sub-topic-title mt-0">Difference Between FDM and TDM</h3>
+                <div class="overflow-x-auto">
+                    <table class="comparison-table">
                         <tr>
-                            <th rowspan="2" class="text-center align-middle">Multiplex Order</th>
-                            <th colspan="2" class="text-center bg-blue-50">µ-Law System (US/Japan)</th>
-                            <th colspan="2" class="text-center bg-green-50">A-Law System (Europe)</th>
+                            <th class="w-1/3">Feature</th>
+                            <th class="w-1/3 bg-blue-50">FDM (Frequency Division)</th>
+                            <th class="w-1/3 bg-green-50">TDM (Time Division)</th>
                         </tr>
                         <tr>
-                            <th class="text-center bg-blue-50">Bit Rate (Mbit/s)</th>
-                            <th class="text-center bg-blue-50">Total Channels</th>
-                            <th class="text-center bg-green-50">Bit Rate (Mbit/s)</th>
-                            <th class="text-center bg-green-50">Total Channels</th>
+                            <td class="font-bold bg-slate-50">How it shares</td>
+                            <td>Shares by dividing <strong>Frequencies</strong>.</td>
+                            <td>Shares by dividing <strong>Time</strong>.</td>
                         </tr>
-                        <tr><td class="text-center font-bold">1st (Base level)</td><td class="text-center">1.544</td><td class="text-center">24</td><td class="text-center">2.048</td><td class="text-center">30</td></tr>
-                        <tr><td class="text-center font-bold">2nd</td><td class="text-center">6.312</td><td class="text-center">96</td><td class="text-center">8.448</td><td class="text-center">120</td></tr>
-                        <tr><td class="text-center font-bold">3rd</td><td class="text-center">44.736</td><td class="text-center">672</td><td class="text-center">34.368</td><td class="text-center">480</td></tr>
+                        <tr>
+                            <td class="font-bold bg-slate-50">Signal Type</td>
+                            <td>Used primarily for <strong>Analog</strong> signals.</td>
+                            <td>Used primarily for <strong>Digital</strong> signals.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-slate-50">Time vs Bandwidth</td>
+                            <td>User transmits all the time, but only gets a tiny piece of the bandwidth.</td>
+                            <td>User gets the full bandwidth, but only for a tiny piece of time.</td>
+                        </tr>
+                        <tr>
+                            <td class="font-bold bg-slate-50">Interference Problem</td>
+                            <td>Suffers from <strong>Crosstalk</strong> (channels bleeding into each other). Needs guard bands.</td>
+                            <td>Suffers from <strong>Synchronization issues</strong>. If clocks are off, data mixes up. Needs sync bits.</td>
+                        </tr>
                     </table>
                 </div>
             </div>
@@ -300,7 +414,70 @@
                     <p class="text-sm mb-4">Suppose the message is "ADD". We convert to alphabet numbers: A=1, D=4, D=4. <br>Row 1 is: [1, 4, 4]. The checksum total is 9. The 9th letter is 'I'. We transmit the string "ADDI".</p>
                     
                     <p class="font-bold text-slate-800">2. Catching and Fixing an Error (Step-by-Step Logic):</p>
-                    <p class="text-sm mb-2">Imagine electrical noise hits the very first number during transmission, corrupting the '1' into an <strong>11</strong>. The receiver constructs the matrix:</p>
+                    <p class="text-sm mb-2">Imagine electrical noise hits the very first number during transmission, corrupting the '1' into an <strong class="text-red-600">11</strong>. The receiver constructs the matrix:</p>
+                    
+                    <!-- MATRIX SUM ERROR DIAGRAM -->
+                    <svg width="400" height="250" viewBox="0 0 400 250" class="mx-auto block bg-white border border-slate-200 rounded-lg p-4 shadow-sm mb-4">
+                        <style>
+                            .cell { fill: none; stroke: #cbd5e1; stroke-width: 1; }
+                            .val { font-family: monospace; font-size: 16px; font-weight: bold; fill: #1e293b; text-anchor: middle; dominant-baseline: middle;}
+                            .err { fill: #dc2626; }
+                            .chk { fill: #2563eb; }
+                        </style>
+                        
+                        <text x="200" y="20" class="svg-text" font-size="14" fill="#0f172a">Received Data Matrix</text>
+
+                        <!-- Grid Lines -->
+                        <rect x="100" y="40" width="200" height="150" class="cell" />
+                        <line x1="150" y1="40" x2="150" y2="190" class="cell" />
+                        <line x1="200" y1="40" x2="200" y2="190" class="cell" />
+                        <line x1="250" y1="40" x2="250" y2="190" class="cell" />
+                        
+                        <line x1="100" y1="90" x2="300" y2="90" class="cell" />
+                        <line x1="100" y1="140" x2="300" y2="140" class="cell" />
+
+                        <!-- Row 1 -->
+                        <text x="125" y="65" class="val err">11</text>
+                        <circle cx="125" cy="65" r="15" fill="none" stroke="#dc2626" stroke-width="2" />
+                        <text x="175" y="65" class="val">4</text>
+                        <text x="225" y="65" class="val">4</text>
+                        <text x="275" y="65" class="val chk">9</text>
+                        <text x="340" y="65" class="svg-text err" font-size="10">Sum=19 &ne; 9</text>
+
+                        <!-- Row 2 -->
+                        <text x="125" y="115" class="val">2</text>
+                        <text x="175" y="115" class="val">5</text>
+                        <text x="225" y="115" class="val">7</text>
+                        <text x="275" y="115" class="val chk">14</text>
+                        <text x="340" y="115" class="svg-text text-green-600" font-size="10">Sum=14 &check;</text>
+
+                        <!-- Row 3 (Col Sums) -->
+                        <text x="125" y="165" class="val chk">3</text>
+                        <text x="175" y="165" class="val chk">9</text>
+                        <text x="225" y="165" class="val chk">11</text>
+                        <text x="275" y="165" class="val chk">23</text>
+
+                        <!-- Col Errors -->
+                        <text x="125" y="210" class="svg-text err" font-size="10">Sum=13</text>
+                        <text x="125" y="225" class="svg-text err" font-size="10">&ne; 3</text>
+                        
+                        <text x="175" y="210" class="svg-text text-green-600" font-size="10">Sum=9</text>
+                        <text x="175" y="225" class="svg-text text-green-600" font-size="10">&check;</text>
+
+                        <text x="225" y="210" class="svg-text text-green-600" font-size="10">Sum=11</text>
+                        <text x="225" y="225" class="svg-text text-green-600" font-size="10">&check;</text>
+                        
+                        <!-- Arrow pointing to intersection -->
+                        <path d="M 50 65 L 100 65" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow-red)"/>
+                        <path d="M 125 20 L 125 40" fill="none" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow-red)"/>
+                        
+                        <defs>
+                            <marker id="arrow-red" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto">
+                                <path d="M0,0 L0,8 L8,4 z" fill="#dc2626" />
+                            </marker>
+                        </defs>
+                    </svg>
+
                     <ul class="text-sm list-disc pl-5 mb-4 text-red-700 font-medium">
                         <li>Row 1 Received as: <strong>[11, 4, 4]</strong>. 
                             <br>Internal sum is 19. But the received Checksum 'I' dictates the sum must be 9! (Error flagged in Row 1).</li>
