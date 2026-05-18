@@ -48,6 +48,8 @@
             border-radius: 0 0.5rem 0.5rem 0;
             margin: 1rem 0;
         }
+        .svg-text { font-family: 'Inter', sans-serif; font-size: 13px; fill: #1e293b; font-weight: 600; text-anchor: middle; dominant-baseline: middle;}
+        .svg-sub { font-size: 11px; fill: #475569; text-anchor: middle; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-800 antialiased">
@@ -374,35 +376,181 @@
             </div>
 
             <h3 class="text-2xl font-bold text-blue-700 mt-10 mb-4 border-b pb-2">A. Guided (Wired) Media Breakdown</h3>
-            <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
+            <div class="space-y-10 text-slate-700 text-lg leading-relaxed">
                 
-                <div>
-                    <h4 class="text-xl font-semibold text-slate-800">1. Twisted Pair Cable</h4>
-                    <p class="text-base mb-2">Consists of two independently insulated copper wires twisted around each other. The twisting is crucial: it helps cancel out electromagnetic interference (crosstalk) from adjacent pairs and external sources.</p>
-                    <ul class="list-disc pl-6 space-y-1 text-base">
-                        <li><strong>Unshielded Twisted Pair (UTP):</strong> The most common type. Very cheap, easy to install. Used heavily in local area networks (LANs) and telephones. Susceptible to external interference.</li>
-                        <li><strong>Shielded Twisted Pair (STP):</strong> Has an extra metal foil wrapper around the pairs to block electromagnetic interference. Used in industrial environments. More expensive and thicker.</li>
+                <!-- 1. Twisted Pair -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-800 mb-2">1. Twisted Pair Cable</h4>
+                    <p class="text-base mb-4">Consists of two independently insulated copper wires twisted around each other like a DNA helix. <br><strong>Why twisted?</strong> When electricity flows, it creates a magnetic field that can leak into nearby wires (Crosstalk). Twisting the wires mathematically cancels out this magnetic interference, keeping the signal clean!</p>
+                    
+                    <svg width="100%" height="150" viewBox="0 0 500 150" class="mx-auto block bg-slate-50 border border-slate-200 rounded p-4 mb-4">
+                        <!-- Wire 1 -->
+                        <path d="M 50 75 Q 100 20, 150 75 T 250 75 T 350 75 T 450 75" fill="none" stroke="#2563eb" stroke-width="12" stroke-linecap="round"/>
+                        <!-- Wire 2 -->
+                        <path d="M 50 75 Q 100 130, 150 75 T 250 75 T 350 75 T 450 75" fill="none" stroke="#dc2626" stroke-width="12" stroke-linecap="round" opacity="0.85"/>
+                        
+                        <!-- Labels -->
+                        <line x1="250" y1="40" x2="250" y2="15" stroke="#475569" stroke-width="2"/>
+                        <text x="250" y="10" class="svg-text" font-size="12" dominant-baseline="bottom">Plastic Insulation</text>
+                        
+                        <line x1="350" y1="110" x2="350" y2="135" stroke="#475569" stroke-width="2"/>
+                        <text x="350" y="140" class="svg-text" font-size="12" dominant-baseline="hanging">Copper Conductor (Inside)</text>
+                    </svg>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-base">
+                        <div class="bg-blue-50 p-4 rounded border border-blue-200">
+                            <strong class="text-blue-900 block mb-1">UTP (Unshielded Twisted Pair)</strong>
+                            <p class="text-sm">The most common and cheapest cable. It has no extra armor, making it easy to bend and install. Used in standard home Ethernet (LAN) networks and traditional telephones.</p>
+                        </div>
+                        <div class="bg-indigo-50 p-4 rounded border border-indigo-200">
+                            <strong class="text-indigo-900 block mb-1">STP (Shielded Twisted Pair)</strong>
+                            <p class="text-sm">Adds a metal foil wrapper around the twisted wires. This acts as an armor to block heavy industrial electrical noise. It is more expensive and thicker.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Coaxial Cable -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-800 mb-2">2. Coaxial Cable</h4>
+                    <p class="text-base mb-4">A much thicker, heavier cable designed to carry higher frequencies (more data) than twisted pair. It achieves this by wrapping the central wire in a thick protective metal shield, which prevents outside noise from getting in and inside signals from leaking out.</p>
+                    
+                    <svg width="100%" height="160" viewBox="0 0 500 160" class="mx-auto block bg-slate-50 border border-slate-200 rounded p-4 mb-4">
+                        <!-- Outer Jacket -->
+                        <rect x="50" y="40" width="100" height="80" fill="#334155" rx="4"/>
+                        <line x1="100" y1="40" x2="100" y2="20" stroke="#475569" stroke-width="2"/>
+                        <text x="100" y="15" class="svg-text" font-size="12">Outer Plastic Jacket</text>
+
+                        <!-- Braided Shield -->
+                        <rect x="150" y="50" width="100" height="60" fill="#94a3b8" />
+                        <line x1="160" y1="50" x2="190" y2="110" stroke="#64748b" stroke-width="2"/>
+                        <line x1="180" y1="50" x2="210" y2="110" stroke="#64748b" stroke-width="2"/>
+                        <line x1="200" y1="50" x2="230" y2="110" stroke="#64748b" stroke-width="2"/>
+                        <line x1="220" y1="50" x2="250" y2="110" stroke="#64748b" stroke-width="2"/>
+                        
+                        <line x1="200" y1="110" x2="200" y2="140" stroke="#475569" stroke-width="2"/>
+                        <text x="200" y="145" class="svg-text" font-size="12" dominant-baseline="hanging">Braided Metal Shield</text>
+
+                        <!-- Insulator -->
+                        <rect x="250" y="60" width="100" height="40" fill="#fef08a" />
+                        <line x1="300" y1="60" x2="300" y2="20" stroke="#475569" stroke-width="2"/>
+                        <text x="300" y="15" class="svg-text" font-size="12">Insulator (Dielectric)</text>
+
+                        <!-- Copper Core -->
+                        <rect x="350" y="75" width="100" height="10" fill="#d97706" rx="2"/>
+                        <line x1="400" y1="85" x2="400" y2="140" stroke="#475569" stroke-width="2"/>
+                        <text x="400" y="145" class="svg-text" font-size="12" dominant-baseline="hanging">Solid Copper Core</text>
+                    </svg>
+
+                    <ul class="list-disc pl-6 space-y-1 text-base text-slate-700">
+                        <li><strong>Applications:</strong> Classic Cable TV networks, broadband internet drops to houses, and CCTV camera wiring.</li>
+                        <li><strong>Pros vs Cons:</strong> Offers much higher bandwidth and better noise immunity than Twisted Pair, but is stiffer, bulkier, and harder to install around tight corners.</li>
                     </ul>
                 </div>
 
-                <div>
-                    <h4 class="text-xl font-semibold text-slate-800">2. Coaxial Cable</h4>
-                    <p class="text-base">Consists of an inner solid copper core, surrounded by an insulating layer, covered by a braided metal mesh (shielding), and finally an outer plastic jacket. It carries much higher frequency signals than twisted pair due to its superior shielding.</p>
-                    <ul class="list-disc pl-6 space-y-1 text-base">
-                        <li>Used historically in Cable TV networks, broadband internet drops, and CCTV systems.</li>
-                        <li>More resistant to interference than UTP but bulkier to handle.</li>
-                    </ul>
+                <!-- 3. Fiber-Optic Cable -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-800 mb-2">3. Fiber-Optic Cable</h4>
+                    <p class="text-base mb-4">The ultimate transmission medium. Instead of sending electricity through copper, it sends <strong>pulses of laser light</strong> through a microscopic tube of glass. It works on the physics principle of <em>Total Internal Reflection</em>—the light acts like a bouncy ball trapped inside a mirror tube.</p>
+                    
+                    <svg width="100%" height="160" viewBox="0 0 500 160" class="mx-auto block bg-slate-50 border border-slate-200 rounded p-4 mb-4">
+                        <!-- Outer Jacket -->
+                        <rect x="50" y="40" width="350" height="80" fill="#0f172a" rx="4"/>
+                        <!-- Cladding -->
+                        <rect x="100" y="55" width="300" height="50" fill="#bae6fd" />
+                        <!-- Core -->
+                        <rect x="150" y="70" width="250" height="20" fill="#e0f2fe" />
+
+                        <!-- Light ray bouncing -->
+                        <path d="M 150 80 L 200 70 L 250 90 L 300 70 L 350 90 L 400 80" fill="none" stroke="#eab308" stroke-width="3" marker-end="url(#light-arrow)"/>
+                        
+                        <defs>
+                            <marker id="light-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                                <path d="M0,0 L0,6 L6,3 z" fill="#eab308" />
+                            </marker>
+                        </defs>
+
+                        <line x1="75" y1="40" x2="75" y2="20" stroke="#475569" stroke-width="2"/>
+                        <text x="75" y="15" class="svg-text" font-size="12">Outer Jacket</text>
+
+                        <line x1="125" y1="105" x2="125" y2="140" stroke="#475569" stroke-width="2"/>
+                        <text x="125" y="145" class="svg-text" font-size="12" dominant-baseline="hanging">Cladding (Mirror Layer)</text>
+
+                        <line x1="200" y1="70" x2="200" y2="20" stroke="#475569" stroke-width="2"/>
+                        <text x="200" y="15" class="svg-text" font-size="12">Glass Core</text>
+
+                        <text x="430" y="80" class="svg-text" fill="#ca8a04" font-size="12">Light Ray</text>
+                    </svg>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-base">
+                        <div class="bg-green-50 p-4 rounded border border-green-200">
+                            <strong class="text-green-900 block mb-1">Benefits</strong>
+                            <ul class="list-disc pl-5 text-sm text-green-800 space-y-1">
+                                <li><strong>Massive Bandwidth:</strong> Carries vastly more data than copper.</li>
+                                <li><strong>Zero Interference:</strong> Since it uses light, magnets and electrical wires cannot corrupt the signal.</li>
+                                <li><strong>Huge Distances:</strong> Travels across oceans without losing power.</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-50 p-4 rounded border border-red-200">
+                            <strong class="text-red-900 block mb-1">Disadvantages</strong>
+                            <ul class="list-disc pl-5 text-sm text-red-800 space-y-1">
+                                <li><strong>High Cost & Fragility:</strong> Glass breaks easily. Very expensive to install and repair.</li>
+                                <li><strong>Unidirectional:</strong> Light only travels one way. You need <em>two</em> cables to talk back and forth.</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <h4 class="text-xl font-semibold text-slate-800">3. Fiber-Optic Cable</h4>
-                    <p class="text-base">Transmits data not as electrical signals, but as <strong>light pulses</strong>. It uses the physical principle of <em>Total Internal Reflection</em>.</p>
-                    <ul class="list-disc pl-6 space-y-1 text-base">
-                        <li><strong>Components:</strong> An ultra-thin glass <strong>Core</strong>, surrounded by a <strong>Cladding</strong> (glass/plastic with lower refractive index to trap light inside), and an outer protective <strong>Jacket</strong>.</li>
-                        <li><strong>Advantages:</strong> Extremely high bandwidth, zero electromagnetic interference (completely immune to noise/crosstalk), excellent for long-distance communication (internet backbones).</li>
-                        <li><strong>Disadvantages:</strong> High cost, fragile (requires careful installation), and difficult to splice/connect. Unidirectional (needs two fibers for 2-way communication).</li>
-                    </ul>
+                <!-- NEW: GUIDED MEDIA TABLE -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm mt-8">
+                    <h4 class="text-xl font-bold text-blue-800 mb-4 border-b pb-2">Master Comparison: Guided Media</h4>
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <tr>
+                                <th class="w-1/4">Feature</th>
+                                <th class="w-1/4 bg-blue-50">Twisted Pair Cable</th>
+                                <th class="w-1/4 bg-indigo-50">Coaxial Cable</th>
+                                <th class="w-1/4 bg-green-50">Fiber Optic Cable</th>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Signal Form</td>
+                                <td>Electrical (Voltage)</td>
+                                <td>Electrical (Voltage)</td>
+                                <td>Light (Photons)</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Bandwidth / Speed</td>
+                                <td>Low to Moderate</td>
+                                <td>High</td>
+                                <td><strong>Very High (Maximum)</strong></td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Noise Immunity</td>
+                                <td>Low (UTP) / Moderate (STP)</td>
+                                <td>High (due to metal shield)</td>
+                                <td><strong>Complete Immunity</strong> (Zero interference)</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Attenuation</td>
+                                <td>High (needs frequent repeaters)</td>
+                                <td>Moderate</td>
+                                <td><strong>Low</strong> (travels miles without repeaters)</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Cost</td>
+                                <td>Least expensive</td>
+                                <td>Moderately expensive</td>
+                                <td>Most expensive</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Installation</td>
+                                <td>Easy to bend and install</td>
+                                <td>Stiff, harder to install</td>
+                                <td>Fragile, requires high expertise</td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
+
             </div>
         </section>
 
@@ -410,52 +558,199 @@
         <section id="wireless" class="mb-12">
             <h2 class="text-2xl font-bold text-blue-700 mb-4 border-b pb-2">B. Unguided (Wireless) Media Breakdown</h2>
             <div class="space-y-6 text-slate-700 text-lg leading-relaxed">
-                <p>Wireless media carry electromagnetic waves without using a physical conductor. They broadcast signals through the air (or vacuum).</p>
+                <p>Wireless media broadcast electromagnetic signals through the air or the vacuum of space, eliminating the need for physical cables. This makes it perfect for mobile phones and connecting difficult terrains (like mountains). The specific type of wireless technology strictly depends on the <strong>Frequency</strong> used.</p>
 
-                <div class="overflow-x-auto mt-4">
-                    <table class="data-table">
-                        <tr>
-                            <th class="w-1/4">Feature</th>
-                            <th class="w-1/4">Radio Waves</th>
-                            <th class="w-1/4">Microwaves</th>
-                            <th class="w-1/4">Infrared Waves</th>
-                        </tr>
-                        <tr>
-                            <td class="font-semibold bg-slate-50">Frequency Range</td>
-                            <td>3 kHz – 1 GHz</td>
-                            <td>1 GHz – 300 GHz</td>
-                            <td>300 GHz – 400 THz</td>
-                        </tr>
-                        <tr>
-                            <td class="font-semibold bg-slate-50">Directionality</td>
-                            <td><strong>Omnidirectional</strong> (propagates in all directions). Antenna does not need alignment.</td>
-                            <td><strong>Unidirectional</strong> (moves in a focused single line). Antennas must be strictly aligned.</td>
-                            <td>Highly directional / Unidirectional.</td>
-                        </tr>
-                        <tr>
-                            <td class="font-semibold bg-slate-50">Wall Penetration</td>
-                            <td>Can easily penetrate solid objects (walls, buildings).</td>
-                            <td><strong>Cannot</strong> penetrate solid objects well (blocked by walls, hills, rain).</td>
-                            <td><strong>Cannot</strong> penetrate solid objects at all.</td>
-                        </tr>
-                        <tr>
-                            <td class="font-semibold bg-slate-50">Special Requirements</td>
-                            <td>Regulated heavily by governments to avoid interference.</td>
-                            <td>Requires strict <strong>Line-of-Sight</strong> (antennas must face each other without obstruction).</td>
-                            <td>Requires direct line-of-sight over very short ranges. Prevents interference between rooms.</td>
-                        </tr>
-                        <tr>
-                            <td class="font-semibold bg-slate-50">Applications</td>
-                            <td>AM/FM Radio, TV broadcasting, standard Wi-Fi, maritime comms.</td>
-                            <td>Point-to-point links, Radar, Satellite communication, Cellular networks.</td>
-                            <td>TV Remote controls, Bluetooth, Wireless mice/keyboards, Mobile-to-printer.</td>
-                        </tr>
-                    </table>
+                <!-- Unified Diagram for Unguided Media -->
+                <h3 class="font-bold text-slate-800 text-xl mt-6 mb-2">Visualizing How Wireless Signals Transmit</h3>
+                <svg width="100%" height="250" viewBox="0 0 700 250" class="mx-auto block bg-white border border-slate-200 rounded p-4 shadow-sm mb-6">
+                    <!-- Radio: Omnidirectional -->
+                    <text x="110" y="30" class="svg-text" font-size="16" font-weight="bold" fill="#0f172a">1. Radio Waves</text>
+                    <text x="110" y="50" class="svg-text" font-size="12" fill="#64748b">(Omnidirectional)</text>
+                    
+                    <!-- Tower -->
+                    <rect x="105" y="100" width="10" height="60" fill="#475569" />
+                    <circle cx="110" cy="100" r="8" fill="#ef4444"/>
+                    
+                    <!-- Expanding ripples -->
+                    <circle cx="110" cy="100" r="30" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6,4"/>
+                    <circle cx="110" cy="100" r="50" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6,4"/>
+                    <circle cx="110" cy="100" r="70" fill="none" stroke="#3b82f6" stroke-width="2" stroke-dasharray="6,4"/>
+                    
+                    <text x="110" y="200" class="svg-text" font-size="12" fill="#1e293b">Like dropping a stone in a pond.</text>
+                    <text x="110" y="215" class="svg-text" font-size="12" fill="#1e293b">Spreads in a complete circle.</text>
+
+                    <!-- Microwave: Line of Sight -->
+                    <line x1="230" y1="20" x2="230" y2="230" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,4"/> <!-- Divider -->
+                    
+                    <text x="350" y="30" class="svg-text" font-size="16" font-weight="bold" fill="#0f172a">2. Microwaves</text>
+                    <text x="350" y="50" class="svg-text" font-size="12" fill="#64748b">(Line-of-Sight)</text>
+
+                    <!-- Dish 1 -->
+                    <path d="M 270 120 Q 290 100 290 120 Q 290 140 270 120 Z" fill="#475569" />
+                    <rect x="265" y="120" width="5" height="40" fill="#475569" />
+                    
+                    <!-- Dish 2 -->
+                    <path d="M 430 120 Q 410 100 410 120 Q 410 140 430 120 Z" fill="#475569" />
+                    <rect x="430" y="120" width="5" height="40" fill="#475569" />
+
+                    <!-- Beam -->
+                    <line x1="290" y1="120" x2="410" y2="120" stroke="#ef4444" stroke-width="3" stroke-dasharray="8,4" marker-end="url(#mw-arrow)"/>
+                    
+                    <text x="350" y="200" class="svg-text" font-size="12" fill="#1e293b">Like a focused laser pointer.</text>
+                    <text x="350" y="215" class="svg-text" font-size="12" fill="#1e293b">Antennas must face each other.</text>
+
+                    <!-- Infrared: Short Range -->
+                    <line x1="470" y1="20" x2="470" y2="230" stroke="#cbd5e1" stroke-width="2" stroke-dasharray="4,4"/> <!-- Divider -->
+
+                    <text x="580" y="30" class="svg-text" font-size="16" font-weight="bold" fill="#0f172a">3. Infrared</text>
+                    <text x="580" y="50" class="svg-text" font-size="12" fill="#64748b">(Short Range)</text>
+
+                    <!-- Remote -->
+                    <rect x="490" y="110" width="20" height="30" fill="#1e293b" rx="2"/>
+                    <circle cx="500" cy="110" r="4" fill="#ef4444"/>
+                    
+                    <!-- TV -->
+                    <rect x="630" y="90" width="40" height="60" fill="#64748b" rx="2"/>
+                    <rect x="635" y="95" width="30" height="40" fill="#0f172a" />
+
+                    <!-- Beam -->
+                    <line x1="505" y1="110" x2="630" y2="110" stroke="#eab308" stroke-width="3" stroke-dasharray="4,2" marker-end="url(#mw-arrow-yellow)"/>
+
+                    <text x="580" y="200" class="svg-text" font-size="12" fill="#1e293b">Like a TV remote.</text>
+                    <text x="580" y="215" class="svg-text" font-size="12" fill="#1e293b">Blocked by anything.</text>
+
+                    <defs>
+                        <marker id="mw-arrow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L6,3 z" fill="#ef4444" />
+                        </marker>
+                        <marker id="mw-arrow-yellow" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+                            <path d="M0,0 L0,6 L6,3 z" fill="#eab308" />
+                        </marker>
+                    </defs>
+                </svg>
+
+                <!-- 1. Radio Waves -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-800 mb-2">1. Radio Waves (3 kHz – 1 GHz)</h4>
+                    <p class="text-base mb-3">Radio waves transmit in all directions at once (<strong>Omnidirectional</strong>). Because they spread out everywhere, the receiving antenna does not need to be pointed directly at the transmitting antenna.</p>
+                    
+                    <ul class="list-disc pl-6 space-y-1 text-sm text-slate-700 mb-4">
+                        <li><strong>Applications:</strong> AM/FM Radio broadcasts, TV broadcasts, and standard Wi-Fi.</li>
+                    </ul>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-green-50 p-3 rounded border border-green-200">
+                            <strong class="text-green-900 block mb-1">Benefits</strong>
+                            <p>Can easily penetrate solid walls and buildings. A single tower can cover an entire city without users needing to aim their devices.</p>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded border border-red-200">
+                            <strong class="text-red-900 block mb-1">Disadvantages</strong>
+                            <p>Because they go everywhere, they are highly insecure (anyone can listen in). Highly prone to interference from other radio stations.</p>
+                        </div>
+                    </div>
                 </div>
+
+                <!-- 2. Microwaves -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-800 mb-2">2. Microwaves (1 GHz – 300 GHz)</h4>
+                    <p class="text-base mb-3">Microwaves are strictly <strong>Unidirectional</strong>. They travel in a perfectly straight, focused beam. To communicate, both the sending and receiving antennas must be perfectly aligned facing each other (called <strong>Line-of-Sight</strong>).</p>
+                    
+                    <ul class="list-disc pl-6 space-y-1 text-sm text-slate-700 mb-4">
+                        <li><strong>Applications:</strong> 4G/5G Cellular Networks, Satellite communication, and modern fast Wi-Fi routers.</li>
+                    </ul>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-green-50 p-3 rounded border border-green-200">
+                            <strong class="text-green-900 block mb-1">Benefits</strong>
+                            <p>Provides massive data-carrying capacity (Huge Bandwidth). Because the beam is focused, multiple antennas can be placed close together without interfering.</p>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded border border-red-200">
+                            <strong class="text-red-900 block mb-1">Disadvantages</strong>
+                            <p>Cannot penetrate solid objects well. The signal is easily blocked by hills, tall buildings, and even heavy rain storms.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Infrared -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm">
+                    <h4 class="text-xl font-bold text-blue-800 mb-2">3. Infrared Waves (300 GHz – 400 THz)</h4>
+                    <p class="text-base mb-3">Infrared operates on extremely high frequencies but is restricted to <strong>very short-range communication</strong>. It requires a direct line-of-sight and cannot pass through physical obstacles at all.</p>
+                    
+                    <ul class="list-disc pl-6 space-y-1 text-sm text-slate-700 mb-4">
+                        <li><strong>Applications:</strong> TV Remote controls, wireless mice/keyboards, Bluetooth device pairing.</li>
+                    </ul>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                        <div class="bg-green-50 p-3 rounded border border-green-200">
+                            <strong class="text-green-900 block mb-1">Benefits</strong>
+                            <p>Extremely secure. Because the signal cannot travel through the walls of a room, neighbors cannot intercept or interfere with your devices.</p>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded border border-red-200">
+                            <strong class="text-red-900 block mb-1">Disadvantages</strong>
+                            <p>Useless for long-distance communication. Even a person walking between the remote and the TV will completely block the signal.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- NEW: UNGUIDED MEDIA TABLE -->
+                <div class="bg-white border border-slate-200 rounded-lg p-6 shadow-sm mt-8">
+                    <h4 class="text-xl font-bold text-blue-800 mb-4 border-b pb-2">Master Comparison: Unguided Media</h4>
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <tr>
+                                <th class="w-1/4">Feature</th>
+                                <th class="w-1/4 bg-blue-50">Radio Waves</th>
+                                <th class="w-1/4 bg-purple-50">Microwaves</th>
+                                <th class="w-1/4 bg-red-50">Infrared</th>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Frequency Range</td>
+                                <td>3 kHz – 1 GHz</td>
+                                <td>1 GHz – 300 GHz</td>
+                                <td>300 GHz – 400 THz</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Directionality</td>
+                                <td><strong>Omnidirectional</strong> (spreads in all directions)</td>
+                                <td><strong>Unidirectional</strong> (straight line)</td>
+                                <td><strong>Highly Directional</strong> (point-to-point)</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Line of Sight Required</td>
+                                <td>No</td>
+                                <td>Yes (Strict)</td>
+                                <td>Yes (Strict)</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Wall Penetration</td>
+                                <td>Can easily penetrate solid objects (walls, buildings).</td>
+                                <td><strong>Cannot</strong> penetrate solid objects well (blocked by walls, hills, rain).</td>
+                                <td><strong>Cannot</strong> penetrate solid objects at all.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Security</td>
+                                <td>Very Low (broadcasted everywhere)</td>
+                                <td>Moderate (focused beam)</td>
+                                <td><strong>High</strong> (confined to a single room)</td>
+                            </tr>
+                            <tr>
+                                <td class="font-semibold bg-slate-50">Applications</td>
+                                <td>AM/FM Radio, TV broadcasting, standard Wi-Fi, maritime comms.</td>
+                                <td>4G/5G Cellular networks, Satellite communication, Radar.</td>
+                                <td>TV Remote controls, Bluetooth, Wireless mice/keyboards.</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </section>
 
     </main>
+
+    <footer class="text-center py-10 text-slate-500 font-medium border-t border-slate-200 mt-10">
+        <p>Prepared for Vatsal's Study Hub. Translating complex telecom physics into plain English for exams.</p>
+    </footer>
 
 </body>
 </html>
